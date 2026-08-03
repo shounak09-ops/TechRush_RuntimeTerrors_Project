@@ -1,107 +1,105 @@
-import { useCallback, useEffect, useState } from "react"
+import React, { useState, useEffect } from "react";
+import DestinationCard from "./components/DestinationCard";
+import DestinationModal from "./components/DestinationModal";
+import CompareDrawer from "./components/CompareDrawer";
+import { DESTINATIONS } from "./data/destinations";
 import { 
-  MapPin, Search, Moon, Sun, Menu, X, Compass, Calendar, 
-  SunMedium, Plus, Trash2, CheckCircle2, Sparkles, Navigation
-} from "lucide-react"
-
-/* ---------------------------------------------------------------------------
- * Sample Destinations
- * ------------------------------------------------------------------------- */
-const DESTINATIONS = [
-  {
-    id: 1,
-    name: "Santorini",
-    country: "Greece",
-    category: "Beaches",
-    image: "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format&fit=crop&w=800&q=80",
-    temp: "26°C",
-    budget: "$$",
-    description: "Iconic white buildings, crystal blue waters, and breathtaking Aegean sunsets."
-  },
-  {
-    id: 2,
-    name: "Banff National Park",
-    country: "Canada",
-    category: "Mountains",
-    image: "https://images.unsplash.com/photo-1517411032315-54ef2cb783bb?auto=format&fit=crop&w=800&q=80",
-    temp: "14°C",
-    budget: "$$$",
-    description: "Turquoise glacial lakes, snow-capped peaks, and endless mountain adventure."
-  },
-  {
-    id: 3,
-    name: "Kyoto Temples",
-    country: "Japan",
-    category: "Heritage",
-    image: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=800&q=80",
-    temp: "21°C",
-    budget: "$$",
-    description: "Ancient wooden temples, bamboo groves, and peaceful traditional gardens."
-  },
-  {
-    id: 4,
-    name: "Bali Coastal Escape",
-    country: "Indonesia",
-    category: "Beaches",
-    image: "https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=800&q=80",
-    temp: "29°C",
-    budget: "$",
-    description: "Lush tropical beaches, vibrant reefs, and spiritual clifftop sanctuaries."
-  },
-  {
-    id: 5,
-    name: "Swiss Alps (Zermatt)",
-    country: "Switzerland",
-    category: "Mountains",
-    image: "https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?auto=format&fit=crop&w=800&q=80",
-    temp: "4°C",
-    budget: "$$$",
-    description: "World-class skiing, scenic mountain railways, and views of the Matterhorn."
-  },
-  {
-    id: 6,
-    name: "Machu Picchu",
-    country: "Peru",
-    category: "Heritage",
-    image: "https://images.unsplash.com/photo-1526392060635-9d6019884377?auto=format&fit=crop&w=800&q=80",
-    temp: "18°C",
-    budget: "$$",
-    description: "Mist-shrouded Incan citadel nestled high in the Andean cloud forest."
-  }
-]
+  MapPin, Search, Moon, Sun, Compass, Calendar, 
+  Trash2, Navigation, Filter, Globe, Heart
+} from "lucide-react";
 
 export default function App() {
-  const [theme, setTheme] = useState("light")
-  const [activeCategory, setActiveCategory] = useState("All")
-  const [searchQuery, setSearchQuery] = useState("")
-  const [itinerary, setItinerary] = useState([])
+  const [theme, setTheme] = useState("light");
+  
+  // Filter States
+  const [scope, setScope] = useState("All"); 
+  const [activeCategory, setActiveCategory] = useState("All"); 
+  const [selectedRegion, setSelectedRegion] = useState("All"); 
+  const [selectedContinent, setSelectedContinent] = useState("All"); 
+  const [showOnlyFavorites, setShowOnlyFavorites] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const toggleTheme = () => setTheme(prev => prev === "light" ? "dark" : "light")
+  // Modal & Persistence States
+  const [selectedModalDest, setSelectedModalDest] = useState(null);
+  
+  const [itinerary, setItinerary] = useState(() => {
+    return JSON.parse(localStorage.getItem("tripnest_itinerary") || "[]");
+  });
+  
+  const [favorites, setFavorites] = useState(() => {
+    return JSON.parse(localStorage.getItem("tripnest_favorites") || "[]");
+  });
 
+  const [compared, setCompared] = useState([]);
+
+  // Sync state to LocalStorage
+  useEffect(() => {
+    localStorage.setItem("tripnest_itinerary", JSON.stringify(itinerary));
+  }, [itinerary]);
+
+  useEffect(() => {
+    localStorage.setItem("tripnest_favorites", JSON.stringify(favorites));
+  }, [favorites]);
+
+  const toggleTheme = () => setTheme(prev => prev === "light" ? "dark" : "light");
+
+  const handleToggleFavorite = (id) => {
+    setFavorites(prev => 
+      prev.includes(id) ? prev.filter(favId => favId !== id) : [...prev, id]
+    );
+  };
+
+  const handleToggleCompare = (id) => {
+    setCompared(prev => 
+      prev.includes(id) ? prev.filter(compId => compId !== id) : [...prev, id]
+    );
+  };
+
+  // Multi-Level Filtering Logic
   const filteredDestinations = DESTINATIONS.filter((item) => {
-    const matchesCategory = activeCategory === "All" || item.category === activeCategory
-    const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          item.country.toLowerCase().includes(searchQuery.toLowerCase())
-    return matchesCategory && matchesSearch
-  })
+    if (showOnlyFavorites && !favorites.includes(item.id)) return false;
+    if (scope === "India" && item.country !== "India") return false;
+    if (scope === "International" && item.country === "India") return false;
+
+    if (scope === "India" && selectedRegion !== "All" && item.region !== selectedRegion) {
+      return false;
+    }
+
+    if (scope === "International" && selectedContinent !== "All" && item.continent !== selectedContinent) {
+      return false;
+    }
+
+    if (activeCategory !== "All" && item.category !== activeCategory) {
+      return false;
+    }
+
+    const query = searchQuery.toLowerCase();
+    return (
+      item.name.toLowerCase().includes(query) ||
+      item.country.toLowerCase().includes(query) ||
+      (item.region && item.region.toLowerCase().includes(query)) ||
+      (item.continent && item.continent.toLowerCase().includes(query))
+    );
+  });
+
+  const comparedObjects = DESTINATIONS.filter(item => compared.includes(item.id));
 
   const addToItinerary = (dest) => {
     if (!itinerary.find((i) => i.id === dest.id)) {
-      setItinerary([...itinerary, dest])
+      setItinerary([...itinerary, dest]);
     }
-  }
+  };
 
   const removeFromItinerary = (id) => {
-    setItinerary(itinerary.filter((i) => i.id !== id))
-  }
+    setItinerary(itinerary.filter((i) => i.id !== id));
+  };
 
   return (
     <div className={`min-h-screen ${theme === 'dark' ? 'bg-slate-950 text-white' : 'bg-slate-50 text-slate-900'} transition-colors duration-300 font-sans`}>
       
-      {/* ---------------- CENTERED HEADER ---------------- */}
-      <header className="sticky top-0 z-50 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-sm">
+      {/* HEADER */}
+      <header className="sticky top-0 z-40 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-sm">
         <div className="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
-          
           <a href="#" className="flex items-center gap-2.5">
             <span className="p-2.5 bg-gradient-to-tr from-sky-500 to-emerald-400 text-white rounded-xl shadow-md">
               <MapPin className="h-5 w-5" />
@@ -133,127 +131,153 @@ export default function App() {
         </div>
       </header>
 
-      {/* ---------------- CENTERED HERO SECTION ---------------- */}
-      <section className="py-20 px-6 text-center max-w-4xl mx-auto space-y-6">
+      {/* HERO SECTION */}
+      <section className="py-16 px-6 text-center max-w-4xl mx-auto space-y-6">
         <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-sky-500/10 text-sky-600 dark:text-sky-400 font-bold text-xs tracking-wider uppercase">
           <Compass className="h-4 w-4" /> Smart Travel Planner
         </span>
 
         <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight leading-tight">
-          Explore the World with <br className="hidden sm:inline"/>
+          Explore India & The World <br className="hidden sm:inline"/>
           <span className="bg-gradient-to-r from-sky-500 via-teal-400 to-emerald-500 bg-clip-text text-transparent">
-            Perfect Clarity
+            With Rich Insights
           </span>
         </h1>
 
-        <p className="text-slate-600 dark:text-slate-400 text-lg max-w-2xl mx-auto leading-relaxed">
-          Discover handpicked destinations, live weather updates, and personalized itineraries in one beautifully clean dashboard.
-        </p>
-
-        {/* Centered Search Bar */}
-        <div className="pt-4 max-w-xl mx-auto">
+        {/* Search Bar */}
+        <div className="pt-2 max-w-xl mx-auto">
           <div className="flex items-center bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-full shadow-lg p-2">
             <Search className="h-5 w-5 text-slate-400 ml-3 shrink-0" />
             <input
               type="text"
-              placeholder="Search destinations, countries..."
+              placeholder="Search by city, country, region, or continent..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full px-3 py-2 bg-transparent outline-none text-sm text-slate-900 dark:text-white placeholder:text-slate-400"
             />
-            <button className="bg-sky-500 hover:bg-sky-600 text-white font-semibold text-sm px-6 py-2.5 rounded-full transition-colors shrink-0 shadow-md">
-              Search
-            </button>
           </div>
         </div>
       </section>
 
-      {/* ---------------- MAIN CONTAINER (MAX WIDTH + CENTERED) ---------------- */}
-      <main className="max-w-6xl mx-auto px-6 pb-24 space-y-20">
+      {/* MAIN CONTAINER */}
+      <main className="max-w-6xl mx-auto px-6 pb-24 space-y-16">
 
-        {/* SECTION 1: DESTINATION GRID */}
+        {/* FILTER BAR */}
         <section id="explore" className="space-y-8">
-          
-          {/* Section Header & Filters */}
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-slate-200 dark:border-slate-800 pb-6">
-            <div>
-              <h2 className="text-3xl font-bold tracking-tight">Trending Destinations</h2>
-              <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">Filtered by weather and budget ratings</p>
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm space-y-6">
+            
+            {/* Scope Row */}
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-5">
+              <div className="flex items-center gap-2 text-slate-900 dark:text-white font-bold text-lg">
+                <Globe className="h-5 w-5 text-sky-500" />
+                <span>Scope</span>
+              </div>
+
+              <div className="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-2xl w-full sm:w-auto">
+                {["All", "India", "International"].map((item) => (
+                  <button
+                    key={item}
+                    onClick={() => {
+                      setScope(item);
+                      if (item !== "India") setSelectedRegion("All");
+                      if (item !== "International") setSelectedContinent("All");
+                    }}
+                    className={`flex-1 sm:flex-none px-5 py-2 rounded-xl text-xs font-bold transition-all ${
+                      scope === item
+                        ? "bg-white dark:bg-slate-900 text-sky-500 shadow-sm"
+                        : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
+                    }`}
+                  >
+                    {item === "India" ? "🇮🇳 India" : item === "International" ? "🌍 Foreign" : "🌐 All"}
+                  </button>
+                ))}
+              </div>
             </div>
 
-            {/* Category Tabs */}
-            <div className="flex flex-wrap gap-2">
-              {["All", "Beaches", "Mountains", "Heritage"].map((cat) => (
+            {/* Category Pills & Dropdowns */}
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+              <div className="flex flex-wrap gap-2">
+                {["All", "Heritage", "Beaches", "Mountains", "Wildlife"].map((cat) => (
+                  <button
+                    key={cat}
+                    onClick={() => setActiveCategory(cat)}
+                    className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+                      activeCategory === cat
+                        ? "bg-sky-500 text-white shadow-md shadow-sky-500/30"
+                        : "bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 text-slate-600 dark:text-slate-300"
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                ))}
+
+                {/* Favorite Quick Filter Pill */}
                 <button
-                  key={cat}
-                  onClick={() => setActiveCategory(cat)}
-                  className={`px-5 py-2 rounded-full text-xs font-bold transition-all ${
-                    activeCategory === cat
-                      ? "bg-sky-500 text-white shadow-md shadow-sky-500/30"
-                      : "bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:border-sky-400"
+                  onClick={() => setShowOnlyFavorites(!showOnlyFavorites)}
+                  className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+                    showOnlyFavorites
+                      ? "bg-rose-500 text-white shadow-md shadow-rose-500/30"
+                      : "bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 text-rose-500"
                   }`}
                 >
-                  {cat}
+                  <Heart className={`h-3.5 w-3.5 ${showOnlyFavorites ? "fill-current" : ""}`} />
+                  Favorites ({favorites.length})
                 </button>
-              ))}
+              </div>
+
+              {/* Region/Continent Selectors */}
+              <div className="flex items-center gap-3 w-full md:w-auto">
+                <Filter className="h-4 w-4 text-slate-400 shrink-0" />
+                {(scope === "All" || scope === "India") && (
+                  <select
+                    value={selectedRegion}
+                    onChange={(e) => setSelectedRegion(e.target.value)}
+                    className="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 rounded-xl px-3 py-2 text-xs font-semibold outline-none w-full sm:w-auto"
+                  >
+                    <option value="All">All Indian Regions</option>
+                    <option value="North">North India</option>
+                    <option value="South">South India</option>
+                    <option value="East">East India</option>
+                    <option value="West">West India</option>
+                  </select>
+                )}
+
+                {(scope === "All" || scope === "International") && (
+                  <select
+                    value={selectedContinent}
+                    onChange={(e) => setSelectedContinent(e.target.value)}
+                    className="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 rounded-xl px-3 py-2 text-xs font-semibold outline-none w-full sm:w-auto"
+                  >
+                    <option value="All">All Continents</option>
+                    <option value="Europe">Europe</option>
+                    <option value="Asia">Asia</option>
+                    <option value="Americas">Americas</option>
+                    <option value="Africa">Africa</option>
+                  </select>
+                )}
+              </div>
             </div>
+
           </div>
 
-          {/* Cards Grid: 3 columns with even gap */}
+          {/* Cards Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredDestinations.map((dest) => (
-              <div 
+              <DestinationCard
                 key={dest.id}
-                className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
-              >
-                <div>
-                  <div className="relative h-56">
-                    <img src={dest.image} alt={dest.name} className="w-full h-full object-cover" />
-                    <div className="absolute top-4 right-4 bg-slate-900/80 backdrop-blur-md text-white text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1.5 shadow-md">
-                      <SunMedium className="h-3.5 w-3.5 text-amber-400" />
-                      {dest.temp}
-                    </div>
-                  </div>
-
-                  <div className="p-6 space-y-3">
-                    <div className="flex items-center justify-between">
-                      <h3 className="text-xl font-bold">{dest.name}</h3>
-                      <span className="text-xs font-bold px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">{dest.budget}</span>
-                    </div>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-                      {dest.description}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="p-6 pt-0">
-                  <button
-                    onClick={() => addToItinerary(dest)}
-                    className="w-full py-3 rounded-2xl bg-sky-50 dark:bg-sky-950/40 text-sky-600 dark:text-sky-400 font-bold text-xs border border-sky-200 dark:border-sky-800/50 hover:bg-sky-500 hover:text-white transition-all flex items-center justify-center gap-2"
-                  >
-                    <Plus className="h-4 w-4" /> Add to Itinerary
-                  </button>
-                </div>
-              </div>
+                dest={dest}
+                onAddToItinerary={addToItinerary}
+                isFavorite={favorites.includes(dest.id)}
+                onToggleFavorite={handleToggleFavorite}
+                isCompared={compared.includes(dest.id)}
+                onToggleCompare={handleToggleCompare}
+                onOpenDetails={(d) => setSelectedModalDest(d)}
+              />
             ))}
           </div>
         </section>
 
-        {/* SECTION 2: MAP BANNER (CENTERED CARD) */}
-        <section id="map" className="bg-gradient-to-r from-slate-900 to-slate-800 text-white rounded-3xl p-10 shadow-2xl relative overflow-hidden text-center sm:text-left flex flex-col sm:flex-row items-center justify-between gap-8">
-          <div className="space-y-3 max-w-xl">
-            <span className="text-xs font-extrabold uppercase tracking-widest text-emerald-400">Interactive Map Preview</span>
-            <h2 className="text-3xl font-extrabold">Real-Time Traffic & Crowd Map</h2>
-            <p className="text-slate-300 text-sm leading-relaxed">
-              Plan smarter routes around crowded tourist hotspots using real-time GPS density data.
-            </p>
-          </div>
-          <button className="bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold px-8 py-3.5 rounded-full shadow-lg transition-transform hover:scale-105 shrink-0 flex items-center gap-2 text-sm">
-            <Navigation className="h-4 w-4" /> Open Map View
-          </button>
-        </section>
-
-        {/* SECTION 3: CENTERED ITINERARY PLANNER */}
+        {/* ITINERARY PLANNER */}
         <section id="itinerary" className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-8 shadow-sm space-y-6">
           <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-4">
             <div className="flex items-center gap-3">
@@ -270,7 +294,7 @@ export default function App() {
 
           {itinerary.length === 0 ? (
             <div className="text-center py-12 text-slate-400 text-sm">
-              Your itinerary is currently empty. Add places from the destinations above to start building your trip!
+              Your itinerary is currently empty. Add places from the destinations above!
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -295,6 +319,21 @@ export default function App() {
         </section>
 
       </main>
+
+      {/* DETAIL MODAL */}
+      <DestinationModal
+        dest={selectedModalDest}
+        onClose={() => setSelectedModalDest(null)}
+        onAddToItinerary={addToItinerary}
+      />
+
+      {/* COMPARE DRAWER */}
+      <CompareDrawer
+        comparedItems={comparedObjects}
+        onRemoveCompare={handleToggleCompare}
+        onClearAll={() => setCompared([])}
+      />
+
     </div>
-  )
+  );
 }
