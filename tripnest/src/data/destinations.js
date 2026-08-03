@@ -149,7 +149,7 @@ export const DESTINATIONS = [
     region: "West",
     category: "Heritage",
     lat: 20.5519, lon: 75.7033,
-    image: "https://images.unsplash.com/photo-1609946850897-4001a1d1e433?auto=format&fit=crop&w=800&q=80",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTpUodK30uucFgpCHABpG9-N16DF9UPlilgkb1CPgsHkA&s=10",
     temp: "30°C", budget: "$",
     description: "Ancient rock-cut cave monuments and the massive monolithic Kailasa Temple."
   },
@@ -197,7 +197,7 @@ export const DESTINATIONS = [
     region: "East",
     category: "Heritage",
     lat: 19.8876, lon: 86.0945,
-    image: "https://images.unsplash.com/photo-1620216503936-a36324b89327?auto=format&fit=crop&w=800&q=80",
+    image: "https://track2training.com/wp-content/uploads/2021/04/f65a2-screenshot_20200712-180725_chrome-1.jpg",
     temp: "31°C", budget: "$",
     description: "13th-century stone chariot architecture dedicated to the Sun God."
   },
@@ -357,3 +357,4 @@ export const DESTINATIONS = [
     description: "Ancient Incan citadel high in the Andes mountains."
   }
 ];
+
