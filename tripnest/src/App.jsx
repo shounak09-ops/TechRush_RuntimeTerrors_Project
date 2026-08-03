@@ -283,7 +283,7 @@ export default function App() {
             <div className="flex items-center gap-3">
               <Calendar className="h-6 w-6 text-sky-500" />
               <div>
-                <h2 className="text-xl font-bold">Your Saved Itinerary</h2>
+                <h2 className="text-xl font-bold text-teal-500">Your Saved Itinerary</h2>
                 <p className="text-xs text-slate-500">Day-by-day trip breakdown</p>
               </div>
             </div>
