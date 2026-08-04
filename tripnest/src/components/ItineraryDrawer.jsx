@@ -5,17 +5,15 @@ import {
   X,
   Sun,
   Moon,
-  Plus,
-  Minus,
-  Trash2,
   MapPin,
   Map,
   Luggage,
   Wallet,
   FileDown,
   FileJson,
-  Eraser,
+  Printer,
   Compass,
+  Pin,
 } from "lucide-react"
 import PackingChecklist from "./PackingCheckList"
 
@@ -41,29 +39,22 @@ export default function ItineraryDrawer({
   onClose,
   theme,
   onToggleTheme,
-  days,
-  selectedDay,
-  onSelectDay,
-  onAddDay,
-  onRemoveDay,
+  activeDestination,
   activitiesByDay,
-  onAddActivity,
-  onRemoveActivity,
   totalBudget,
   packingItems,
   onTogglePacking,
-  onAddPacking,
-  onRemovePacking,
   onExportJSON,
   onExportPDF,
-  onClearAll,
-  itinerary,
-  onRemoveFromItinerary,
 }) {
   const [tab, setTab] = useState("itinerary")
-  const [title, setTitle] = useState("")
-  const [cost, setCost] = useState("")
+  const [selectedDay, setSelectedDay] = useState(1)
   const dayBarRef = useRef(null)
+
+  // Generate fixed days based on active destination
+  const fixedDays = activeDestination 
+    ? Array.from({ length: activeDestination.suggestedDays }, (_, i) => i + 1)
+    : [1]
 
   const dayActivities = activitiesByDay[selectedDay] || []
 
@@ -72,20 +63,6 @@ export default function ItineraryDrawer({
     if (!el) return
     if (e.deltaY === 0) return
     el.scrollLeft += e.deltaY
-  }
-
-  function handleAddActivity(e) {
-    e.preventDefault()
-    const trimmed = title.trim()
-    if (!trimmed) return
-    onAddActivity(selectedDay, {
-      title: trimmed,
-      location: "Custom entry",
-      category: "Custom",
-      cost: Number.parseFloat(cost) || 0,
-    })
-    setTitle("")
-    setCost("")
   }
 
   return (
@@ -153,6 +130,18 @@ export default function ItineraryDrawer({
           </button>
         </header>
 
+        {/* Status Badge */}
+        {activeDestination && (
+          <div className={`mx-4 mt-4 flex items-center gap-2 rounded-xl bg-gradient-to-r from-sky-500/10 to-indigo-500/10 px-3 py-2 border border-sky-500/20 ${
+            theme === 'dark' ? 'text-slate-100' : 'text-slate-900'
+          }`}>
+            <Pin className="h-4 w-4 text-sky-500" />
+            <span className="text-xs font-semibold">
+              📌 Fixed {activeDestination.suggestedDays}-Day Plan: {activeDestination.name}
+            </span>
+          </div>
+        )}
+
         {/* Tabs */}
         <div className={`flex gap-1 border-b p-2 ${
           theme === 'dark' ? 'border-slate-800' : 'border-slate-200'
@@ -161,7 +150,7 @@ export default function ItineraryDrawer({
             active={tab === "itinerary"}
             onClick={() => setTab("itinerary")}
             icon={<Map className="h-4 w-4" />}
-            full="Itinerary & Budget"
+            full={`🗺️ Itinerary (${fixedDays.length} Days)`}
             short="Itinerary"
             theme={theme}
           />
@@ -169,7 +158,7 @@ export default function ItineraryDrawer({
             active={tab === "packing"}
             onClick={() => setTab("packing")}
             icon={<Luggage className="h-4 w-4" />}
-            full="Packing Checklist"
+            full="🧳 Packing Checklist"
             short="Packing"
             theme={theme}
           />
@@ -187,45 +176,20 @@ export default function ItineraryDrawer({
                   }`}>
                     Days
                   </span>
-                  <div className="flex items-center gap-1.5">
-                    <button
-                      type="button"
-                      onClick={onRemoveDay}
-                      disabled={days.length <= 1}
-                      aria-label="Remove last day"
-                      className={`inline-flex items-center gap-1 rounded-lg border px-2 py-1 text-xs font-medium transition-colors hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-40 ${
-                        theme === 'dark'
-                          ? 'border-slate-700 text-slate-300 hover:bg-slate-800'
-                          : 'border-slate-200 text-slate-600'
-                      }`}
-                    >
-                      <Minus className="h-3.5 w-3.5" />
-                      Remove Day
-                    </button>
-                    <button
-                      type="button"
-                      onClick={onAddDay}
-                      aria-label="Add a day"
-                      className="inline-flex items-center gap-1 rounded-lg bg-indigo-600 px-2 py-1 text-xs font-semibold text-white transition-colors hover:bg-indigo-500"
-                    >
-                      <Plus className="h-3.5 w-3.5" />
-                      Add Day
-                    </button>
-                  </div>
                 </div>
                 <div
                   ref={dayBarRef}
                   onWheel={handleWheel}
                   className="tn-scroll-x flex snap-x gap-2 overflow-x-auto pb-2"
                 >
-                  {days.map((day) => {
+                  {fixedDays.map((day) => {
                     const count = (activitiesByDay[day] || []).length
                     const active = day === selectedDay
                     return (
                       <button
                         key={day}
                         type="button"
-                        onClick={() => onSelectDay(day)}
+                        onClick={() => setSelectedDay(day)}
                         aria-pressed={active}
                         className={`flex min-w-[84px] snap-start flex-col items-center rounded-xl border px-3 py-2.5 transition-all ${
                           active
@@ -245,49 +209,6 @@ export default function ItineraryDrawer({
                   })}
                 </div>
               </div>
-
-              {/* Saved Destinations */}
-              {itinerary && itinerary.length > 0 && (
-                <div className="flex flex-col gap-2">
-                  <h3 className={`text-sm font-semibold ${
-                    theme === 'dark' ? 'text-slate-200' : 'text-slate-700'
-                  }`}>Saved Destinations</h3>
-                  <ul className="flex flex-col gap-2">
-                    {itinerary.map((item, index) => (
-                      <li
-                        key={item.id}
-                        className={`group flex items-center gap-3 rounded-xl border p-3 shadow-sm transition-colors ${
-                          theme === 'dark'
-                            ? 'border-slate-800 bg-slate-800/50'
-                            : 'border-slate-200 bg-white'
-                        }`}
-                      >
-                        <span className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-xs font-bold ${
-                          theme === 'dark' ? 'bg-slate-700 text-slate-300' : 'bg-slate-100 text-slate-600'
-                        }`}>
-                          {index + 1}
-                        </span>
-                        <div className="min-w-0 flex-1">
-                          <p className={`truncate text-sm font-semibold ${
-                            theme === 'dark' ? 'text-slate-100' : 'text-slate-800'
-                          }`}>{item.name}</p>
-                          <p className={`text-xs ${
-                            theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
-                          }`}>{item.country}</p>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={() => onRemoveFromItinerary(item.id)}
-                          aria-label={`Remove ${item.name}`}
-                          className="rounded-lg p-1.5 text-slate-400 opacity-0 transition hover:bg-rose-500/10 hover:text-rose-500 focus:opacity-100 group-hover:opacity-100"
-                        >
-                          <Trash2 className="h-4 w-4" aria-hidden="true" />
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
 
               {/* Activities */}
               <div className="flex flex-col gap-2">
@@ -309,7 +230,7 @@ export default function ItineraryDrawer({
                       }`}>No activities yet</p>
                       <p className={`text-xs ${
                         theme === 'dark' ? 'text-slate-500' : 'text-slate-400'
-                      }`}>Add one below or from a destination card.</p>
+                      }`}>Activities are pre-populated from your destination.</p>
                     </div>
                   </div>
                 ) : (
@@ -347,79 +268,12 @@ export default function ItineraryDrawer({
                           <span className={`text-sm font-bold ${
                             theme === 'dark' ? 'text-slate-100' : 'text-slate-900'
                           }`}>{currency(a.cost)}</span>
-                          <button
-                            type="button"
-                            onClick={() => onRemoveActivity(selectedDay, a.id)}
-                            aria-label={`Remove ${a.title}`}
-                            className="rounded-lg p-1 text-slate-400 transition hover:bg-rose-500/10 hover:text-rose-500"
-                          >
-                            <Trash2 className="h-4 w-4" aria-hidden="true" />
-                          </button>
                         </div>
                       </li>
                     ))}
                   </ul>
                 )}
               </div>
-
-              {/* Add custom activity */}
-              <form
-                onSubmit={handleAddActivity}
-                className={`rounded-2xl border p-3 ${
-                  theme === 'dark'
-                    ? 'border-slate-800 bg-slate-800/40'
-                    : 'border-slate-200 bg-slate-50'
-                }`}
-              >
-                <p className={`mb-2 text-xs font-semibold uppercase tracking-wider ${
-                  theme === 'dark' ? 'text-slate-500' : 'text-slate-400'
-                }`}>
-                  Add custom activity
-                </p>
-                <div className="flex flex-col gap-2">
-                  <input
-                    type="text"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    placeholder="Activity title"
-                    aria-label="Activity title"
-                    className={`w-full rounded-xl border px-3 py-2 text-sm placeholder:text-slate-400 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/30 ${
-                      theme === 'dark'
-                        ? 'border-slate-700 bg-slate-800 text-slate-100 placeholder:text-slate-500'
-                        : 'border-slate-200 bg-white text-slate-800'
-                    }`}
-                  />
-                  <div className="flex gap-2">
-                    <div className="relative flex-1">
-                      <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-slate-400">
-                        $
-                      </span>
-                      <input
-                        type="number"
-                        min="0"
-                        step="0.01"
-                        value={cost}
-                        onChange={(e) => setCost(e.target.value)}
-                        placeholder="Cost"
-                        aria-label="Activity cost"
-                        className={`w-full rounded-xl border py-2 pl-7 pr-3 text-sm placeholder:text-slate-400 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/30 ${
-                          theme === 'dark'
-                            ? 'border-slate-700 bg-slate-800 text-slate-100 placeholder:text-slate-500'
-                            : 'border-slate-200 bg-white text-slate-800'
-                        }`}
-                      />
-                    </div>
-                    <button
-                      type="submit"
-                      disabled={!title.trim()}
-                      className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-teal-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/40 disabled:opacity-50"
-                    >
-                      <Plus className="h-4 w-4" aria-hidden="true" />
-                      Add Activity
-                    </button>
-                  </div>
-                </div>
-              </form>
 
               {/* Budget summary */}
               <div className="flex items-center justify-between rounded-2xl border border-teal-500/30 bg-gradient-to-r from-teal-500/10 to-indigo-500/10 p-4">
@@ -433,7 +287,7 @@ export default function ItineraryDrawer({
                     }`}>Total estimated cost</p>
                     <p className={`text-xs ${
                       theme === 'dark' ? 'text-slate-500' : 'text-slate-400'
-                    }`}>Across all {days.length} days</p>
+                    }`}>Across all {fixedDays.length} days</p>
                   </div>
                 </div>
                 <span className={`text-2xl font-extrabold ${
@@ -445,27 +299,26 @@ export default function ItineraryDrawer({
             <PackingChecklist
               items={packingItems}
               onToggle={onTogglePacking}
-              onAdd={onAddPacking}
-              onRemove={onRemovePacking}
+              activeDestination={activeDestination}
               theme={theme}
             />
           )}
         </div>
 
         {/* Footer action bar */}
-        <footer className={`tn-no-print grid grid-cols-3 gap-2 border-t p-3 ${
+        <footer className={`tn-no-print grid grid-cols-2 gap-2 border-t p-3 ${
           theme === 'dark' ? 'border-slate-800' : 'border-slate-200'
         }`}>
           <button
             type="button"
-            onClick={onExportPDF}
+            onClick={() => window.print()}
             className={`inline-flex items-center justify-center gap-1.5 rounded-xl border px-2 py-2.5 text-xs font-semibold transition-colors hover:bg-slate-100 ${
               theme === 'dark'
                 ? 'border-slate-700 text-slate-200 hover:bg-slate-800'
                 : 'border-slate-200 text-slate-700'
             }`}
           >
-            <FileDown className="h-4 w-4" aria-hidden="true" />
+            <Printer className="h-4 w-4" aria-hidden="true" />
             Save as PDF
           </button>
           <button
@@ -475,18 +328,6 @@ export default function ItineraryDrawer({
           >
             <FileJson className="h-4 w-4" aria-hidden="true" />
             Export JSON
-          </button>
-          <button
-            type="button"
-            onClick={onClearAll}
-            className={`inline-flex items-center justify-center gap-1.5 rounded-xl border px-2 py-2.5 text-xs font-semibold transition-colors hover:bg-rose-50 ${
-              theme === 'dark'
-                ? 'border-rose-500/30 text-rose-400 hover:bg-rose-500/10'
-                : 'border-rose-200 text-rose-600'
-            }`}
-          >
-            <Eraser className="h-4 w-4" aria-hidden="true" />
-            Clear All
           </button>
         </footer>
       </aside>

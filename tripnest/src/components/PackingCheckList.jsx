@@ -1,33 +1,79 @@
 "use client"
 
-import { useMemo, useState } from "react"
-import { Plus, Trash2, Check, Luggage } from "lucide-react"
+import { useMemo, useState, useEffect } from "react"
+import { Check, Luggage, Pin } from "lucide-react"
 
 const CATEGORY_ORDER = ["Documents", "Electronics", "Toiletries", "Health", "Clothing", "Custom"]
 
-/**
- * Smart packing checklist.
- * State is fully controlled by the parent so it can be persisted and exported.
- *
- * items: Array<{ id, label, category, packed }>
- */
-export default function PackingChecklist({ items, onToggle, onAdd, onRemove, theme }) {
-  const [label, setLabel] = useState("")
-  const [category, setCategory] = useState("Custom")
+// Standard essentials that apply to all trips
+const STANDARD_ESSENTIALS = [
+  { id: "std_1", label: "Passport & ID", category: "Documents", packed: false },
+  { id: "std_2", label: "Travel insurance documents", category: "Documents", packed: false },
+  { id: "std_3", label: "Wallet/Cash/Cards", category: "Documents", packed: false },
+  { id: "std_4", label: "Phone charger", category: "Electronics", packed: false },
+  { id: "std_5", label: "Power bank", category: "Electronics", packed: false },
+  { id: "std_6", label: "Universal travel adapter", category: "Electronics", packed: false },
+  { id: "std_7", label: "Toothbrush & toothpaste", category: "Toiletries", packed: false },
+  { id: "std_8", label: "Shampoo & conditioner", category: "Toiletries", packed: false },
+  { id: "std_9", label: "First aid kit", category: "Health", packed: false },
+  { id: "std_10", label: "Prescription medications", category: "Health", packed: false },
+]
 
-  const packedCount = items.filter((i) => i.packed).length
-  const total = items.length
+/**
+ * Fixed Smart packing checklist.
+ * Pre-loads standard essentials + destination-specific items.
+ * No manual additions or deletions - strict destination lock.
+ */
+export default function PackingChecklist({ items, onToggle, activeDestination, theme }) {
+  const [localItems, setLocalItems] = useState([])
+
+  // Load saved state from localStorage for this destination
+  useEffect(() => {
+    if (activeDestination) {
+      const storageKey = `tripnest_packing_${activeDestination.id}`
+      const saved = JSON.parse(localStorage.getItem(storageKey) || "null")
+      
+      if (saved) {
+        setLocalItems(saved)
+      } else {
+        // Initialize with standard essentials + destination-specific items
+        const destinationItems = activeDestination.recommendedPacking?.map((item, index) => ({
+          id: `dest_${index}`,
+          label: item,
+          category: "Custom",
+          packed: false
+        })) || []
+        
+        const initialItems = [...STANDARD_ESSENTIALS, ...destinationItems]
+        setLocalItems(initialItems)
+      }
+    }
+  }, [activeDestination])
+
+  // Save to localStorage whenever items change
+  useEffect(() => {
+    if (activeDestination && localItems.length > 0) {
+      const storageKey = `tripnest_packing_${activeDestination.id}`
+      localStorage.setItem(storageKey, JSON.stringify(localItems))
+    }
+  }, [localItems, activeDestination])
+
+  // Use parent items if provided, otherwise use local state
+  const displayItems = items && items.length > 0 ? items : localItems
+
+  const packedCount = displayItems.filter((i) => i.packed).length
+  const total = displayItems.length
   const percent = total === 0 ? 0 : Math.round((packedCount / total) * 100)
 
   const grouped = useMemo(() => {
     const map = {}
-    for (const item of items) {
+    for (const item of displayItems) {
       const key = item.category || "Custom"
       if (!map[key]) map[key] = []
       map[key].push(item)
     }
     return map
-  }, [items])
+  }, [displayItems])
 
   const orderedCategories = useMemo(() => {
     const present = Object.keys(grouped)
@@ -38,16 +84,28 @@ export default function PackingChecklist({ items, onToggle, onAdd, onRemove, the
     })
   }, [grouped])
 
-  function handleSubmit(e) {
-    e.preventDefault()
-    const trimmed = label.trim()
-    if (!trimmed) return
-    onAdd({ label: trimmed, category })
-    setLabel("")
+  const handleToggle = (id) => {
+    const updatedItems = displayItems.map(item => 
+      item.id === id ? { ...item, packed: !item.packed } : item
+    )
+    setLocalItems(updatedItems)
+    if (onToggle) onToggle(id)
   }
 
   return (
     <div className="flex flex-col gap-5">
+      {/* Status Badge */}
+      {activeDestination && (
+        <div className={`flex items-center gap-2 rounded-xl bg-gradient-to-r from-sky-500/10 to-indigo-500/10 px-3 py-2 border border-sky-500/20 ${
+          theme === 'dark' ? 'text-slate-100' : 'text-slate-900'
+        }`}>
+          <Pin className="h-4 w-4 text-sky-500" />
+          <span className="text-xs font-semibold">
+            📌 Fixed Checklist: {activeDestination.name}
+          </span>
+        </div>
+      )}
+
       {/* Progress */}
       <div className={`rounded-2xl border p-4 ${
         theme === 'dark'
@@ -66,7 +124,7 @@ export default function PackingChecklist({ items, onToggle, onAdd, onRemove, the
           <span className={`text-sm font-bold ${
             theme === 'dark' ? 'text-slate-100' : 'text-slate-900'
           }`}>
-            {packedCount}/{total} Packed
+            {packedCount} / {total} Packed ({percent}%)
           </span>
         </div>
         <div
@@ -85,46 +143,6 @@ export default function PackingChecklist({ items, onToggle, onAdd, onRemove, the
           />
         </div>
       </div>
-
-      {/* Add custom item */}
-      <form onSubmit={handleSubmit} className="flex flex-col gap-2 sm:flex-row">
-        <input
-          type="text"
-          value={label}
-          onChange={(e) => setLabel(e.target.value)}
-          placeholder="Add a custom item…"
-          aria-label="Custom packing item"
-          className={`min-w-0 flex-1 rounded-xl border px-3 py-2 text-sm placeholder:text-slate-400 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/30 ${
-            theme === 'dark'
-              ? 'border-slate-700 bg-slate-800 text-slate-100 placeholder:text-slate-500'
-              : 'border-slate-200 bg-white text-slate-800'
-          }`}
-        />
-        <select
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          aria-label="Item category"
-          className={`rounded-xl border px-3 py-2 text-sm focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/30 ${
-            theme === 'dark'
-              ? 'border-slate-700 bg-slate-800 text-slate-200'
-              : 'border-slate-200 bg-white text-slate-700'
-          }`}
-        >
-          {CATEGORY_ORDER.map((c) => (
-            <option key={c} value={c}>
-              {c}
-            </option>
-          ))}
-        </select>
-        <button
-          type="submit"
-          className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-teal-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/40 disabled:opacity-50"
-          disabled={!label.trim()}
-        >
-          <Plus className="h-4 w-4" aria-hidden="true" />
-          Add Item
-        </button>
-      </form>
 
       {/* Grouped list */}
       <div className="flex flex-col gap-5">
@@ -147,7 +165,7 @@ export default function PackingChecklist({ items, onToggle, onAdd, onRemove, the
                 >
                   <button
                     type="button"
-                    onClick={() => onToggle(item.id)}
+                    onClick={() => handleToggle(item.id)}
                     aria-pressed={item.packed}
                     aria-label={item.packed ? `Mark ${item.label} as not packed` : `Mark ${item.label} as packed`}
                     className={`grid h-5 w-5 flex-shrink-0 place-items-center rounded-md border transition-colors ${
@@ -169,14 +187,6 @@ export default function PackingChecklist({ items, onToggle, onAdd, onRemove, the
                   >
                     {item.label}
                   </span>
-                  <button
-                    type="button"
-                    onClick={() => onRemove(item.id)}
-                    aria-label={`Delete ${item.label}`}
-                    className="rounded-lg p-1.5 text-slate-400 opacity-0 transition hover:bg-rose-500/10 hover:text-rose-500 focus:opacity-100 group-hover:opacity-100"
-                  >
-                    <Trash2 className="h-4 w-4" aria-hidden="true" />
-                  </button>
                 </li>
               ))}
             </ul>
@@ -189,7 +199,7 @@ export default function PackingChecklist({ items, onToggle, onAdd, onRemove, the
           }`}>
             <p className={`text-sm ${
               theme === 'dark' ? 'text-slate-500' : 'text-slate-400'
-            }`}>Your packing list is empty. Add your first item above.</p>
+            }`}>Select a destination to load your packing checklist.</p>
           </div>
         )}
       </div>

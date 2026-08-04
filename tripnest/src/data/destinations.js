@@ -11,7 +11,9 @@ export const DESTINATIONS = [
     lat: 27.1751, lon: 78.0421,
     image: "https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=800&q=80",
     temp: "32°C", budget: "$",
-    description: "Iconic ivory-white marble mausoleum on the Yamuna River."
+    description: "Iconic ivory-white marble mausoleum on the Yamuna River.",
+    suggestedDays: 2,
+    recommendedPacking: ["Sunscreen SPF 50+", "Comfortable walking shoes", "Light breathable clothing", "Camera", "Hat/cap for sun protection"]
   },
   {
     id: 102,
@@ -22,7 +24,9 @@ export const DESTINATIONS = [
     lat: 26.9258, lon: 75.8237,
     image: "https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=800&q=80",
     temp: "31°C", budget: "$",
-    description: "Royal pink sandstone architecture and forts in the heart of Rajasthan."
+    description: "Royal pink sandstone architecture and forts in the heart of Rajasthan.",
+    suggestedDays: 3,
+    recommendedPacking: ["Sunscreen SPF 50+", "Comfortable walking shoes", "Light cotton clothing", "Camera", "Sunglasses", "Hat/cap"]
   },
   {
     id: 103,
@@ -33,7 +37,9 @@ export const DESTINATIONS = [
     lat: 34.1526, lon: 77.5771,
     image: "https://images.unsplash.com/photo-1581793745862-99fde7fa73d2?auto=format&fit=crop&w=800&q=80",
     temp: "12°C", budget: "$$",
-    description: "High-altitude Himalayan mountain passes and glacial lakes."
+    description: "High-altitude Himalayan mountain passes and glacial lakes.",
+    suggestedDays: 5,
+    recommendedPacking: ["Thermal base layers", "Warm jacket", "Windproof outer layer", "Sunscreen SPF 50+", "Lip balm", "Sunglasses", "Comfortable hiking boots"]
   },
   {
     id: 104,
@@ -44,7 +50,9 @@ export const DESTINATIONS = [
     lat: 32.2432, lon: 77.1892,
     image: "https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=800&q=80",
     temp: "15°C", budget: "$",
-    description: "Snowy peaks, pine forests, and mountain valley adventures."
+    description: "Snowy peaks, pine forests, and mountain valley adventures.",
+    suggestedDays: 4,
+    recommendedPacking: ["Warm jacket", "Thermal wear", "Waterproof boots", "Gloves", "Beanie/hat", "Sunscreen", "Sunglasses"]
   },
   {
     id: 105,
@@ -55,7 +63,9 @@ export const DESTINATIONS = [
     lat: 29.5300, lon: 78.7747,
     image: "https://images.unsplash.com/photo-1534177616072-ef7dc120449d?auto=format&fit=crop&w=800&q=80",
     temp: "26°C", budget: "$$",
-    description: "India's oldest national park famous for Bengal Tigers and sal forests."
+    description: "India's oldest national park famous for Bengal Tigers and sal forests.",
+    suggestedDays: 3,
+    recommendedPacking: ["Binoculars", "Camera with zoom lens", "Earth-toned clothing", "Insect repellent", "Comfortable walking shoes", "Flashlight"]
   },
 
   // ==========================================
@@ -70,7 +80,9 @@ export const DESTINATIONS = [
     lat: 15.3350, lon: 76.4600,
     image: "https://images.unsplash.com/photo-1600100397608-f010f423b971?auto=format&fit=crop&w=800&q=80",
     temp: "30°C", budget: "$",
-    description: "UNESCO World Heritage site with ancient Vijayanagara empire ruins."
+    description: "UNESCO World Heritage site with ancient Vijayanagara empire ruins.",
+    suggestedDays: 3,
+    recommendedPacking: ["Comfortable walking shoes", "Sunscreen SPF 50+", "Light breathable clothing", "Camera", "Hat/cap", "Water bottle"]
   },
   {
     id: 202,
@@ -81,7 +93,9 @@ export const DESTINATIONS = [
     lat: 12.6269, lon: 80.1927,
     image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=800&q=80",
     temp: "31°C", budget: "$",
-    description: "7th-century rock-cut coastal Shore Temple and monolithic rathas."
+    description: "7th-century rock-cut coastal Shore Temple and monolithic rathas.",
+    suggestedDays: 2,
+    recommendedPacking: ["Sunscreen SPF 50+", "Comfortable walking shoes", "Light cotton clothing", "Camera", "Beach wear", "Hat/cap"]
   },
   {
     id: 203,
@@ -92,7 +106,9 @@ export const DESTINATIONS = [
     lat: 9.4981, lon: 76.3388,
     image: "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=800&q=80",
     temp: "28°C", budget: "$",
-    description: "Serene network of palm-fringed coastal backwater canals."
+    description: "Serene network of palm-fringed coastal backwater canals.",
+    suggestedDays: 3,
+    recommendedPacking: ["Light breathable clothing", "Sunscreen SPF 50+", "Insect repellent", "Camera", "Waterproof bag", "Comfortable sandals"]
   },
   {
     id: 204,
@@ -103,7 +119,9 @@ export const DESTINATIONS = [
     lat: 8.7379, lon: 76.7163,
     image: "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=800&q=80",
     temp: "29°C", budget: "$",
-    description: "Dramatic red cliffs adjacent to the Arabian Sea coastline."
+    description: "Dramatic red cliffs adjacent to the Arabian Sea coastline.",
+    suggestedDays: 3,
+    recommendedPacking: ["Beach wear", "Sunscreen SPF 50+", "Comfortable walking shoes", "Camera", "Light cover-up", "Sunglasses"]
   },
   {
     id: 205,
@@ -114,7 +132,9 @@ export const DESTINATIONS = [
     lat: 10.0889, lon: 77.0595,
     image: "https://images.unsplash.com/photo-1593693397690-362cb9666fc2?auto=format&fit=crop&w=800&q=80",
     temp: "20°C", budget: "$",
-    description: "Rolling tea garden estates nestled in Western Ghats mountain ranges."
+    description: "Rolling tea garden estates nestled in Western Ghats mountain ranges.",
+    suggestedDays: 3,
+    recommendedPacking: ["Light jacket", "Comfortable walking shoes", "Rain jacket/umbrella", "Camera", "Insect repellent", "Sunscreen"]
   },
   {
     id: 206,
@@ -125,7 +145,9 @@ export const DESTINATIONS = [
     lat: 11.9169, lon: 76.3333,
     image: "https://images.unsplash.com/photo-1561731216-c3a4d99437d5?auto=format&fit=crop&w=800&q=80",
     temp: "25°C", budget: "$$$",
-    description: "Premier leopard and black panther habitat along Kabini river backwaters."
+    description: "Premier leopard and black panther habitat along Kabini river backwaters.",
+    suggestedDays: 3,
+    recommendedPacking: ["Binoculars", "Camera with zoom lens", "Earth-toned clothing", "Insect repellent", "Comfortable walking shoes", "Flashlight"]
   },
 
   // ==========================================
@@ -140,7 +162,9 @@ export const DESTINATIONS = [
     lat: 15.2993, lon: 74.1240,
     image: "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=800&q=80",
     temp: "29°C", budget: "$",
-    description: "Golden sand beaches, palm groves, and energetic coastline vibes."
+    description: "Golden sand beaches, palm groves, and energetic coastline vibes.",
+    suggestedDays: 4,
+    recommendedPacking: ["Beach wear", "Sunscreen SPF 50+", "Sunglasses", "Flip-flops", "Light cover-up", "Camera", "Insect repellent"]
   },
   {
     id: 302,
@@ -151,7 +175,9 @@ export const DESTINATIONS = [
     lat: 20.5519, lon: 75.7033,
     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTpUodK30uucFgpCHABpG9-N16DF9UPlilgkb1CPgsHkA&s=10",
     temp: "30°C", budget: "$",
-    description: "Ancient rock-cut cave monuments and the massive monolithic Kailasa Temple."
+    description: "Ancient rock-cut cave monuments and the massive monolithic Kailasa Temple.",
+    suggestedDays: 3,
+    recommendedPacking: ["Comfortable walking shoes", "Sunscreen SPF 50+", "Light breathable clothing", "Camera", "Flashlight", "Water bottle"]
   },
   {
     id: 303,
@@ -162,7 +188,9 @@ export const DESTINATIONS = [
     lat: 21.1243, lon: 70.8242,
     image: "https://images.unsplash.com/photo-1534567153574-2b12153a87f0?auto=format&fit=crop&w=800&q=80",
     temp: "33°C", budget: "$$",
-    description: "The sole wild sanctuary for majestic Asiatic Lions in Gujarat."
+    description: "The sole wild sanctuary for majestic Asiatic Lions in Gujarat.",
+    suggestedDays: 3,
+    recommendedPacking: ["Binoculars", "Camera with zoom lens", "Earth-toned clothing", "Insect repellent", "Comfortable walking shoes", "Sunscreen SPF 50+", "Hat/cap"]
   },
   {
     id: 304,
@@ -173,7 +201,9 @@ export const DESTINATIONS = [
     lat: 26.0173, lon: 76.5026,
     image: "https://images.unsplash.com/photo-1549366021-9f761d450615?auto=format&fit=crop&w=800&q=80",
     temp: "31°C", budget: "$$",
-    description: "Royal hunting grounds turned wildlife reserve dominated by historic fort ruins."
+    description: "Royal hunting grounds turned wildlife reserve dominated by historic fort ruins.",
+    suggestedDays: 3,
+    recommendedPacking: ["Binoculars", "Camera with zoom lens", "Earth-toned clothing", "Insect repellent", "Comfortable walking shoes", "Sunscreen SPF 50+", "Flashlight"]
   },
 
   // ==========================================
@@ -188,7 +218,9 @@ export const DESTINATIONS = [
     lat: 27.0410, lon: 88.2663,
     image: "https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=800&q=80",
     temp: "16°C", budget: "$",
-    description: "Famed tea gardens with views of Kangchenjunga peak."
+    description: "Famed tea gardens with views of Kangchenjunga peak.",
+    suggestedDays: 3,
+    recommendedPacking: ["Light jacket", "Comfortable walking shoes", "Rain jacket/umbrella", "Camera", "Warm layers", "Sunscreen"]
   },
   {
     id: 402,
@@ -199,7 +231,9 @@ export const DESTINATIONS = [
     lat: 19.8876, lon: 86.0945,
     image: "https://track2training.com/wp-content/uploads/2021/04/f65a2-screenshot_20200712-180725_chrome-1.jpg",
     temp: "31°C", budget: "$",
-    description: "13th-century stone chariot architecture dedicated to the Sun God."
+    description: "13th-century stone chariot architecture dedicated to the Sun God.",
+    suggestedDays: 2,
+    recommendedPacking: ["Sunscreen SPF 50+", "Comfortable walking shoes", "Light breathable clothing", "Camera", "Hat/cap", "Water bottle"]
   },
   {
     id: 403,
@@ -210,7 +244,9 @@ export const DESTINATIONS = [
     lat: 19.7983, lon: 85.8249,
     image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
     temp: "30°C", budget: "$",
-    description: "Blue Flag certified sacred coastal shoreline along the Bay of Bengal."
+    description: "Blue Flag certified sacred coastal shoreline along the Bay of Bengal.",
+    suggestedDays: 3,
+    recommendedPacking: ["Beach wear", "Sunscreen SPF 50+", "Comfortable walking shoes", "Light cover-up", "Camera", "Sunglasses"]
   },
   {
     id: 404,
@@ -221,7 +257,9 @@ export const DESTINATIONS = [
     lat: 26.5775, lon: 93.1711,
     image: "https://images.unsplash.com/photo-1575550959106-5a7defe28b56?auto=format&fit=crop&w=800&q=80",
     temp: "24°C", budget: "$$",
-    description: "Assam's wetland grass plains hosting two-thirds of the world's Great One-horned Rhinos."
+    description: "Assam's wetland grass plains hosting two-thirds of the world's Great One-horned Rhinos.",
+    suggestedDays: 3,
+    recommendedPacking: ["Binoculars", "Camera with zoom lens", "Earth-toned clothing", "Insect repellent", "Comfortable walking shoes", "Rain jacket", "Flashlight"]
   },
 
   // ==========================================
@@ -236,7 +274,9 @@ export const DESTINATIONS = [
     lat: 36.3932, lon: 25.4615,
     image: "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format&fit=crop&w=800&q=80",
     temp: "26°C", budget: "$$$",
-    description: "Iconic cliffside white villas and Mediterranean sunsets."
+    description: "Iconic cliffside white villas and Mediterranean sunsets.",
+    suggestedDays: 4,
+    recommendedPacking: ["Light breathable clothing", "Sunscreen SPF 50+", "Sunglasses", "Comfortable walking shoes", "Swimwear", "Camera", "Light jacket for evenings"]
   },
   {
     id: 502,
@@ -247,7 +287,9 @@ export const DESTINATIONS = [
     lat: 45.9765, lon: 7.7491,
     image: "https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?auto=format&fit=crop&w=800&q=80",
     temp: "4°C", budget: "$$$",
-    description: "Alpine skiing, mountain railways, and views of the Matterhorn."
+    description: "Alpine skiing, mountain railways, and views of the Matterhorn.",
+    suggestedDays: 5,
+    recommendedPacking: ["Thermal base layers", "Warm jacket", "Waterproof outer layer", "Insulated gloves", "Beanie/hat", "Ski goggles", "Warm waterproof boots"]
   },
   {
     id: 503,
@@ -258,7 +300,9 @@ export const DESTINATIONS = [
     lat: 41.8902, lon: 12.4922,
     image: "https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=800&q=80",
     temp: "25°C", budget: "$$$",
-    description: "Ancient Roman amphitheater and historic empire center."
+    description: "Ancient Roman amphitheater and historic empire center.",
+    suggestedDays: 3,
+    recommendedPacking: ["Comfortable walking shoes", "Sunscreen SPF 50+", "Light breathable clothing", "Camera", "Modest clothing for churches", "Day bag"]
   },
   {
     id: 504,
@@ -269,7 +313,9 @@ export const DESTINATIONS = [
     lat: 48.8584, lon: 2.2945,
     image: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=800&q=80",
     temp: "22°C", budget: "$$$",
-    description: "World-famous architectural landmark and cultural arts hub."
+    description: "World-famous architectural landmark and cultural arts hub.",
+    suggestedDays: 3,
+    recommendedPacking: ["Comfortable walking shoes", "Light jacket", "Sunscreen SPF 50+", "Camera", "Stylish casual clothing", "Day bag", "Umbrella"]
   },
   {
     id: 505,
@@ -280,7 +326,9 @@ export const DESTINATIONS = [
     lat: 40.6340, lon: 14.6027,
     image: "https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=800&q=80",
     temp: "27°C", budget: "$$$",
-    description: "Dramatic coastal cliffs, pastel villages, and Tyrrhenian sea waters."
+    description: "Dramatic coastal cliffs, pastel villages, and Tyrrhenian sea waters.",
+    suggestedDays: 4,
+    recommendedPacking: ["Light breathable clothing", "Sunscreen SPF 50+", "Swimwear", "Comfortable walking shoes", "Camera", "Sunglasses", "Light jacket for boat rides"]
   },
 
   // ==========================================
@@ -295,7 +343,9 @@ export const DESTINATIONS = [
     lat: -2.3333, lon: 34.8333,
     image: "https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=800&q=80",
     temp: "28°C", budget: "$$$",
-    description: "Famous Great Migration savannah hosting lions, elephants, and wildebeest."
+    description: "Famous Great Migration savannah hosting lions, elephants, and wildebeest.",
+    suggestedDays: 4,
+    recommendedPacking: ["Binoculars", "Camera with zoom lens", "Earth-toned clothing", "Insect repellent", "Sunscreen SPF 50+", "Comfortable walking shoes", "Flashlight", "Hat/cap"]
   },
   {
     id: 602,
@@ -306,7 +356,9 @@ export const DESTINATIONS = [
     lat: -23.9884, lon: 31.5547,
     image: "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?auto=format&fit=crop&w=800&q=80",
     temp: "26°C", budget: "$$$",
-    description: "Vast bushveld game reserve renowned for Africa's 'Big Five'."
+    description: "Vast bushveld game reserve renowned for Africa's 'Big Five'.",
+    suggestedDays: 4,
+    recommendedPacking: ["Binoculars", "Camera with zoom lens", "Earth-toned clothing", "Insect repellent", "Sunscreen SPF 50+", "Comfortable walking shoes", "Flashlight", "Light jacket"]
   },
 
   // ==========================================
@@ -321,7 +373,9 @@ export const DESTINATIONS = [
     lat: 35.0116, lon: 135.7681,
     image: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=800&q=80",
     temp: "21°C", budget: "$$",
-    description: "Classical Buddhist temples, gardens, and imperial palaces."
+    description: "Classical Buddhist temples, gardens, and imperial palaces.",
+    suggestedDays: 3,
+    recommendedPacking: ["Comfortable walking shoes", "Light breathable clothing", "Camera", "Modest clothing for temples", "Day bag", "Umbrella", "Sunscreen"]
   },
   {
     id: 702,
@@ -332,7 +386,9 @@ export const DESTINATIONS = [
     lat: -8.4095, lon: 115.1889,
     image: "https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=800&q=80",
     temp: "29°C", budget: "$$",
-    description: "Tropical beaches, coral reefs, and cliffside sanctuaries."
+    description: "Tropical beaches, coral reefs, and cliffside sanctuaries.",
+    suggestedDays: 4,
+    recommendedPacking: ["Light breathable clothing", "Sunscreen SPF 50+", "Swimwear", "Comfortable walking shoes", "Camera", "Insect repellent", "Light cover-up"]
   },
   {
     id: 703,
@@ -343,7 +399,9 @@ export const DESTINATIONS = [
     lat: 51.4968, lon: -115.9281,
     image: "https://images.unsplash.com/photo-1517411032315-54ef2cb783bb?auto=format&fit=crop&w=800&q=80",
     temp: "14°C", budget: "$$$",
-    description: "Turquoise glacial lakes and Rocky Mountain hiking trails."
+    description: "Turquoise glacial lakes and Rocky Mountain hiking trails.",
+    suggestedDays: 4,
+    recommendedPacking: ["Warm jacket", "Thermal base layers", "Hiking boots", "Waterproof outer layer", "Sunscreen SPF 50+", "Camera", "Bear spray (if hiking)"]
   },
   {
     id: 704,
@@ -354,7 +412,9 @@ export const DESTINATIONS = [
     lat: -13.1631, lon: -72.5450,
     image: "https://images.unsplash.com/photo-1526392060635-9d6019884377?auto=format&fit=crop&w=800&q=80",
     temp: "18°C", budget: "$$",
-    description: "Ancient Incan citadel high in the Andes mountains."
+    description: "Ancient Incan citadel high in the Andes mountains.",
+    suggestedDays: 4,
+    recommendedPacking: ["Comfortable hiking boots", "Light breathable clothing", "Warm jacket", "Rain jacket", "Sunscreen SPF 50+", "Camera", "Altitude sickness medication", "Water bottle"]
   }
 ];
 
