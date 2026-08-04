@@ -1,342 +1,518 @@
 "use client"
 
-import { useMemo, useState } from "react"
-import { X, Clock, MapPin, Trash2, Plus, Download, Sparkles } from "lucide-react"
+import { useRef, useState } from "react"
+import {
+  X,
+  Sun,
+  Moon,
+  Plus,
+  Minus,
+  Trash2,
+  MapPin,
+  Map,
+  Luggage,
+  Wallet,
+  FileDown,
+  FileJson,
+  Eraser,
+  Compass,
+} from "lucide-react"
+import PackingChecklist from "./PackingCheckList"
 
 const CATEGORY_STYLES = {
-  Heritage: "bg-amber-50 text-amber-700 ring-amber-200",
-  Beach: "bg-cyan-50 text-cyan-700 ring-cyan-200",
-  Dining: "bg-rose-50 text-rose-700 ring-rose-200",
-  Adventure: "bg-emerald-50 text-emerald-700 ring-emerald-200",
-  Custom: "bg-slate-100 text-slate-600 ring-slate-200",
+  Sightseeing: "bg-indigo-500/15 text-indigo-600 dark:text-indigo-400",
+  Food: "bg-amber-500/15 text-amber-600 dark:text-amber-400",
+  Adventure: "bg-teal-500/15 text-teal-600 dark:text-teal-400",
+  Stay: "bg-rose-500/15 text-rose-600 dark:text-rose-400",
+  Transport: "bg-sky-500/15 text-sky-600 dark:text-sky-400",
+  Custom: "bg-slate-500/15 text-slate-600 dark:text-slate-300",
+  Heritage: "bg-purple-500/15 text-purple-600 dark:text-purple-400",
+  Beaches: "bg-cyan-500/15 text-cyan-600 dark:text-cyan-400",
+  Mountains: "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400",
+  Wildlife: "bg-orange-500/15 text-orange-600 dark:text-orange-400",
 }
 
-const INITIAL_ACTIVITIES = [
-  {
-    id: "a1",
-    day: 1,
-    time: "09:00 AM",
-    title: "Old Town Heritage Walk",
-    location: "Historic District",
-    category: "Heritage",
-    price: 120,
-  },
-  {
-    id: "a2",
-    day: 1,
-    time: "02:30 PM",
-    title: "Sunset Cove Retreat",
-    location: "Azure Bay",
-    category: "Beach",
-    price: 85,
-  },
-  {
-    id: "a3",
-    day: 2,
-    time: "11:00 AM",
-    title: "Cliffside Zipline",
-    location: "Verde Ridge",
-    category: "Adventure",
-    price: 160,
-  },
-]
-
-const DAYS = [1, 2, 3]
-
-function timeToMinutes(time) {
-  const match = time.match(/(\d{1,2}):(\d{2})\s*(AM|PM)?/i)
-  if (!match) return 0
-  let hours = Number.parseInt(match[1], 10) % 12
-  const minutes = Number.parseInt(match[2], 10)
-  const meridiem = match[3]?.toUpperCase()
-  if (meridiem === "PM") hours += 12
-  return hours * 60 + minutes
+function currency(n) {
+  return `$${Number(n || 0).toLocaleString(undefined, { maximumFractionDigits: 2 })}`
 }
 
-export default function ItineraryDrawer() {
-  const [open, setOpen] = useState(true)
-  const [activeDay, setActiveDay] = useState(1)
-  const [activities, setActivities] = useState(INITIAL_ACTIVITIES)
-  const [showForm, setShowForm] = useState(false)
-  const [form, setForm] = useState({ title: "", time: "", cost: "", day: "1" })
+export default function ItineraryDrawer({
+  open,
+  onClose,
+  theme,
+  onToggleTheme,
+  days,
+  selectedDay,
+  onSelectDay,
+  onAddDay,
+  onRemoveDay,
+  activitiesByDay,
+  onAddActivity,
+  onRemoveActivity,
+  totalBudget,
+  packingItems,
+  onTogglePacking,
+  onAddPacking,
+  onRemovePacking,
+  onExportJSON,
+  onExportPDF,
+  onClearAll,
+  itinerary,
+  onRemoveFromItinerary,
+}) {
+  const [tab, setTab] = useState("itinerary")
+  const [title, setTitle] = useState("")
+  const [cost, setCost] = useState("")
+  const dayBarRef = useRef(null)
 
-  const totalBudget = useMemo(
-    () => activities.reduce((sum, a) => sum + a.price, 0),
-    [activities],
-  )
+  const dayActivities = activitiesByDay[selectedDay] || []
 
-  const dayActivities = useMemo(
-    () =>
-      activities
-        .filter((a) => a.day === activeDay)
-        .sort((a, b) => timeToMinutes(a.time) - timeToMinutes(b.time)),
-    [activities, activeDay],
-  )
-
-  function removeActivity(id) {
-    setActivities((prev) => prev.filter((a) => a.id !== id))
+  function handleWheel(e) {
+    const el = dayBarRef.current
+    if (!el) return
+    if (e.deltaY === 0) return
+    el.scrollLeft += e.deltaY
   }
 
-  function addActivity(e) {
+  function handleAddActivity(e) {
     e.preventDefault()
-    if (!form.title.trim()) return
-    const day = Number.parseInt(form.day, 10) || 1
-    setActivities((prev) => [
-      ...prev,
-      {
-        id: `c${Date.now()}`,
-        day,
-        time: form.time.trim() || "12:00 PM",
-        title: form.title.trim(),
-        location: "Custom Stop",
-        category: "Custom",
-        price: Number.parseFloat(form.cost) || 0,
-      },
-    ])
-    setForm({ title: "", time: "", cost: "", day: String(day) })
-    setShowForm(false)
-    setActiveDay(day)
-  }
-
-  if (!open) {
-    return (
-      <button
-        onClick={() => setOpen(true)}
-        className="fixed right-6 top-6 z-50 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-teal-500 to-cyan-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-cyan-600/25 transition-transform hover:scale-105 active:scale-95"
-      >
-        <Sparkles className="h-4 w-4" />
-        Open Itinerary
-      </button>
-    )
+    const trimmed = title.trim()
+    if (!trimmed) return
+    onAddActivity(selectedDay, {
+      title: trimmed,
+      location: "Custom entry",
+      category: "Custom",
+      cost: Number.parseFloat(cost) || 0,
+    })
+    setTitle("")
+    setCost("")
   }
 
   return (
-    <div className="fixed inset-0 z-50">
+    <>
       {/* Overlay */}
       <div
+        className={`tn-no-print fixed inset-0 z-40 bg-slate-900/40 backdrop-blur-sm transition-opacity duration-300 ${
+          open ? "opacity-100" : "pointer-events-none opacity-0"
+        }`}
+        onClick={onClose}
         aria-hidden="true"
-        onClick={() => setOpen(false)}
-        className="absolute inset-0 bg-slate-900/40 backdrop-blur-md transition-opacity"
       />
 
       {/* Drawer */}
       <aside
+        className={`fixed inset-y-0 right-0 z-50 flex w-full max-w-md flex-col border-l shadow-2xl transition-transform duration-300 ease-out ${
+          theme === 'dark'
+            ? 'border-slate-800 bg-slate-900'
+            : 'border-slate-200 bg-white'
+        } ${open ? "translate-x-0" : "translate-x-full"}`}
         role="dialog"
-        aria-label="Trip itinerary"
         aria-modal="true"
-        className="absolute right-0 top-0 flex h-full w-full max-w-md translate-x-0 flex-col bg-slate-50 shadow-2xl transition-transform duration-300 ease-out"
+        aria-label="Itinerary and essentials"
       >
         {/* Header */}
-        <header className="flex items-start justify-between gap-4 border-b border-slate-100 bg-white/80 px-6 py-5 backdrop-blur-sm">
-          <div>
-            <h2 className="bg-gradient-to-r from-teal-500 to-cyan-600 bg-clip-text text-2xl font-bold tracking-tight text-transparent">
-              Trip Itinerary
-            </h2>
-            <span className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-teal-50 px-3 py-1 text-xs font-semibold text-teal-700 ring-1 ring-teal-100">
-              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-teal-500" />
-              {activities.length} Places Saved
+        <header className={`flex items-center gap-3 border-b p-4 ${
+          theme === 'dark' ? 'border-slate-800' : 'border-slate-200'
+        }`}>
+          <div className="flex flex-1 items-center gap-3 rounded-xl bg-gradient-to-r from-teal-500/10 to-indigo-500/10 px-3 py-2">
+            <span className="text-xl leading-none" aria-hidden="true">
+              🎒
             </span>
+            <div className="min-w-0">
+              <h2 className={`truncate text-sm font-bold ${
+                theme === 'dark' ? 'text-slate-100' : 'text-slate-900'
+              }`}>Itinerary &amp; Essentials</h2>
+              <p className={`truncate text-xs ${
+                theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
+              }`}>Plan every day of your trip</p>
+            </div>
           </div>
           <button
-            onClick={() => setOpen(false)}
-            aria-label="Close itinerary"
-            className="rounded-full border border-slate-100 bg-white p-2 text-slate-500 shadow-sm transition-all hover:rotate-90 hover:text-slate-900 hover:shadow-md"
+            type="button"
+            onClick={onToggleTheme}
+            aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+            className={`grid h-9 w-9 place-items-center rounded-xl border transition-colors hover:bg-slate-100 ${
+              theme === 'dark'
+                ? 'border-slate-700 text-slate-300 hover:bg-slate-800'
+                : 'border-slate-200 text-slate-600'
+            }`}
           >
-            <X className="h-5 w-5" />
+            {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+          </button>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close itinerary panel"
+            className={`grid h-9 w-9 place-items-center rounded-xl border transition-colors hover:bg-slate-100 ${
+              theme === 'dark'
+                ? 'border-slate-700 text-slate-300 hover:bg-slate-800'
+                : 'border-slate-200 text-slate-600'
+            }`}
+          >
+            <X className="h-4 w-4" />
           </button>
         </header>
 
-        {/* Day Tabs */}
-        <div className="flex gap-2 px-6 py-4">
-          {DAYS.map((day) => {
-            const active = day === activeDay
-            return (
-              <button
-                key={day}
-                onClick={() => setActiveDay(day)}
-                className={`flex-1 rounded-full px-4 py-2 text-sm font-semibold transition-all ${
-                  active
-                    ? "bg-gradient-to-r from-teal-500 to-cyan-600 text-white shadow-lg shadow-cyan-600/30"
-                    : "bg-white text-slate-500 shadow-sm ring-1 ring-slate-100 hover:text-slate-900"
-                }`}
-              >
-                Day {day}
-              </button>
-            )
-          })}
+        {/* Tabs */}
+        <div className={`flex gap-1 border-b p-2 ${
+          theme === 'dark' ? 'border-slate-800' : 'border-slate-200'
+        }`}>
+          <TabButton
+            active={tab === "itinerary"}
+            onClick={() => setTab("itinerary")}
+            icon={<Map className="h-4 w-4" />}
+            full="Itinerary & Budget"
+            short="Itinerary"
+            theme={theme}
+          />
+          <TabButton
+            active={tab === "packing"}
+            onClick={() => setTab("packing")}
+            icon={<Luggage className="h-4 w-4" />}
+            full="Packing Checklist"
+            short="Packing"
+            theme={theme}
+          />
         </div>
 
-        {/* Activity list */}
-        <div className="flex-1 overflow-y-auto px-6 pb-4">
-          {dayActivities.length === 0 ? (
-            <div className="mt-10 rounded-2xl border border-dashed border-slate-200 bg-white/60 p-8 text-center">
-              <p className="text-sm font-medium text-slate-500">
-                No activities planned for Day {activeDay} yet.
-              </p>
-            </div>
-          ) : (
-            <ol className="relative ml-3 border-l-2 border-dotted border-slate-200">
-              {dayActivities.map((a) => (
-                <li key={a.id} className="relative mb-4 pl-6">
-                  <span className="absolute -left-[7px] top-6 h-3 w-3 rounded-full border-2 border-white bg-gradient-to-r from-teal-500 to-cyan-600 shadow" />
-                  <div className="group rounded-2xl border border-slate-100 bg-white p-4 shadow-md transition-all hover:shadow-lg">
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-600">
-                        <Clock className="h-3.5 w-3.5" />
-                        {a.time}
-                      </span>
+        {/* Scrollable body */}
+        <div className="tn-scroll flex-1 overflow-y-auto p-4">
+          {tab === "itinerary" ? (
+            <div className="flex flex-col gap-5">
+              {/* Day navigation wheel */}
+              <div>
+                <div className="mb-2 flex items-center justify-between">
+                  <span className={`text-xs font-semibold uppercase tracking-wider ${
+                    theme === 'dark' ? 'text-slate-500' : 'text-slate-400'
+                  }`}>
+                    Days
+                  </span>
+                  <div className="flex items-center gap-1.5">
+                    <button
+                      type="button"
+                      onClick={onRemoveDay}
+                      disabled={days.length <= 1}
+                      aria-label="Remove last day"
+                      className={`inline-flex items-center gap-1 rounded-lg border px-2 py-1 text-xs font-medium transition-colors hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-40 ${
+                        theme === 'dark'
+                          ? 'border-slate-700 text-slate-300 hover:bg-slate-800'
+                          : 'border-slate-200 text-slate-600'
+                      }`}
+                    >
+                      <Minus className="h-3.5 w-3.5" />
+                      Remove Day
+                    </button>
+                    <button
+                      type="button"
+                      onClick={onAddDay}
+                      aria-label="Add a day"
+                      className="inline-flex items-center gap-1 rounded-lg bg-indigo-600 px-2 py-1 text-xs font-semibold text-white transition-colors hover:bg-indigo-500"
+                    >
+                      <Plus className="h-3.5 w-3.5" />
+                      Add Day
+                    </button>
+                  </div>
+                </div>
+                <div
+                  ref={dayBarRef}
+                  onWheel={handleWheel}
+                  className="tn-scroll-x flex snap-x gap-2 overflow-x-auto pb-2"
+                >
+                  {days.map((day) => {
+                    const count = (activitiesByDay[day] || []).length
+                    const active = day === selectedDay
+                    return (
                       <button
-                        onClick={() => removeActivity(a.id)}
-                        aria-label={`Remove ${a.title}`}
-                        className="rounded-lg p-1.5 text-slate-300 transition-colors hover:bg-red-50 hover:text-red-500"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </button>
-                    </div>
-
-                    <h3 className="mt-3 text-base font-semibold text-slate-900">
-                      {a.title}
-                    </h3>
-                    <p className="mt-1 flex items-center gap-1 text-sm text-slate-500">
-                      <MapPin className="h-3.5 w-3.5" />
-                      {a.location}
-                    </p>
-
-                    <div className="mt-3 flex items-center justify-between">
-                      <span
-                        className={`rounded-full px-2.5 py-1 text-xs font-semibold ring-1 ${
-                          CATEGORY_STYLES[a.category] ?? CATEGORY_STYLES.Custom
+                        key={day}
+                        type="button"
+                        onClick={() => onSelectDay(day)}
+                        aria-pressed={active}
+                        className={`flex min-w-[84px] snap-start flex-col items-center rounded-xl border px-3 py-2.5 transition-all ${
+                          active
+                            ? "border-teal-500 bg-teal-500 text-white shadow-lg shadow-teal-500/25"
+                            : theme === 'dark'
+                              ? "border-slate-700 bg-slate-800 text-slate-300 hover:border-teal-400"
+                              : "border-slate-200 bg-white text-slate-600 hover:border-teal-400"
                         }`}
                       >
-                        {a.category}
-                      </span>
-                      <span className="text-base font-bold text-teal-600">
-                        ${a.price}
-                      </span>
+                        <span className="text-xs font-medium opacity-80">Day</span>
+                        <span className="text-lg font-bold leading-tight">{day}</span>
+                        <span className={`text-[10px] ${active ? "text-white/80" : "text-slate-400"}`}>
+                          {count} {count === 1 ? "item" : "items"}
+                        </span>
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+
+              {/* Saved Destinations */}
+              {itinerary && itinerary.length > 0 && (
+                <div className="flex flex-col gap-2">
+                  <h3 className={`text-sm font-semibold ${
+                    theme === 'dark' ? 'text-slate-200' : 'text-slate-700'
+                  }`}>Saved Destinations</h3>
+                  <ul className="flex flex-col gap-2">
+                    {itinerary.map((item, index) => (
+                      <li
+                        key={item.id}
+                        className={`group flex items-center gap-3 rounded-xl border p-3 shadow-sm transition-colors ${
+                          theme === 'dark'
+                            ? 'border-slate-800 bg-slate-800/50'
+                            : 'border-slate-200 bg-white'
+                        }`}
+                      >
+                        <span className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-xs font-bold ${
+                          theme === 'dark' ? 'bg-slate-700 text-slate-300' : 'bg-slate-100 text-slate-600'
+                        }`}>
+                          {index + 1}
+                        </span>
+                        <div className="min-w-0 flex-1">
+                          <p className={`truncate text-sm font-semibold ${
+                            theme === 'dark' ? 'text-slate-100' : 'text-slate-800'
+                          }`}>{item.name}</p>
+                          <p className={`text-xs ${
+                            theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
+                          }`}>{item.country}</p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => onRemoveFromItinerary(item.id)}
+                          aria-label={`Remove ${item.name}`}
+                          className="rounded-lg p-1.5 text-slate-400 opacity-0 transition hover:bg-rose-500/10 hover:text-rose-500 focus:opacity-100 group-hover:opacity-100"
+                        >
+                          <Trash2 className="h-4 w-4" aria-hidden="true" />
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* Activities */}
+              <div className="flex flex-col gap-2">
+                <h3 className={`text-sm font-semibold ${
+                  theme === 'dark' ? 'text-slate-200' : 'text-slate-700'
+                }`}>Day {selectedDay} activities</h3>
+                {dayActivities.length === 0 ? (
+                  <div className={`flex flex-col items-center gap-3 rounded-2xl border border-dashed py-10 text-center ${
+                    theme === 'dark' ? 'border-slate-700' : 'border-slate-300'
+                  }`}>
+                    <span className={`grid h-14 w-14 place-items-center rounded-full ${
+                      theme === 'dark' ? 'bg-slate-800 text-slate-500' : 'bg-slate-100 text-slate-400'
+                    }`}>
+                      <Compass className="h-7 w-7" aria-hidden="true" />
+                    </span>
+                    <div>
+                      <p className={`text-sm font-medium ${
+                        theme === 'dark' ? 'text-slate-300' : 'text-slate-600'
+                      }`}>No activities yet</p>
+                      <p className={`text-xs ${
+                        theme === 'dark' ? 'text-slate-500' : 'text-slate-400'
+                      }`}>Add one below or from a destination card.</p>
                     </div>
                   </div>
-                </li>
-              ))}
-            </ol>
-          )}
+                ) : (
+                  <ul className="flex flex-col gap-2">
+                    {dayActivities.map((a) => (
+                      <li
+                        key={a.id}
+                        className={`group flex items-start gap-3 rounded-xl border p-3 shadow-sm transition-colors hover:border-slate-300 ${
+                          theme === 'dark'
+                            ? 'border-slate-800 bg-slate-800/50 hover:border-slate-700'
+                            : 'border-slate-200 bg-white hover:border-slate-300'
+                        }`}
+                      >
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-2">
+                            <p className={`truncate text-sm font-semibold ${
+                              theme === 'dark' ? 'text-slate-100' : 'text-slate-800'
+                            }`}>{a.title}</p>
+                            <span
+                              className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${
+                                CATEGORY_STYLES[a.category] || CATEGORY_STYLES.Custom
+                              }`}
+                            >
+                              {a.category}
+                            </span>
+                          </div>
+                          <p className={`mt-0.5 flex items-center gap-1 text-xs ${
+                            theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
+                          }`}>
+                            <MapPin className="h-3 w-3" aria-hidden="true" />
+                            <span className="truncate">{a.location}</span>
+                          </p>
+                        </div>
+                        <div className="flex flex-col items-end gap-1">
+                          <span className={`text-sm font-bold ${
+                            theme === 'dark' ? 'text-slate-100' : 'text-slate-900'
+                          }`}>{currency(a.cost)}</span>
+                          <button
+                            type="button"
+                            onClick={() => onRemoveActivity(selectedDay, a.id)}
+                            aria-label={`Remove ${a.title}`}
+                            className="rounded-lg p-1 text-slate-400 transition hover:bg-rose-500/10 hover:text-rose-500"
+                          >
+                            <Trash2 className="h-4 w-4" aria-hidden="true" />
+                          </button>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
 
-          {/* Add activity */}
-          <div className="mt-4">
-            {!showForm ? (
-              <button
-                onClick={() => setShowForm(true)}
-                className="flex w-full items-center justify-center gap-2 rounded-2xl border border-dashed border-teal-200 bg-teal-50/50 px-4 py-3 text-sm font-semibold text-teal-700 transition-colors hover:bg-teal-50"
-              >
-                <Plus className="h-4 w-4" />
-                Add Custom Activity
-              </button>
-            ) : (
+              {/* Add custom activity */}
               <form
-                onSubmit={addActivity}
-                className="rounded-2xl border border-slate-100 bg-white p-4 shadow-md"
+                onSubmit={handleAddActivity}
+                className={`rounded-2xl border p-3 ${
+                  theme === 'dark'
+                    ? 'border-slate-800 bg-slate-800/40'
+                    : 'border-slate-200 bg-slate-50'
+                }`}
               >
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="col-span-2">
-                    <label className="mb-1 block text-xs font-semibold text-slate-500">
-                      Title
-                    </label>
-                    <input
-                      value={form.title}
-                      onChange={(e) =>
-                        setForm((f) => ({ ...f, title: e.target.value }))
-                      }
-                      placeholder="e.g. Rooftop Dinner"
-                      className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900 outline-none transition-all focus:border-teal-400 focus:bg-white focus:ring-2 focus:ring-teal-200"
-                    />
-                  </div>
-                  <div>
-                    <label className="mb-1 block text-xs font-semibold text-slate-500">
-                      Time
-                    </label>
-                    <input
-                      value={form.time}
-                      onChange={(e) =>
-                        setForm((f) => ({ ...f, time: e.target.value }))
-                      }
-                      placeholder="07:00 PM"
-                      className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900 outline-none transition-all focus:border-teal-400 focus:bg-white focus:ring-2 focus:ring-teal-200"
-                    />
-                  </div>
-                  <div>
-                    <label className="mb-1 block text-xs font-semibold text-slate-500">
-                      Cost ($)
-                    </label>
-                    <input
-                      value={form.cost}
-                      onChange={(e) =>
-                        setForm((f) => ({ ...f, cost: e.target.value }))
-                      }
-                      inputMode="numeric"
-                      placeholder="120"
-                      className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900 outline-none transition-all focus:border-teal-400 focus:bg-white focus:ring-2 focus:ring-teal-200"
-                    />
-                  </div>
-                  <div className="col-span-2">
-                    <label className="mb-1 block text-xs font-semibold text-slate-500">
-                      Day
-                    </label>
-                    <select
-                      value={form.day}
-                      onChange={(e) =>
-                        setForm((f) => ({ ...f, day: e.target.value }))
-                      }
-                      className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900 outline-none transition-all focus:border-teal-400 focus:bg-white focus:ring-2 focus:ring-teal-200"
+                <p className={`mb-2 text-xs font-semibold uppercase tracking-wider ${
+                  theme === 'dark' ? 'text-slate-500' : 'text-slate-400'
+                }`}>
+                  Add custom activity
+                </p>
+                <div className="flex flex-col gap-2">
+                  <input
+                    type="text"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    placeholder="Activity title"
+                    aria-label="Activity title"
+                    className={`w-full rounded-xl border px-3 py-2 text-sm placeholder:text-slate-400 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/30 ${
+                      theme === 'dark'
+                        ? 'border-slate-700 bg-slate-800 text-slate-100 placeholder:text-slate-500'
+                        : 'border-slate-200 bg-white text-slate-800'
+                    }`}
+                  />
+                  <div className="flex gap-2">
+                    <div className="relative flex-1">
+                      <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-slate-400">
+                        $
+                      </span>
+                      <input
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        value={cost}
+                        onChange={(e) => setCost(e.target.value)}
+                        placeholder="Cost"
+                        aria-label="Activity cost"
+                        className={`w-full rounded-xl border py-2 pl-7 pr-3 text-sm placeholder:text-slate-400 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/30 ${
+                          theme === 'dark'
+                            ? 'border-slate-700 bg-slate-800 text-slate-100 placeholder:text-slate-500'
+                            : 'border-slate-200 bg-white text-slate-800'
+                        }`}
+                      />
+                    </div>
+                    <button
+                      type="submit"
+                      disabled={!title.trim()}
+                      className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-teal-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/40 disabled:opacity-50"
                     >
-                      {DAYS.map((d) => (
-                        <option key={d} value={d}>
-                          Day {d}
-                        </option>
-                      ))}
-                    </select>
+                      <Plus className="h-4 w-4" aria-hidden="true" />
+                      Add Activity
+                    </button>
                   </div>
-                </div>
-                <div className="mt-4 flex gap-2">
-                  <button
-                    type="submit"
-                    className="flex-1 rounded-xl bg-gradient-to-r from-teal-500 to-cyan-600 px-4 py-2 text-sm font-semibold text-white shadow-md shadow-cyan-600/25 transition-transform hover:scale-[1.02] active:scale-95"
-                  >
-                    Add Activity
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setShowForm(false)}
-                    className="rounded-xl px-4 py-2 text-sm font-semibold text-slate-500 transition-colors hover:text-slate-900"
-                  >
-                    Cancel
-                  </button>
                 </div>
               </form>
-            )}
-          </div>
+
+              {/* Budget summary */}
+              <div className="flex items-center justify-between rounded-2xl border border-teal-500/30 bg-gradient-to-r from-teal-500/10 to-indigo-500/10 p-4">
+                <div className="flex items-center gap-2">
+                  <span className="grid h-9 w-9 place-items-center rounded-xl bg-teal-500/20 text-teal-600 dark:text-teal-400">
+                    <Wallet className="h-4 w-4" aria-hidden="true" />
+                  </span>
+                  <div>
+                    <p className={`text-xs ${
+                      theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
+                    }`}>Total estimated cost</p>
+                    <p className={`text-xs ${
+                      theme === 'dark' ? 'text-slate-500' : 'text-slate-400'
+                    }`}>Across all {days.length} days</p>
+                  </div>
+                </div>
+                <span className={`text-2xl font-extrabold ${
+                  theme === 'dark' ? 'text-slate-100' : 'text-slate-900'
+                }`}>{currency(totalBudget)}</span>
+              </div>
+            </div>
+          ) : (
+            <PackingChecklist
+              items={packingItems}
+              onToggle={onTogglePacking}
+              onAdd={onAddPacking}
+              onRemove={onRemovePacking}
+              theme={theme}
+            />
+          )}
         </div>
 
-        {/* Footer summary */}
-        <footer className="border-t border-slate-100 bg-white/80 px-6 py-5 backdrop-blur-sm">
-          <div className="mb-4 flex items-end justify-between">
-            <div>
-              <p className="text-xs font-medium uppercase tracking-wide text-slate-400">
-                Estimated Budget
-              </p>
-              <p className="text-3xl font-bold text-slate-900">${totalBudget}</p>
-            </div>
-            <button
-              onClick={() => setActivities([])}
-              className="text-sm font-semibold text-slate-400 transition-colors hover:text-red-500"
-            >
-              Clear All
-            </button>
-          </div>
-          <button className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-teal-500 to-cyan-600 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-cyan-600/30 transition-transform hover:scale-[1.02] active:scale-95">
-            <Download className="h-4 w-4" />
-            Export Itinerary
+        {/* Footer action bar */}
+        <footer className={`tn-no-print grid grid-cols-3 gap-2 border-t p-3 ${
+          theme === 'dark' ? 'border-slate-800' : 'border-slate-200'
+        }`}>
+          <button
+            type="button"
+            onClick={onExportPDF}
+            className={`inline-flex items-center justify-center gap-1.5 rounded-xl border px-2 py-2.5 text-xs font-semibold transition-colors hover:bg-slate-100 ${
+              theme === 'dark'
+                ? 'border-slate-700 text-slate-200 hover:bg-slate-800'
+                : 'border-slate-200 text-slate-700'
+            }`}
+          >
+            <FileDown className="h-4 w-4" aria-hidden="true" />
+            Save as PDF
+          </button>
+          <button
+            type="button"
+            onClick={onExportJSON}
+            className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-indigo-600 px-2 py-2.5 text-xs font-semibold text-white transition-colors hover:bg-indigo-500"
+          >
+            <FileJson className="h-4 w-4" aria-hidden="true" />
+            Export JSON
+          </button>
+          <button
+            type="button"
+            onClick={onClearAll}
+            className={`inline-flex items-center justify-center gap-1.5 rounded-xl border px-2 py-2.5 text-xs font-semibold transition-colors hover:bg-rose-50 ${
+              theme === 'dark'
+                ? 'border-rose-500/30 text-rose-400 hover:bg-rose-500/10'
+                : 'border-rose-200 text-rose-600'
+            }`}
+          >
+            <Eraser className="h-4 w-4" aria-hidden="true" />
+            Clear All
           </button>
         </footer>
       </aside>
-    </div>
+    </>
+  )
+}
+
+function TabButton({ active, onClick, icon, full, short, theme }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={active}
+      className={`flex flex-1 items-center justify-center gap-1.5 rounded-xl px-3 py-2 text-sm font-semibold transition-colors ${
+        active
+          ? theme === 'dark'
+            ? "bg-slate-100 text-slate-900"
+            : "bg-slate-900 text-white"
+          : theme === 'dark'
+            ? "text-slate-400 hover:bg-slate-800"
+            : "text-slate-500 hover:bg-slate-100"
+      }`}
+    >
+      {icon}
+      <span className="hidden sm:inline">{full}</span>
+      <span className="sm:hidden">{short}</span>
+    </button>
   )
 }

@@ -2,11 +2,13 @@ import React, { useState, useEffect } from "react";
 import DestinationCard from "./components/DestinationCard";
 import DestinationModal from "./components/DestinationModal";
 import CompareDrawer from "./components/CompareDrawer";
+import ItineraryDrawer from "./components/ItineraryDrawer";
 import { DESTINATIONS } from "./data/destinations";
 import { 
-  MapPin, Search, Moon, Sun, Compass, Calendar, 
-  Trash2, Navigation, Filter, Globe, Heart
+  MapPin, Search, Moon, Sun, Compass, 
+  Trash2, Navigation, Filter, Globe, Heart, Bot
 } from "lucide-react";
+import html2pdf from 'html2pdf.js';
 
 export default function App() {
   const [theme, setTheme] = useState("light");
@@ -32,6 +34,60 @@ export default function App() {
 
   const [compared, setCompared] = useState([]);
 
+  // Itinerary Drawer State
+  const [itineraryDrawerOpen, setItineraryDrawerOpen] = useState(false);
+  const [days, setDays] = useState(() => {
+    const saved = JSON.parse(localStorage.getItem("tripnest_days") || "[]");
+    return saved.length > 0 ? saved : [1];
+  });
+  const [selectedDay, setSelectedDay] = useState(1);
+  const [activitiesByDay, setActivitiesByDay] = useState(() => {
+    return JSON.parse(localStorage.getItem("tripnest_activities") || "{}");
+  });
+  const [packingItems, setPackingItems] = useState(() => {
+    const saved = JSON.parse(localStorage.getItem("tripnest_packing") || "[]");
+    if (saved.length > 0) return saved;
+    
+    // Default packing items with summer, winter, and general essentials
+    return [
+      // General Essentials
+      { id: 1, label: "Passport/ID", category: "Documents", packed: false },
+      { id: 2, label: "Travel insurance documents", category: "Documents", packed: false },
+      { id: 3, label: "Wallet/Cash/Cards", category: "Documents", packed: false },
+      { id: 4, label: "Phone charger", category: "Electronics", packed: false },
+      { id: 5, label: "Power bank", category: "Electronics", packed: false },
+      { id: 6, label: "Universal travel adapter", category: "Electronics", packed: false },
+      { id: 7, label: "Toothbrush & toothpaste", category: "Toiletries", packed: false },
+      { id: 8, label: "Shampoo & conditioner", category: "Toiletries", packed: false },
+      { id: 9, label: "Sunscreen", category: "Toiletries", packed: false },
+      { id: 10, label: "First aid kit", category: "Health", packed: false },
+      { id: 11, label: "Prescription medications", category: "Health", packed: false },
+      { id: 12, label: "Comfortable walking shoes", category: "Clothing", packed: false },
+      { id: 13, label: "Underwear & socks", category: "Clothing", packed: false },
+      
+      // Summer Essentials
+      { id: 14, label: "Light breathable t-shirts", category: "Clothing", packed: false },
+      { id: 15, label: "Shorts", category: "Clothing", packed: false },
+      { id: 16, label: "Sun hat/cap", category: "Clothing", packed: false },
+      { id: 17, label: "Sunglasses", category: "Clothing", packed: false },
+      { id: 18, label: "Sandals/flip-flops", category: "Clothing", packed: false },
+      { id: 19, label: "Insect repellent", category: "Health", packed: false },
+      { id: 20, label: "Light scarf/bandana", category: "Clothing", packed: false },
+      { id: 21, label: "Deodorant", category: "Toiletries", packed: false },
+      
+      // Winter Essentials
+      { id: 22, label: "Warm jacket/coat", category: "Clothing", packed: false },
+      { id: 23, label: "Thermal underwear", category: "Clothing", packed: false },
+      { id: 24, label: "Sweaters/hoodies", category: "Clothing", packed: false },
+      { id: 25, label: "Warm gloves", category: "Clothing", packed: false },
+      { id: 26, label: "Woolen hat/beanie", category: "Clothing", packed: false },
+      { id: 27, label: "Scarf", category: "Clothing", packed: false },
+      { id: 28, label: "Winter boots", category: "Clothing", packed: false },
+      { id: 29, label: "Lip balm", category: "Toiletries", packed: false },
+      { id: 30, label: "Hand warmers", category: "Health", packed: false },
+    ];
+  });
+
   // Sync state to LocalStorage
   useEffect(() => {
     localStorage.setItem("tripnest_itinerary", JSON.stringify(itinerary));
@@ -40,6 +96,18 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem("tripnest_favorites", JSON.stringify(favorites));
   }, [favorites]);
+
+  useEffect(() => {
+    localStorage.setItem("tripnest_days", JSON.stringify(days));
+  }, [days]);
+
+  useEffect(() => {
+    localStorage.setItem("tripnest_activities", JSON.stringify(activitiesByDay));
+  }, [activitiesByDay]);
+
+  useEffect(() => {
+    localStorage.setItem("tripnest_packing", JSON.stringify(packingItems));
+  }, [packingItems]);
 
   const toggleTheme = () => setTheme(prev => prev === "light" ? "dark" : "light");
 
@@ -87,11 +155,243 @@ export default function App() {
   const addToItinerary = (dest) => {
     if (!itinerary.find((i) => i.id === dest.id)) {
       setItinerary([...itinerary, dest]);
+      // Automatically add as an activity to the first day
+      setActivitiesByDay(prev => ({
+        ...prev,
+        1: [...(prev[1] || []), {
+          id: Date.now(),
+          title: dest.name,
+          location: dest.country,
+          category: dest.category,
+          cost: 0,
+          destinationId: dest.id
+        }]
+      }));
     }
   };
 
   const removeFromItinerary = (id) => {
     setItinerary(itinerary.filter((i) => i.id !== id));
+    // Also remove any activities associated with this destination
+    setActivitiesByDay(prev => {
+      const updated = {};
+      for (const day in prev) {
+        updated[day] = prev[day].filter(activity => activity.destinationId !== id);
+      }
+      return updated;
+    });
+  };
+
+  // Itinerary Drawer Handlers
+  const handleAddDay = () => {
+    const newDay = Math.max(...days) + 1;
+    setDays([...days, newDay]);
+    setSelectedDay(newDay);
+  };
+
+  const handleRemoveDay = () => {
+    if (days.length <= 1) return;
+    const dayToRemove = days[days.length - 1];
+    const newDays = days.slice(0, -1);
+    setDays(newDays);
+    if (selectedDay === dayToRemove) {
+      setSelectedDay(newDays[newDays.length - 1]);
+    }
+    // Remove activities for the deleted day
+    setActivitiesByDay(prev => {
+      const updated = { ...prev };
+      delete updated[dayToRemove];
+      return updated;
+    });
+  };
+
+  const handleAddActivity = (day, activity) => {
+    setActivitiesByDay(prev => ({
+      ...prev,
+      [day]: [...(prev[day] || []), { ...activity, id: Date.now() }]
+    }));
+  };
+
+  const handleRemoveActivity = (day, activityId) => {
+    setActivitiesByDay(prev => ({
+      ...prev,
+      [day]: (prev[day] || []).filter(a => a.id !== activityId)
+    }));
+  };
+
+  const handleTogglePacking = (id) => {
+    setPackingItems(prev => 
+      prev.map(item => item.id === id ? { ...item, packed: !item.packed } : item)
+    );
+  };
+
+  const handleAddPacking = (item) => {
+    setPackingItems(prev => [...prev, { ...item, id: Date.now() }]);
+  };
+
+  const handleRemovePacking = (id) => {
+    setPackingItems(prev => prev.filter(item => item.id !== id));
+  };
+
+  const handleExportJSON = () => {
+    const data = {
+      itinerary,
+      days,
+      activitiesByDay,
+      packingItems,
+      favorites,
+      compared
+    };
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'tripnest-export.json';
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const handleClearAll = () => {
+    if (confirm('Are you sure you want to clear all itinerary data?')) {
+      setDays([1]);
+      setSelectedDay(1);
+      setActivitiesByDay({});
+      setPackingItems([]);
+      setItinerary([]);
+    }
+  };
+
+  const totalBudget = Object.values(activitiesByDay).flat().reduce((sum, activity) => sum + (activity.cost || 0), 0);
+
+  // PDF Export Function
+  const handleExportPDF = () => {
+    const element = document.createElement('div');
+    
+    // Trip Summary Header
+    const packedCount = packingItems.filter((i) => i.packed).length;
+    const totalItems = packingItems.length;
+    const totalActivities = Object.values(activitiesByDay).flat().length;
+    
+    let htmlContent = `
+      <div style="font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 40px 20px; color: #333;">
+        <!-- Header -->
+        <div style="text-align: center; margin-bottom: 40px; border-bottom: 3px solid #0ea5e9; padding-bottom: 20px;">
+          <h1 style="color: #0ea5e9; margin: 0; font-size: 32px; font-weight: bold;">TripNest Travel Itinerary</h1>
+          <p style="color: #666; margin: 10px 0 0 0; font-size: 14px;">Your complete travel planner summary</p>
+        </div>
+
+        <!-- Trip Summary -->
+        <div style="background: #f8fafc; padding: 20px; border-radius: 8px; margin-bottom: 30px; border-left: 4px solid #0ea5e9;">
+          <h2 style="margin: 0 0 15px 0; color: #1e293b; font-size: 18px;">Trip Summary</h2>
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
+            <div>
+              <p style="margin: 0; color: #64748b; font-size: 12px; font-weight: bold;">TOTAL BUDGET</p>
+              <p style="margin: 5px 0 0 0; color: #0ea5e9; font-size: 24px; font-weight: bold;">$${totalBudget.toFixed(2)}</p>
+            </div>
+            <div>
+              <p style="margin: 0; color: #64748b; font-size: 12px; font-weight: bold;">DAYS PLANNED</p>
+              <p style="margin: 5px 0 0 0; color: #1e293b; font-size: 24px; font-weight: bold;">${days.length}</p>
+            </div>
+            <div>
+              <p style="margin: 0; color: #64748b; font-size: 12px; font-weight: bold;">TOTAL ACTIVITIES</p>
+              <p style="margin: 5px 0 0 0; color: #1e293b; font-size: 24px; font-weight: bold;">${totalActivities}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Saved Destinations -->
+        ${itinerary.length > 0 ? `
+        <div style="margin-bottom: 30px;">
+          <h2 style="margin: 0 0 20px 0; color: #1e293b; font-size: 20px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">Saved Destinations</h2>
+          <div style="display: grid; gap: 10px;">
+            ${itinerary.map((dest, index) => `
+              <div style="background: #fff; padding: 15px; border: 1px solid #e2e8f0; border-radius: 6px; display: flex; align-items: center; gap: 15px;">
+                <div style="background: #0ea5e9; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px;">${index + 1}</div>
+                <div style="flex: 1;">
+                  <p style="margin: 0; color: #1e293b; font-weight: bold; font-size: 16px;">${dest.name}</p>
+                  <p style="margin: 5px 0 0 0; color: #64748b; font-size: 13px;">${dest.country}</p>
+                </div>
+                <span style="background: #dbeafe; color: #0ea5e9; padding: 4px 12px; border-radius: 12px; font-size: 11px; font-weight: bold;">${dest.category}</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+        ` : ''}
+
+        <!-- Day-by-Day Itinerary -->
+        <div style="margin-bottom: 30px;">
+          <h2 style="margin: 0 0 20px 0; color: #1e293b; font-size: 20px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">Day-by-Day Itinerary</h2>
+          ${days.map(day => {
+            const dayActivities = activitiesByDay[day] || [];
+            if (dayActivities.length === 0) return '';
+            return `
+              <div style="margin-bottom: 25px;">
+                <h3 style="margin: 0 0 15px 0; color: #0ea5e9; font-size: 18px; font-weight: bold;">Day ${day}</h3>
+                <div style="display: grid; gap: 10px;">
+                  ${dayActivities.map(activity => `
+                    <div style="background: #f8fafc; padding: 12px 15px; border-left: 3px solid #0ea5e9; border-radius: 4px;">
+                      <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <div style="flex: 1;">
+                          <p style="margin: 0; color: #1e293b; font-weight: bold; font-size: 15px;">${activity.title}</p>
+                          <p style="margin: 5px 0 0 0; color: #64748b; font-size: 13px;">📍 ${activity.location}</p>
+                        </div>
+                        <div style="text-align: right;">
+                          <p style="margin: 0; color: #10b981; font-weight: bold; font-size: 15px;">$${(activity.cost || 0).toFixed(2)}</p>
+                          <span style="background: #e0e7ff; color: #6366f1; padding: 2px 8px; border-radius: 8px; font-size: 10px; font-weight: bold;">${activity.category}</span>
+                        </div>
+                      </div>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            `;
+          }).join('')}
+          ${Object.values(activitiesByDay).flat().length === 0 ? '<p style="color: #94a3b8; font-style: italic;">No activities planned yet.</p>' : ''}
+        </div>
+
+        <!-- Packing Checklist -->
+        <div style="margin-bottom: 30px;">
+          <h2 style="margin: 0 0 20px 0; color: #1e293b; font-size: 20px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">Packing Checklist</h2>
+          <div style="background: #f8fafc; padding: 20px; border-radius: 8px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+              <p style="margin: 0; color: #64748b; font-size: 14px;">Progress: <strong>${packedCount}/${totalItems}</strong> items packed</p>
+              <p style="margin: 0; color: #10b981; font-size: 14px; font-weight: bold;">${Math.round((packedCount / totalItems) * 100) || 0}% Complete</p>
+            </div>
+            <div style="display: grid; gap: 8px;">
+              ${packingItems.map(item => `
+                <div style="display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #e2e8f0;">
+                  <span style="color: ${item.packed ? '#10b981' : '#cbd5e1'}; font-size: 16px;">${item.packed ? '☑' : '☐'}</span>
+                  <span style="flex: 1; color: ${item.packed ? '#94a3b8' : '#1e293b'}; text-decoration: ${item.packed ? 'line-through' : 'none'}; font-size: 14px;">${item.label}</span>
+                  <span style="background: #e2e8f0; color: #64748b; padding: 2px 8px; border-radius: 4px; font-size: 11px;">${item.category}</span>
+                </div>
+              `).join('')}
+            </div>
+            ${packingItems.length === 0 ? '<p style="color: #94a3b8; font-style: italic;">No items in packing list.</p>' : ''}
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div style="margin-top: 40px; padding-top: 20px; border-top: 2px solid #e2e8f0; text-align: center; color: #94a3b8; font-size: 12px;">
+          <p style="margin: 0;">Generated on ${new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
+          <p style="margin: 5px 0 0 0;">Generated with TripNest - Your Smart Travel Companion</p>
+        </div>
+      </div>
+    `;
+
+    element.innerHTML = htmlContent;
+    document.body.appendChild(element);
+
+    const opt = {
+      margin: [10, 10, 10, 10],
+      filename: 'TripNest_Itinerary.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2, useCORS: true },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+
+    html2pdf().set(opt).from(element).save().then(() => {
+      document.body.removeChild(element);
+    });
   };
 
   return (
@@ -112,14 +412,6 @@ export default function App() {
           <nav className="hidden md:flex items-center gap-8 font-semibold text-sm text-slate-600 dark:text-slate-300">
             <a href="#explore" className="hover:text-sky-500 transition-colors">Destinations</a>
             <a href="#map" className="hover:text-sky-500 transition-colors">Live Map</a>
-            <a href="#itinerary" className="hover:text-sky-500 transition-colors flex items-center gap-1.5">
-              Itinerary
-              {itinerary.length > 0 && (
-                <span className="bg-sky-500 text-white text-xs px-2 py-0.5 rounded-full font-bold">
-                  {itinerary.length}
-                </span>
-              )}
-            </a>
           </nav>
 
           <button
@@ -127,6 +419,19 @@ export default function App() {
             className="p-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-amber-400 hover:scale-105 transition-transform"
           >
             {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+          </button>
+
+          <button
+            onClick={() => setItineraryDrawerOpen(true)}
+            className="p-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-gradient-to-r from-sky-500 to-indigo-500 text-white hover:scale-105 transition-transform flex items-center gap-2 px-4"
+          >
+            <Bot className="h-5 w-5" />
+            <span className="hidden sm:inline font-semibold text-sm">Companion</span>
+            {itinerary.length > 0 && (
+              <span className="bg-white/20 text-white text-xs px-2 py-0.5 rounded-full font-bold">
+                {itinerary.length}
+              </span>
+            )}
           </button>
         </div>
       </header>
@@ -277,47 +582,6 @@ export default function App() {
           </div>
         </section>
 
-        {/* ITINERARY PLANNER */}
-        <section id="itinerary" className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-8 shadow-sm space-y-6">
-          <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-4">
-            <div className="flex items-center gap-3">
-              <Calendar className="h-6 w-6 text-sky-500" />
-              <div>
-                <h2 className="text-xl font-bold text-teal-500">Your Saved Itinerary</h2>
-                <p className="text-xs text-slate-500">Day-by-day trip breakdown</p>
-              </div>
-            </div>
-            <span className="text-xs font-bold px-3 py-1 rounded-full bg-sky-500/10 text-sky-600 dark:text-sky-400">
-              {itinerary.length} Items Selected
-            </span>
-          </div>
-
-          {itinerary.length === 0 ? (
-            <div className="text-center py-12 text-slate-400 text-sm">
-              Your itinerary is currently empty. Add places from the destinations above!
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {itinerary.map((item, index) => (
-                <div key={item.id} className="flex items-center justify-between p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800">
-                  <div className="flex items-center gap-3">
-                    <span className="w-8 h-8 rounded-full bg-sky-500 text-white font-bold text-xs flex items-center justify-center shrink-0">
-                      D{index + 1}
-                    </span>
-                    <div>
-                      <h4 className="font-bold text-sm">{item.name}</h4>
-                      <p className="text-xs text-slate-500">{item.country}</p>
-                    </div>
-                  </div>
-                  <button onClick={() => removeFromItinerary(item.id)} className="text-rose-500 p-2 hover:bg-rose-50 dark:hover:bg-rose-950/30 rounded-lg">
-                    <Trash2 className="h-4 w-4" />
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
-        </section>
-
       </main>
 
       {/* DETAIL MODAL */}
@@ -332,6 +596,33 @@ export default function App() {
         comparedItems={comparedObjects}
         onRemoveCompare={handleToggleCompare}
         onClearAll={() => setCompared([])}
+        theme={theme}
+      />
+
+      {/* ITINERARY DRAWER */}
+      <ItineraryDrawer
+        open={itineraryDrawerOpen}
+        onClose={() => setItineraryDrawerOpen(false)}
+        theme={theme}
+        onToggleTheme={toggleTheme}
+        days={days}
+        selectedDay={selectedDay}
+        onSelectDay={setSelectedDay}
+        onAddDay={handleAddDay}
+        onRemoveDay={handleRemoveDay}
+        activitiesByDay={activitiesByDay}
+        onAddActivity={handleAddActivity}
+        onRemoveActivity={handleRemoveActivity}
+        totalBudget={totalBudget}
+        packingItems={packingItems}
+        onTogglePacking={handleTogglePacking}
+        onAddPacking={handleAddPacking}
+        onRemovePacking={handleRemovePacking}
+        onExportJSON={handleExportJSON}
+        onExportPDF={handleExportPDF}
+        onClearAll={handleClearAll}
+        itinerary={itinerary}
+        onRemoveFromItinerary={removeFromItinerary}
       />
 
     </div>
