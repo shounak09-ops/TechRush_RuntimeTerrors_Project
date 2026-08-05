@@ -80,7 +80,7 @@ export default function MapView({ open, onClose, destinations, onViewDetails }) 
           <img src="${dest.image}" alt="${dest.name}">
           <h3>${dest.name}</h3>
           <p>${dest.description ? dest.description.slice(0, 70) : ""}</p>
-          <button onclick="window.__tripnestMapBridge?.viewDetails(${dest.id})">View Details</button>
+          <button onclick='window.__tripnestMapBridge?.viewDetails(${JSON.stringify(String(dest.id))})'>View Details</button>
           <button class="secondary" id="dir-${dest.id}" onclick="window.__tripnestMapDirections?.(${dest.lat}, ${dest.lon}, this)">Get Directions</button>
         </div>
       `;
@@ -243,7 +243,7 @@ export default function MapView({ open, onClose, destinations, onViewDetails }) 
 
   const handleSearchResultsClick = (e) => {
     const target = e.target.closest("div[data-id]");
-    if (target) selectDestination(Number(target.dataset.id));
+    if (target) selectDestination(target.dataset.id);
   };
 
   const handleSearchKeyDown = (e) => {
