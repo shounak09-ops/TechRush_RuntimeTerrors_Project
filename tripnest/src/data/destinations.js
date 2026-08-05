@@ -84,7 +84,7 @@ export const DESTINATIONS = [
   {
     id: "rome-italy",
     name: "Rome",
-    category: "Historical",
+    category: "Heritage",
     continent: "Europe",
     country: "Italy",
     lat: 41.9028,
@@ -246,7 +246,7 @@ export const DESTINATIONS = [
   {
     id: "cairo-egypt",
     name: "Cairo & Giza",
-    category: "Historical",
+    category: "Heritage",
     continent: "Africa",
     country: "Egypt",
     lat: 30.0444,
@@ -329,7 +329,7 @@ export const DESTINATIONS = [
   {
     id: "ladakh-india",
     name: "Leh Ladakh",
-    category: "Adventure",
+    category: "Mountains",
     region: "North",
     continent: "Asia",
     country: "India",
@@ -385,7 +385,7 @@ export const DESTINATIONS = [
   {
     id: "kaziranga-india",
     name: "Kaziranga National Park",
-    category: "Wildlife & Nature",
+    category: "Wildlife",
     continent: "Asia",
     country: "India",
     lat: 26.5775,
@@ -411,7 +411,7 @@ export const DESTINATIONS = [
   {
     id: "jim-corbett-india",
     name: "Jim Corbett National Park",
-    category: "Wildlife & Nature",
+    category: "Wildlife",
     continent: "Asia",
     country: "India",
     lat: 29.5300,
@@ -437,7 +437,7 @@ export const DESTINATIONS = [
   {
     id: "gir-national-park-india",
     name: "Gir National Park",
-    category: "Wildlife & Nature",
+    category: "Wildlife",
     continent: "Asia",
     country: "India",
     lat: 21.1243,
@@ -463,7 +463,7 @@ export const DESTINATIONS = [
   {
     id: "kabini-india",
     name: "Kabini Forest Reserve",
-    category: "Wildlife & Nature",
+    category: "Wildlife",
     continent: "Asia",
     country: "India",
     lat: 11.9261,
@@ -489,7 +489,7 @@ export const DESTINATIONS = [
   {
     id: "mahabalipuram-india",
     name: "Mahabalipuram",
-    category: "Heritage & Culture",
+    category: "Heritage",
     continent: "Asia",
     country: "India",
     lat: 12.6269,
@@ -515,7 +515,7 @@ export const DESTINATIONS = [
   {
     id: "hampta-pass-india",
     name: "Hampta Pass",
-    category: "Adventure & Trekking",
+    category: "Mountains",
     continent: "Asia",
     country: "India",
     lat: 32.2227,
@@ -541,7 +541,7 @@ export const DESTINATIONS = [
   {
     id: "sikkim-india",
     name: "Sikkim",
-    category: "Mountains & Culture",
+    category: "Mountains",
     continent: "Asia",
     country: "India",
     lat: 27.5330,
@@ -567,7 +567,7 @@ export const DESTINATIONS = [
   {
     id: "puri-india",
     name: "Puri",
-    category: "Pilgrimage & Coastal",
+    category: "Heritage",
     continent: "Asia",
     country: "India",
     lat: 19.8135,
@@ -593,7 +593,7 @@ export const DESTINATIONS = [
   {
     id: "gujarat-india",
     name: "Gujarat",
-    category: "Heritage & Culture",
+    category: "Heritage",
     continent: "Asia",
     country: "India",
     lat: 22.2587,
@@ -671,7 +671,7 @@ export const DESTINATIONS = [
   {
     id: "masai-mara-kenya",
     name: "Masai Mara",
-    category: "Wildlife & Safari",
+    category: "Wildlife",
     continent: "Africa",
     country: "Kenya",
     lat: -1.4061,
@@ -753,7 +753,7 @@ export const DESTINATIONS = [
   {
     id: "varanasi-india",
     name: "Varanasi",
-    category: "Culture",
+    category: "Heritage",
     region: "North",
     continent: "Asia",
     country: "India",
@@ -809,7 +809,7 @@ export const DESTINATIONS = [
   {
     id: "kashmir-valley",
     name: "Srinagar & Gulmarg",
-    category: "Mountains",
+    category: "Nature",
     region: "North",
     continent: "Asia",
     country: "India",
@@ -893,7 +893,7 @@ export const DESTINATIONS = [
   {
     id: "hampi-karnataka",
     name: "Hampi",
-    category: "Historical",
+    category: "Heritage",
     region: "South",
     continent: "Asia",
     country: "India",
@@ -949,7 +949,7 @@ export const DESTINATIONS = [
   {
     id: "rishikesh-uttarakhand",
     name: "Rishikesh & Haridwar",
-    category: "Adventure",
+    category: "Heritage",
     region: "North",
     continent: "Asia",
     country: "India",

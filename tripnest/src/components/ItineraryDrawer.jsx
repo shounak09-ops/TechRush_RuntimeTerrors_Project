@@ -31,7 +31,7 @@ const CATEGORY_STYLES = {
 }
 
 function currency(n) {
-  return `$${Number(n || 0).toLocaleString(undefined, { maximumFractionDigits: 2 })}`
+  return `$${Number(n || 10).toLocaleString(undefined, { maximumFractionDigits: 2 })}`
 }
 
 export default function ItineraryDrawer({
@@ -230,7 +230,7 @@ export default function ItineraryDrawer({
                       }`}>No activities yet</p>
                       <p className={`text-xs ${
                         theme === 'dark' ? 'text-slate-500' : 'text-slate-400'
-                      }`}>Activities are pre-populated from your destination.</p>
+                      }`}>Let's Decide the activities.</p>
                     </div>
                   </div>
                 ) : (

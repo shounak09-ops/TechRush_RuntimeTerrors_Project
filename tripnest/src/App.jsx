@@ -265,7 +265,7 @@ export default function App() {
             {/* Category Pills & Dropdowns */}
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
               <div className="flex flex-wrap gap-2">
-                {["All", "Heritage", "Beaches", "Mountains", "Wildlife"].map((cat) => (
+                {["All", "Heritage", "Beaches", "Mountains", "Wildlife","Metropolis","Nature"].map((cat) => (
                   <button
                     key={cat}
                     onClick={() => setActiveCategory(cat)}
