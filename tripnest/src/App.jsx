@@ -207,8 +207,8 @@ export default function App() {
 
         <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight leading-tight">
           Explore India & The World <br className="hidden sm:inline"/>
-          <span className="bg-gradient-to-r from-sky-500 via-teal-400 to-emerald-500 bg-clip-text text-transparent">
-            With Rich Insights
+          <span className="bg-gradient-to-r from-sky-600 via-teal-500 to-emerald-600 bg-clip-text text-transparent drop-shadow-[0_1px_2px_rgba(0,0,0,0.15)] font-bold">
+           With Rich Insights
           </span>
         </h1>
 

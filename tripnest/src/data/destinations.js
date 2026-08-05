@@ -1,446 +1,617 @@
 export const DESTINATIONS = [
-  // ==========================================
-  // 🇮🇳 INDIA - NORTH REGION
-  // ==========================================
+  // --- FOREIGN / INTERNATIONAL DESTINATIONS ---
   {
-    id: 101,
-    name: "Taj Mahal, Agra",
-    country: "India",
-    region: "North",
-    category: "Heritage",
-    lat: 27.1751, lon: 78.0421,
-    image: "https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=800&q=80",
+    id: "paris-france",
+    name: "Paris",
+    category: "Culture",
+    continent: "Europe",
+    country: "France",
+    temp: "18°C",
+    bestTime: "Apr - Oct",
+    image: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=1200&q=80",
     images: [
-      "https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1585135497273-1a86b09fe707?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=800&q=80"
+      "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?auto=format&fit=crop&w=1200&q=80"
     ],
-    temp: "32°C", budget: "$",
-    description: "Iconic ivory-white marble mausoleum on the Yamuna River.",
-    suggestedDays: 2,
-    recommendedPacking: ["Sunscreen SPF 50+", "Comfortable walking shoes", "Light breathable clothing", "Camera", "Hat/cap for sun protection"],
-    bestTime: "Oct - Mar",
+    description: "The City of Light captivates with iconic architecture, world-class art collections, and charming cafe culture along the Seine.",
     highlights: [
-      "Sunrise viewing of changing marble hues",
-      "Explore Agra Fort and Mehtab Bagh gardens",
-      "Taste authentic Agra Petha in local bazaars"
+      "Eiffel Tower sunset viewing & picnic",
+      "Louvre Museum & Musée d'Orsay tours",
+      "Strolling through Montmartre and Le Marais",
+      "Seine River dinner cruise"
     ],
-    insiderTip: "Arrive 30 minutes before sunrise at the East Gate for the shortest lines and softest lighting."
-  },
-  {
-    id: 102,
-    name: "Jaipur City Palace",
-    country: "India",
-    region: "North",
-    category: "Heritage",
-    lat: 26.9258, lon: 75.8237,
-    image: "https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=800&q=80",
-    images: [
-      "https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1603262110263-fb0112e7cc33?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1524230507669-5ff97982bb5e?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1617854818583-09e7f077a156?auto=format&fit=crop&w=800&q=80"
-    ],
-    temp: "31°C", budget: "$",
-    description: "Royal pink sandstone architecture and forts in the heart of Rajasthan.",
-    suggestedDays: 3,
-    recommendedPacking: ["Sunscreen SPF 50+", "Comfortable walking shoes", "Light cotton clothing", "Camera", "Sunglasses", "Hat/cap"],
-    bestTime: "Nov - Feb",
-    highlights: [
-      "Photograph the 953 carved honeycomb windows of Hawa Mahal",
-      "Jeep or elephant ride up to the hilltops of Amber Fort",
-      "Savor an authentic Rajasthani Thali at Chokhi Dhani"
-    ],
-    insiderTip: "Buy a composite ticket at Amber Fort to save money across all major city heritage monuments."
-  },
-  {
-    id: 103,
-    name: "Leh-Ladakh",
-    country: "India",
-    region: "North",
-    category: "Mountains",
-    lat: 34.1526, lon: 77.5771,
-    image: "https://images.unsplash.com/photo-1581793745862-99fde7fa73d2?auto=format&fit=crop&w=800&q=80",
-    images: [
-      "https://images.unsplash.com/photo-1581793745862-99fde7fa73d2?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1506197603052-3cc9c3a201bd?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1578637387939-43c525550085?auto=format&fit=crop&w=800&q=80"
-    ],
-    temp: "12°C", budget: "$$",
-    description: "High-altitude Himalayan mountain passes and glacial lakes.",
     suggestedDays: 5,
-    recommendedPacking: ["Thermal base layers", "Warm jacket", "Windproof outer layer", "Sunscreen SPF 50+", "Lip balm", "Sunglasses", "Comfortable hiking boots"],
-    bestTime: "May - Sep",
-    highlights: [
-      "Drive across Khardung La pass toward Nubra Valley",
-      "Overnight camping along the turquoise waters of Pangong Tso",
-      "Explore the cliffside monastic architecture of Thiksey"
-    ],
-    insiderTip: "Rest completely for your first 36 hours in Leh to avoid severe High Altitude Sickness (AMS)."
+    recommendedPacking: ["Comfortable walking shoes", "Universal adapter", "Light raincoat", "Smart casual evening wear"],
+    insiderTip: "Book Louvre tickets weeks in advance and enter via the Porte de Lille entrance to skip the glass pyramid line."
   },
   {
-    id: 104,
-    name: "Manali & Solang",
-    country: "India",
-    region: "North",
-    category: "Mountains",
-    lat: 32.2432, lon: 77.1892,
-    image: "https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=800&q=80",
+    id: "tokyo-japan",
+    name: "Tokyo",
+    category: "Metropolis",
+    continent: "Asia",
+    country: "Japan",
+    temp: "22°C",
+    bestTime: "Mar - May, Sep - Nov",
+    image: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=1200&q=80",
     images: [
-      "https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1605649487212-47bdab064df7?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1596895111956-bf1cf0599ce5?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1578637387939-43c525550085?auto=format&fit=crop&w=800&q=80"
+      "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=1200&q=80"
     ],
-    temp: "15°C", budget: "$",
-    description: "Snowy peaks, pine forests, and mountain valley adventures.",
+    description: "An extraordinary blend of ultra-modern skyscrapers, neon-lit alleys, ancient Shinto shrines, and world-renowned culinary experiences.",
+    highlights: [
+      "Shibuya Crossing & Harajuku street food",
+      "Senso-ji Temple in historic Asakusa",
+      "TeamLab Planets immersive digital art",
+      "Day trip to Mount Fuji & Lake Kawaguchiko"
+    ],
+    suggestedDays: 6,
+    recommendedPacking: ["Easy slip-on shoes", "Suica/Pasmo transit card", "Portable power bank", "Pocket Wi-Fi / eSIM"],
+    insiderTip: "Convenience stores (7-Eleven, Lawson) have gourmet quality meals and low-fee ATMs for international card withdrawals."
+  },
+  {
+    id: "bali-indonesia",
+    name: "Bali",
+    category: "Beach",
+    continent: "Asia",
+    country: "Indonesia",
+    temp: "29°C",
+    bestTime: "Apr - Oct",
+    image: "https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1200&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1555400038-63f5ba517a47?auto=format&fit=crop&w=1200&q=80"
+    ],
+    description: "Island of the Gods known for lush terraced rice paddies, volcanic mountains, vibrant coral reefs, and spiritual yoga retreats.",
+    highlights: [
+      "Tegallalang Rice Terraces in Ubud",
+      "Uluwatu Temple sunset & Kecak Fire Dance",
+      "Snorkeling and diving off Nusa Penida",
+      "Sunrise trek up Mount Batur"
+    ],
+    suggestedDays: 7,
+    recommendedPacking: ["Reef-safe sunscreen", "Lightweight cotton wear", "Temple cover-up sarong", "Insect repellent"],
+    insiderTip: "Rent a scooter or hire a private driver for full-day excursions—local ride-hailing apps can be restricted in traditional villages."
+  },
+  {
+    id: "rome-italy",
+    name: "Rome",
+    category: "Historical",
+    continent: "Europe",
+    country: "Italy",
+    temp: "24°C",
+    bestTime: "Apr - Jun, Sep - Oct",
+    image: "https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=1200&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1529260830199-42c24126f198?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1531572753322-ad063cecc140?auto=format&fit=crop&w=1200&q=80"
+    ],
+    description: "An open-air museum filled with nearly 3,000 years of globally influential art, architecture, and ancient Roman ruins.",
+    highlights: [
+      "Colosseum & Roman Forum underground tour",
+      "Vatican Museums & Sistine Chapel",
+      "Trevi Fountain throw-a-coin tradition",
+      "Authentic pasta tasting in Trastevere"
+    ],
     suggestedDays: 4,
-    recommendedPacking: ["Warm jacket", "Thermal wear", "Waterproof boots", "Gloves", "Beanie/hat", "Sunscreen", "Sunglasses"],
-    bestTime: "Oct - Jun",
-    highlights: [
-      "Paragliding and zorbing in Solang Valley",
-      "Drive through Atal Tunnel toward Lahaul Valley",
-      "Café hopping and wooden handicrafts in Old Manali"
-    ],
-    insiderTip: "Book Rohtang Pass permits online 2 days in advance as daily vehicle counts are strictly capped."
+    recommendedPacking: ["Refillable water bottle", "Sturdy walking shoes", "Modest clothing for churches", "Sunglasses"],
+    insiderTip: "Drink from the public fountains (nasoni) for crisp, cold running spring water across the entire city."
   },
   {
-    id: 105,
-    name: "Jim Corbett National Park",
-    country: "India",
-    region: "North",
-    category: "Wildlife",
-    lat: 29.5300, lon: 78.7747,
-    image: "https://images.unsplash.com/photo-1534177616072-ef7dc120449d?auto=format&fit=crop&w=800&q=80",
-    images: [
-      "https://images.unsplash.com/photo-1534177616072-ef7dc120449d?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1549366021-9f761d450615?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1561731216-c3a4d99437d5?auto=format&fit=crop&w=800&q=80"
-    ],
-    temp: "26°C", budget: "$$",
-    description: "India's oldest national park famous for Bengal Tigers and sal forests.",
-    suggestedDays: 3,
-    recommendedPacking: ["Binoculars", "Camera with zoom lens", "Earth-toned clothing", "Insect repellent", "Comfortable walking shoes", "Flashlight"],
-    bestTime: "Nov - Jun",
-    highlights: [
-      "Open-top 4x4 Jeep safaris through Dhikala and Bijrani zones",
-      "Birdwatching along the Ramganga River banks",
-      "Stay in historic British-era forest rest houses"
-    ],
-    insiderTip: "Reserve safari slots on the official portal 45 days prior, especially for the popular Dhikala zone."
-  },
-
-  // ==========================================
-  // 🇮🇳 INDIA - SOUTH REGION
-  // ==========================================
-  {
-    id: 201,
-    name: "Hampi Monuments",
-    country: "India",
-    region: "South",
-    category: "Heritage",
-    lat: 15.3350, lon: 76.4600,
-    image: "https://images.unsplash.com/photo-1600100397608-f010f423b971?auto=format&fit=crop&w=800&q=80",
-    images: [
-      "https://images.unsplash.com/photo-1600100397608-f010f423b971?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1620766182966-c6eb5ed2b788?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=800&q=80"
-    ],
-    temp: "30°C", budget: "$",
-    description: "UNESCO World Heritage site with ancient Vijayanagara empire ruins.",
-    suggestedDays: 3,
-    recommendedPacking: ["Comfortable walking shoes", "Sunscreen SPF 50+", "Light breathable clothing", "Camera", "Hat/cap", "Water bottle"],
-    bestTime: "Oct - Feb",
-    highlights: [
-      "Marvel at the stone chariot inside Vittala Temple",
-      "Watch the sunset from atop boulder-strewn Matanga Hill",
-      "Take a traditional coracle boat ride across Tungabhadra River"
-    ],
-    insiderTip: "Rent a scooter or bicycle on the Anegundi side to cover distant ruins efficiently."
-  },
-  {
-    id: 202,
-    name: "Mahabalipuram Temples",
-    country: "India",
-    region: "South",
-    category: "Heritage",
-    lat: 12.6269, lon: 80.1927,
-    image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=800&q=80",
-    images: [
-      "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1600100397608-f010f423b971?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=800&q=80"
-    ],
-    temp: "31°C", budget: "$",
-    description: "7th-century rock-cut coastal Shore Temple and monolithic rathas.",
-    suggestedDays: 2,
-    recommendedPacking: ["Sunscreen SPF 50+", "Comfortable walking shoes", "Light cotton clothing", "Camera", "Beach wear", "Hat/cap"],
-    bestTime: "Nov - Feb",
-    highlights: [
-      "Explore the 7th-century rock-cut Shore Temple by the ocean",
-      "Inspect the giant open-air relief carving of Arjuna's Penance",
-      "Try fresh catch of the day at seaside seafood shacks"
-    ],
-    insiderTip: "Visit Arjuna's Penance late in the afternoon when sunlight highlights the stone detail."
-  },
-  {
-    id: 203,
-    name: "Alleppey Backwaters",
-    country: "India",
-    region: "South",
-    category: "Beaches",
-    lat: 9.4981, lon: 76.3388,
-    image: "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=800&q=80",
-    images: [
-      "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1593693397690-362cb9666fc2?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=800&q=80"
-    ],
-    temp: "28°C", budget: "$",
-    description: "Serene network of palm-fringed coastal backwater canals.",
-    suggestedDays: 3,
-    recommendedPacking: ["Light breathable clothing", "Sunscreen SPF 50+", "Insect repellent", "Camera", "Waterproof bag", "Comfortable sandals"],
-    bestTime: "Sep - Mar",
-    highlights: [
-      "Overnight houseboat cruise along Punnamada Lake",
-      "Shallow canal country-canoe trips through paddy fields",
-      "Sample authentic Karimeen Pollichathu (pearl spot fish) on banana leaf"
-    ],
-    insiderTip: "Book a small non-motorized canoe ride to explore narrow interior canals where houseboats can't go."
-  },
-  {
-    id: 204,
-    name: "Varkala Cliff Beach",
-    country: "India",
-    region: "South",
-    category: "Beaches",
-    lat: 8.7379, lon: 76.7163,
-    image: "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=800&q=80",
-    images: [
-      "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=800&q=80"
-    ],
-    temp: "29°C", budget: "$",
-    description: "Dramatic red cliffs adjacent to the Arabian Sea coastline.",
-    suggestedDays: 3,
-    recommendedPacking: ["Beach wear", "Sunscreen SPF 50+", "Comfortable walking shoes", "Camera", "Light cover-up", "Sunglasses"],
-    bestTime: "Oct - Mar",
-    highlights: [
-      "Sunset dining along the cliffside cafes overlooking Papanasam Beach",
-      "Ayurvedic massage treatments at cliffside wellness retreats",
-      "Surfing lessons along North Cliff beach swells"
-    ],
-    insiderTip: "Papanasam Beach is considered holy; dress modestly near the main temple entry path."
-  },
-  {
-    id: 205,
-    name: "Munnar Hills",
-    country: "India",
-    region: "South",
+    id: "swiss-alps",
+    name: "Interlaken & Swiss Alps",
     category: "Mountains",
-    lat: 10.0889, lon: 77.0595,
-    image: "https://images.unsplash.com/photo-1593693397690-362cb9666fc2?auto=format&fit=crop&w=800&q=80",
+    continent: "Europe",
+    country: "Switzerland",
+    temp: "12°C",
+    bestTime: "Dec - Mar (Ski) / Jun - Sep (Hike)",
+    image: "https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?auto=format&fit=crop&w=1200&q=80",
     images: [
-      "https://images.unsplash.com/photo-1593693397690-362cb9666fc2?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=800&q=80"
+      "https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1527668752968-14dc70a27c95?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80"
     ],
-    temp: "20°C", budget: "$",
-    description: "Rolling tea garden estates nestled in Western Ghats mountain ranges.",
-    suggestedDays: 3,
-    recommendedPacking: ["Light jacket", "Comfortable walking shoes", "Rain jacket/umbrella", "Camera", "Insect repellent", "Sunscreen"],
-    bestTime: "Sep - May",
+    description: "Breathtaking alpine vistas, crystalline glacial lakes, high-altitude train journeys, and world-class hiking trails.",
     highlights: [
-      "Tour tea plantations and sample freshly brewed orthodox teas",
-      "Spot endangered Nilgiri Tahr goats at Eravikulam National Park",
-      "Boating at Mattupetty Dam surrounded by tea slopes"
+      "Jungfraujoch - Top of Europe railway",
+      "Paragliding over Interlaken lakes",
+      "Hiking First Cliff Walk in Grindelwald",
+      "Scenic Lake Thun boat cruise"
     ],
-    insiderTip: "Book Eravikulam National Park bus tickets online early in the morning to avoid long queues."
+    suggestedDays: 5,
+    recommendedPacking: ["Thermal base layers", "Hiking boots", "Polarized sunglasses", "Windproof jacket"],
+    insiderTip: "Purchase a Swiss Travel Pass—it grants unlimited rides on trains, buses, mountain boats, and discounts on cable cars."
   },
   {
-    id: 206,
-    name: "Kabini Forest Reserve",
-    country: "India",
-    region: "South",
-    category: "Wildlife",
-    lat: 11.9169, lon: 76.3333,
-    image: "https://images.unsplash.com/photo-1561731216-c3a4d99437d5?auto=format&fit=crop&w=800&q=80",
-    images: [
-      "https://images.unsplash.com/photo-1561731216-c3a4d99437d5?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1534177616072-ef7dc120449d?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1534567153574-2b12153a87f0?auto=format&fit=crop&w=800&q=80"
-    ],
-    temp: "25°C", budget: "$$$",
-    description: "Premier leopard and black panther habitat along Kabini river backwaters.",
-    suggestedDays: 3,
-    recommendedPacking: ["Binoculars", "Camera with zoom lens", "Earth-toned clothing", "Insect repellent", "Comfortable walking shoes", "Flashlight"],
-    bestTime: "Oct - May",
-    highlights: [
-      "Boat safari along the reservoir to see large herds of Asian elephants",
-      "Spot leopards and rare black panthers in Nagarhole zone",
-      "Guided nature walks with resident naturalists"
-    ],
-    insiderTip: "Summer months (March to May) yield the best big cat and elephant sightings around receding waters."
-  },
-
-  // ==========================================
-  // 🇮🇳 INDIA - WEST REGION
-  // ==========================================
-  {
-    id: 301,
-    name: "North Goa Beaches",
-    country: "India",
-    region: "West",
-    category: "Beaches",
-    lat: 15.2993, lon: 74.1240,
-    image: "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=800&q=80",
-    images: [
-      "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80"
-    ],
-    temp: "29°C", budget: "$",
-    description: "Golden sand beaches, palm groves, and energetic coastline vibes.",
-    suggestedDays: 4,
-    recommendedPacking: ["Beach wear", "Sunscreen SPF 50+", "Sunglasses", "Flip-flops", "Light cover-up", "Camera", "Insect repellent"],
-    bestTime: "Nov - Feb",
-    highlights: [
-      "Water sports like parasailing and jet skiing at Calangute & Baga",
-      "Explore Portuguese heritage at Aguada Fort and Old Goa churches",
-      "Sunset flea market shopping at Anjuna Beach"
-    ],
-    insiderTip: "Head to Ashwem or Morjim Beach further north for cleaner sands and quieter crowds."
-  },
-  {
-    id: 302,
-    name: "Ajanta & Ellora Caves",
-    country: "India",
-    region: "West",
-    category: "Heritage",
-    lat: 20.5519, lon: 75.7033,
-    image: "https://images.unsplash.com/photo-1600100397608-f010f423b971?auto=format&fit=crop&w=800&q=80",
-    images: [
-      "https://images.unsplash.com/photo-1600100397608-f010f423b971?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=800&q=80"
-    ],
-    temp: "30°C", budget: "$",
-    description: "Ancient rock-cut cave monuments and the massive monolithic Kailasa Temple.",
-    suggestedDays: 3,
-    recommendedPacking: ["Comfortable walking shoes", "Sunscreen SPF 50+", "Light breathable clothing", "Camera", "Flashlight", "Water bottle"],
+    id: "dubai-uae",
+    name: "Dubai",
+    category: "Metropolis",
+    continent: "Asia",
+    country: "United Arab Emirates",
+    temp: "33°C",
     bestTime: "Nov - Mar",
-    highlights: [
-      "Behold Cave 16 (Kailasa Temple), carved top-down from a single rock mass",
-      "Study ancient Buddhist frescoes inside Ajanta's horseshoe ravine",
-      "Explore Hindu, Jain, and Buddhist rock carving styles side-by-side"
+    image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1200&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1518684079-3c830dcef090?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1580674684081-7617fbf3d745?auto=format&fit=crop&w=1200&q=80"
     ],
-    insiderTip: "Ajanta Caves are closed on Mondays; Ellora Caves are closed on Tuesdays."
+    description: "A futuristic desert oasis boasting ultra-tall skyscrapers, extravagant shopping malls, luxury beach resorts, and desert safaris.",
+    highlights: [
+      "Burj Khalifa observation deck view",
+      "Desert dune bashing & Bedouin camp dinner",
+      "Museum of the Future tour",
+      "Dubai Fountain show & Mall shopping"
+    ],
+    suggestedDays: 4,
+    recommendedPacking: ["Light breathable linen", "Sunglasses", "Sunscreen", "Smart evening attire"],
+    insiderTip: "Use the clean and cheap Dubai Metro system to easily bypass heavy road traffic between major attractions."
   },
   {
-    id: 303,
-    name: "Gir National Park",
-    country: "India",
-    region: "West",
-    category: "Wildlife",
-    lat: 21.1243, lon: 70.8242,
-    image: "https://images.unsplash.com/photo-1534567153574-2b12153a87f0?auto=format&fit=crop&w=800&q=80",
+    id: "new-york-usa",
+    name: "New York City",
+    category: "Metropolis",
+    continent: "North America",
+    country: "United States",
+    temp: "20°C",
+    bestTime: "Apr - Jun, Sep - Nov",
+    image: "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format&fit=crop&w=1200&q=80",
     images: [
-      "https://images.unsplash.com/photo-1534567153574-2b12153a87f0?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1534177616072-ef7dc120449d?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1549366021-9f761d450615?auto=format&fit=crop&w=800&q=80"
+      "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1538688525198-9b88f6f53126?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1518391846015-55a9cc003b25?auto=format&fit=crop&w=1200&q=80"
     ],
-    temp: "33°C", budget: "$$",
-    description: "The sole wild sanctuary for majestic Asiatic Lions in Gujarat.",
-    suggestedDays: 3,
-    recommendedPacking: ["Binoculars", "Camera with zoom lens", "Earth-toned clothing", "Insect repellent", "Comfortable walking shoes", "Sunscreen SPF 50+", "Hat/cap"],
-    bestTime: "Dec - Apr",
+    description: "The global hub of culture, entertainment, and fashion—renowned for soaring skyscrapers, Broadway theatre, and vibrant neighborhoods.",
     highlights: [
-      "Open jeep safari tracking wild Asiatic Lion prides",
-      "Spot chinkara gazelles, spotted deer, and marsh crocodiles",
-      "Visit the Maldhari tribal settlements inside the buffer forest"
+      "Central Park bike ride & picnic",
+      "Broadway show in Times Square",
+      "Statue of Liberty & Ellis Island ferry",
+      "Walking the Brooklyn Bridge at sunset"
     ],
-    insiderTip: "The park remains completely closed during monsoon season (June 16 to October 15)."
+    suggestedDays: 5,
+    recommendedPacking: ["Comfortable walking sneakers", "Layered outerwear", "MetroCard / Contactless card", "Small crossbody bag"],
+    insiderTip: "Tap to pay directly at subway turnstiles using your contactless bank card or smartphone wallet via OMNY."
   },
   {
-    id: 304,
-    name: "Ranthambore Tiger Reserve",
-    country: "India",
-    region: "West",
-    category: "Wildlife",
-    lat: 26.0173, lon: 76.5026,
-    image: "https://images.unsplash.com/photo-1549366021-9f761d450615?auto=format&fit=crop&w=800&q=80",
+    id: "singapore",
+    name: "Singapore",
+    category: "Metropolis",
+    continent: "Asia",
+    country: "Singapore",
+    temp: "30°C",
+    bestTime: "Year-round",
+    image: "https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&w=1200&q=80",
     images: [
-      "https://images.unsplash.com/photo-1549366021-9f761d450615?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1534177616072-ef7dc120449d?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1561731216-c3a4d99437d5?auto=format&fit=crop&w=800&q=80"
+      "https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1565967511849-76a60a516170?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1506351421178-63b52a2d2562?auto=format&fit=crop&w=1200&q=80"
     ],
-    temp: "31°C", budget: "$$",
-    description: "Royal hunting grounds turned wildlife reserve dominated by historic fort ruins.",
+    description: "A lush garden city combining futuristic marvels, diverse cultures, botanical sanctuaries, and world-class street food.",
+    highlights: [
+      "Gardens by the Bay & Supertree Grove light show",
+      "Marina Bay Sands skypark observation deck",
+      "Hawker center food tour in Chinatown & Maxwell",
+      "Sentosa Island beach resort day trip"
+    ],
+    suggestedDays: 4,
+    recommendedPacking: ["Light cotton shirts", "Compact umbrella", "Refillable water bottle", "Walking sandals"],
+    insiderTip: "Eat at Michelin-recognized hawker stalls like Lau Pa Sat or Chinatown Complex for top-tier local dishes under $10."
+  },
+  {
+    id: "santorini-greece",
+    name: "Santorini",
+    category: "Beach",
+    continent: "Europe",
+    country: "Greece",
+    temp: "25°C",
+    bestTime: "Late Apr - Oct",
+    image: "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format&fit=crop&w=1200&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=1200&q=80"
+    ],
+    description: "An Aegean island dream characterized by cliffside whitewashed villages, iconic blue-domed churches, and stunning sunsets.",
+    highlights: [
+      "Sunset watching in Oia village",
+      "Catamaran cruise around caldera volcanic springs",
+      "Exploring Red Beach & Ancient Akrotiri ruins",
+      "Wine tasting at cliffside vineyards"
+    ],
     suggestedDays: 3,
-    recommendedPacking: ["Binoculars", "Camera with zoom lens", "Earth-toned clothing", "Insect repellent", "Comfortable walking shoes", "Sunscreen SPF 50+", "Flashlight"],
+    recommendedPacking: ["Sun hat & sunglasses", "Grip-sole walking shoes for cobbles", "Swimwear", "Light jacket for windy nights"],
+    insiderTip: "Avoid midday cruise crowds in Oia by exploring the narrow alleyways early in the morning before 10 AM."
+  },
+  {
+    id: "cairo-egypt",
+    name: "Cairo & Giza",
+    category: "Historical",
+    continent: "Africa",
+    country: "Egypt",
+    temp: "27°C",
     bestTime: "Oct - Apr",
-    highlights: [
-      "Safari through ancient fort ruins where tigers freely roam",
-      "Climb up Ranthambore Fort for panoramic park views",
-      "Birdwatching around Padam Talao and Raj Bagh lakes"
+    image: "https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?auto=format&fit=crop&w=1200&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1568322445389-f64ac2515020?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1539650116574-8efeb43e2750?auto=format&fit=crop&w=1200&q=80"
     ],
-    insiderTip: "Zones 1 through 5 offer higher tiger activity compared to peripheral outer zones 6 through 10."
+    description: "The gateway to antiquity, where ancient wonders like the Great Pyramids stand alongside the bustling life of the Nile valley.",
+    highlights: [
+      "Giza Pyramids & Great Sphinx guided tour",
+      "Grand Egyptian Museum pharaonic treasures",
+      "Sunset Felucca sailing boat ride on the Nile",
+      "Khan el-Khalili historic bazaar shopping"
+    ],
+    suggestedDays: 4,
+    recommendedPacking: ["Modest lightweight clothing", "Wide-brim hat", "Sunscreen", "Cash in local currency"],
+    insiderTip: "Hire an official licensed Egyptologist guide for the Pyramids to ensure smooth entry and avoid aggressive street vendors."
+  },
+  {
+    id: "sydney-australia",
+    name: "Sydney",
+    category: "Culture",
+    continent: "Oceania",
+    country: "Australia",
+    temp: "23°C",
+    bestTime: "Sep - Nov, Feb - Apr",
+    image: "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?auto=format&fit=crop&w=1200&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1523428096881-5bd79d04300f?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80"
+    ],
+    description: "A harbor metropolis where striking modern architecture meets world-famous surf beaches, national parks, and coastal walks.",
+    highlights: [
+      "Sydney Opera House guided tour & concert",
+      "Bondi to Coogee coastal cliff walk",
+      "Sydney Harbour ferry ride to Manly",
+      "Day trip to the Blue Mountains"
+    ],
+    suggestedDays: 5,
+    recommendedPacking: ["High-SPF broad spectrum sunscreen", "Beachwear", "Comfortable walking shoes", "Sunglasses"],
+    insiderTip: "Take the public Manly Ferry from Circular Quay for harbor views at a fraction of the cost of commercial tour cruises."
+  },
+  {
+    id: "queenstown-newzealand",
+    name: "Queenstown",
+    category: "Adventure",
+    continent: "Oceania",
+    country: "New Zealand",
+    temp: "15°C",
+    bestTime: "Dec - Feb (Summer) / Jun - Aug (Ski)",
+    image: "https://images.unsplash.com/photo-1589802829985-817e51171b92?auto=format&fit=crop&w=1200&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1589802829985-817e51171b92?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1507699622108-4be3abd695ad?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80"
+    ],
+    description: "The adventure capital of the world, nestled along Lake Wakatipu with alpine peaks and thrill-seeking outdoor sports.",
+    highlights: [
+      "Milford Sound fjord scenic day cruise",
+      "Skyline Gondola ride & Luge track",
+      "Bungee jumping or Shotover Jet boat experience",
+      "Wine tasting tours in Central Otago"
+    ],
+    suggestedDays: 5,
+    recommendedPacking: ["Sturdy hiking shoes", "Windproof jacket", "Layered thermal clothing", "Camera"],
+    insiderTip: "Book your Milford Sound excursion well in advance—choosing a small boat tour gets you much closer to the cliff waterfalls."
   },
 
-  // ==========================================
-  // 🇮🇳 INDIA - EAST REGION
-  // ==========================================
+  // --- INDIAN DESTINATIONS ---
   {
-    id: 401,
-    name: "Darjeeling Hills",
+    id: "ladakh-india",
+    name: "Leh Ladakh",
+    category: "Adventure",
+    region: "North",
+    continent: "Asia",
     country: "India",
-    region: "East",
-    category: "Mountains",
-    lat: 27.0410, lon: 88.2663,
-    image: "https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=800&q=80",
+    temp: "10°C",
+    bestTime: "May - Sep",
+    image: "https://images.unsplash.com/photo-1581793745862-99fde7fa73d2?auto=format&fit=crop&w=1200&q=80",
     images: [
-      "https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1593693397690-362cb9666fc2?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1581793745862-99fde7fa73d2?auto=format&fit=crop&w=800&q=80"
+      "https://images.unsplash.com/photo-1581793745862-99fde7fa73d2?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1506197603052-3cc9c3a201bd?auto=format&fit=crop&w=1200&q=80"
     ],
-    temp: "16°C", budget: "$",
-    description: "Famed tea gardens with views of Kangchenjunga peak.",
-    suggestedDays: 3,
-    recommendedPacking: ["Light jacket", "Comfortable walking shoes", "Rain jacket/umbrella", "Camera", "Warm layers", "Sunscreen"],
-    bestTime: "Mar - May, Oct - Nov",
+    description: "High-altitude desert wonderland featuring azure lakes, rugged mountain passes, and historic Buddhist monasteries.",
     highlights: [
-      "Early morning sunrise over Mt. Kangchenjunga at Tiger Hill",
-      "Ride the UNESCO World Heritage Darjeeling Himalayan Toy Train",
-      "Tour Happy Valley Tea Estate and sip freshly plucked First Flush tea"
+      "Pangong Tso & Nubra Valley double-humped camel safari",
+      "Driving through Khardung La Pass",
+      "Thiksey and Hemis Monastery spiritual tours",
+      "Stargazing at Hanle Observatory reserve"
     ],
-    insiderTip: "Leave for Tiger Hill by 3:30 AM to secure a front-row view before sunrise crowds arrive."
+    suggestedDays: 7,
+    recommendedPacking: ["Heavy thermals", "Hydration pack", "High-SPF sunscreen", "Diamox / Altitude medication"],
+    insiderTip: "Dedicating the first 24 to 48 hours strictly to resting in Leh is essential for safe acclimatization."
   },
   {
-    id: 402,
-    name: "Konark Sun Temple",
+    id: "kerala-backwaters",
+    name: "Alleppey & Munnar",
+    category: "Nature",
+    region: "South",
+    continent: "Asia",
     country: "India",
-    region: "East",
-    category: "Heritage",
-    lat: 19.8876, lon: 86.0945,
-    image: "https://images.unsplash.com/photo-1600100397608-f010f423b971?auto=format&fit=crop&w=800&q=80",
+    temp: "26°C",
+    bestTime: "Sep - Mar",
+    image: "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=1200&q=80",
     images: [
-      "https://images.unsplash.com/photo-1600100397608-f010f423b971?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=800&q=80"
+      "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1593693397690-362cb9666fc2?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1506461883276-594a12b11cf3?auto=format&fit=crop&w=1200&q=80"
     ],
-    temp: "31°C", budget: "$",
-    description: "13th-century stone chariot architecture dedicated to the Sun God.",
-    suggestedDays: 2,
-    recommendedPacking: ["Sunscreen SPF 50+", "Comfortable walking shoes", "Light breathable clothing", "Camera", "Hat/cap", "Water bottle"],
-    bestTime: "Oct - Feb",
+    description: "Tranquil tropical paradise known for emerald tea gardens, palm-fringed backwater canals, and luxury houseboat cruises.",
     highlights: [
-      "Examine the 24 carved stone wheels functioning as accurate sundials",
-      "Attend the evening Light and Sound show illuminating temple history",
-      "Visit nearby Chandrabhaga Beach for clean coastal views"
+      "Overnight houseboat stay through Punnamada Lake",
+      "Munnar tea estate walks & museum tours",
+      "Ayurvedic wellness therapy massages",
+      "Kathakali cultural performance"
     ],
-    insiderTip: "Hire an ASI-certified local guide at the gate to fully appreciate the complex astronomical symbolism."
+    suggestedDays: 5,
+    recommendedPacking: ["Light cotton clothing", "Mosquito repellent", "Comfortable sandals", "Camera with extra batteries"],
+    insiderTip: "Hire a traditional canoe or shikara through smaller inner canals where large houseboats cannot fit."
+  },
+  {
+    id: "jaipur-india",
+    name: "Jaipur",
+    category: "Heritage",
+    region: "North",
+    continent: "Asia",
+    country: "India",
+    temp: "28°C",
+    bestTime: "Oct - Mar",
+    image: "https://images.unsplash.com/photo-1477587458883-47145ed94245?auto=format&fit=crop&w=1200&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1477587458883-47145ed94245?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1603262110263-fb0112e7cc33?auto=format&fit=crop&w=1200&q=80"
+    ],
+    description: "The Royal Pink City showcasing majestic hill forts, opulent royal palaces, and vibrant bazaar shopping.",
+    highlights: [
+      "Amber Fort grand ramparts & Sheesh Mahal",
+      "Hawa Mahal (Palace of Winds) facade photo stop",
+      "City Palace & Jantar Mantar observatory",
+      "Bazaars shopping for textiles, jewelry & block prints"
+    ],
+    suggestedDays: 3,
+    recommendedPacking: ["Sun hat", "Breathable fabrics", "Comfortable walking shoes", "Extra bag for artisan shopping"],
+    insiderTip: "Visit Nahargarh Fort right before sunset for a panoramic view of the entire city lighting up."
+  },
+  {
+    id: "goa-india",
+    name: "Goa",
+    category: "Beach",
+    region: "West",
+    continent: "Asia",
+    country: "India",
+    temp: "31°C",
+    bestTime: "Nov - Feb",
+    image: "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=1200&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80"
+    ],
+    description: "India's coastal haven featuring golden beaches, Portuguese heritage architecture, water sports, and lively nightlife.",
+    highlights: [
+      "Water sports at Calangute & Baga beaches",
+      "Exploring Fontainhas Portuguese Latin Quarter",
+      "Dudhsagar Waterfalls jeep safari",
+      "Sunset beach shacks & seafood dining"
+    ],
+    suggestedDays: 4,
+    recommendedPacking: ["Swimwear", "Flip flops", "Waterproof phone pouch", "Sunscreen"],
+    insiderTip: "Head to South Goa (Palolem, Agonda) for serene, quiet beaches, and North Goa for nightlife and water activities."
+  },
+  {
+    id: "varanasi-india",
+    name: "Varanasi",
+    category: "Culture",
+    region: "North",
+    continent: "Asia",
+    country: "India",
+    temp: "25°C",
+    bestTime: "Oct - Mar",
+    image: "https://images.unsplash.com/photo-1561361513-2d000a50f0dc?auto=format&fit=crop&w=1200&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1561361513-2d000a50f0dc?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1571536802807-30451e3955d8?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1627894483216-2138af692e32?auto=format&fit=crop&w=1200&q=80"
+    ],
+    description: "One of the world's oldest continually inhabited cities, renowned for spiritual ghats along the sacred Ganges river.",
+    highlights: [
+      "Evening Ganga Aarti ceremony at Dashashwamedh Ghat",
+      "Sunrise wooden boat ride along the Ganges ghats",
+      "Exploring narrow heritage alleys & Banarasi silk weaving",
+      "Excursion to Sarnath Buddhist stupas"
+    ],
+    suggestedDays: 3,
+    recommendedPacking: ["Modest clothing", "Slip-on shoes for temple visits", "Hand sanitizer", "Camera"],
+    insiderTip: "Take the sunrise boat ride from Assi Ghat to Manikarnika Ghat for the best photographic light and atmospheric tranquility."
+  },
+  {
+    id: "taj-mahal-agra",
+    name: "Agra & Taj Mahal",
+    category: "Heritage",
+    region: "North",
+    continent: "Asia",
+    country: "India",
+    temp: "27°C",
+    bestTime: "Oct - Mar",
+    image: "https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=1200&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1585135497273-1a86b09fe70e?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1200&q=80"
+    ],
+    description: "Home to the world's grandest monument to love, surrounded by rich Mughal architectural landmarks.",
+    highlights: [
+      "Sunrise viewing of the Taj Mahal",
+      "Exploring Agra Fort red sandstone palaces",
+      "Sunset view across the Yamuna from Mehtab Bagh",
+      "Day trip to Fatehpur Sikri ghost city"
+    ],
+    suggestedDays: 2,
+    recommendedPacking: ["Sun hat", "Comfortable walking shoes", "Valid photo ID", "Water bottle"],
+    insiderTip: "Arrive at the Taj Mahal East Gate 30 minutes before sunrise to be first in line and avoid long queues."
+  },
+  {
+    id: "kashmir-valley",
+    name: "Srinagar & Gulmarg",
+    category: "Mountains",
+    region: "North",
+    continent: "Asia",
+    country: "India",
+    temp: "14°C",
+    bestTime: "Apr - Oct (Greenery) / Dec - Feb (Snow)",
+    image: "https://images.unsplash.com/photo-1598091383021-15ddea10925d?auto=format&fit=crop&w=1200&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1598091383021-15ddea10925d?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1566837945700-30057527ade0?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1617868186608-87ae598cb729?auto=format&fit=crop&w=1200&q=80"
+    ],
+    description: "Heaven on Earth featuring serene mirror lakes, wooden houseboats, lush alpine meadows, and world-class ski slopes.",
+    highlights: [
+      "Shikara ride on Dal Lake & floating vegetable market",
+      "Gulmarg Gondola cable car ride to Apharwat Peak",
+      "Strolling Shalimar & Nishat Bagh Mughal Gardens",
+      "Overnight stay on a carved wooden houseboat"
+    ],
+    suggestedDays: 5,
+    recommendedPacking: ["Warm woolens / layers", "Waterproof jacket", "Grip shoes", "Moisturizer"],
+    insiderTip: "Book phase 2 Gulmarg Gondola tickets online well in advance as daily tickets are strictly limited."
+  },
+  {
+    id: "andaman-islands",
+    name: "Andaman Islands",
+    category: "Beach",
+    region: "South",
+    continent: "Asia",
+    country: "India",
+    temp: "29°C",
+    bestTime: "Oct - May",
+    image: "https://images.unsplash.com/photo-1589308078059-be1415eab4c3?auto=format&fit=crop&w=1200&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1589308078059-be1415eab4c3?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80"
+    ],
+    description: "Pristine tropical archipelago offering turquoise ocean waters, white sand beaches, coral reef diving, and dense rainforests.",
+    highlights: [
+      "Radhanagar Beach sunset walk on Havelock Island",
+      "Scuba diving & bioluminescent night kayaking",
+      "Cellular Jail light & sound historical show",
+      "Elephant Beach water sports & sea walking"
+    ],
+    suggestedDays: 6,
+    recommendedPacking: ["Reef-safe sunscreen", "Snorkel gear", "Waterproof phone case", "Light cotton clothes"],
+    insiderTip: "Book inter-island private ferry tickets (Makruzz / Nautika) early to guarantee comfortable seating between islands."
+  },
+  {
+    id: "meghalaya-shillong",
+    name: "Shillong & Cherrapunji",
+    category: "Nature",
+    region: "East",
+    continent: "Asia",
+    country: "India",
+    temp: "19°C",
+    bestTime: "Oct - Apr",
+    image: "https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=1200&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1200&q=80"
+    ],
+    description: "The Abode of Clouds featuring living root bridges, cascading waterfalls, crystal-clear rivers, and limestone cave networks.",
+    highlights: [
+      "Trekking to the Double Decker Living Root Bridge in Nongriat",
+      "Boating on the glass-like waters of Dawki River",
+      "Nohkalikai & Seven Sisters Waterfalls viewing",
+      "Exploring Mawsmai & Arwah limestone caves"
+    ],
+    suggestedDays: 5,
+    recommendedPacking: ["Trekking shoes with good grip", "Rainwear / poncho", "Quick-dry clothing", "Bug spray"],
+    insiderTip: "Start the Nongriat living root bridge trek early in the morning to beat the heat on the 3,000-step return climb."
+  },
+  {
+    id: "hampi-karnataka",
+    name: "Hampi",
+    category: "Historical",
+    region: "South",
+    continent: "Asia",
+    country: "India",
+    temp: "29°C",
+    bestTime: "Nov - Feb",
+    image: "https://images.unsplash.com/photo-1600100397608-f010e423b971?auto=format&fit=crop&w=1200&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1600100397608-f010e423b971?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1609946782782-7771746f3a76?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1200&q=80"
+    ],
+    description: "A UNESCO World Heritage landscape of boulder-strewn hills dotted with magnificent 14th-century Vijayanagara Empire ruins.",
+    highlights: [
+      "Virupaksha Temple & Vijaya Vittala Stone Chariot",
+      "Coracle boat ride across Tungabhadra River",
+      "Sunset from Matanga Hill or Hemakuta Hill",
+      "Bicycle tour through Lotus Mahal & Elephant Stables"
+    ],
+    suggestedDays: 3,
+    recommendedPacking: ["Sun hat & shades", "Light cotton wear", "Sturdy walking sandals", "Hydration bottle"],
+    insiderTip: "Renting a bicycle or moped is the best way to comfortably explore the vast scattered ruins at your own pace."
+  },
+  {
+    id: "darjeeling-westbengal",
+    name: "Darjeeling",
+    category: "Mountains",
+    region: "East",
+    continent: "Asia",
+    country: "India",
+    temp: "15°C",
+    bestTime: "Oct - Dec, Mar - May",
+    image: "https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=1200&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1200&q=80"
+    ],
+    description: "Queen of the Hills famous for world-class tea gardens, heritage Himalayan railways, and views of Mount Kanchenjunga.",
+    highlights: [
+      "Tiger Hill sunrise over Mount Kanchenjunga",
+      "UNESCO Darjeeling Himalayan Railway (Toy Train) ride",
+      "Tea tasting tour at Happy Valley Tea Estate",
+      "Ghoom Monastery & Batasia Loop visit"
+    ],
+    suggestedDays: 3,
+    recommendedPacking: ["Warm woolens", "Comfortable walking shoes", "Camera", "Thermos bottle"],
+    insiderTip: "Book the Steam Engine joyride between Darjeeling and Ghoom in advance for the authentic heritage Toy Train experience."
+  },
+  {
+    id: "rishikesh-uttarakhand",
+    name: "Rishikesh & Haridwar",
+    category: "Adventure",
+    region: "North",
+    continent: "Asia",
+    country: "India",
+    temp: "22°C",
+    bestTime: "Sep - Nov, Feb - May",
+    image: "https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?auto=format&fit=crop&w=1200&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1600100397608-f010e423b971?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1561361513-2d000a50f0dc?auto=format&fit=crop&w=1200&q=80"
+    ],
+    description: "Yoga Capital of the World where the clear blue Ganges exits the Himalayas, blending adrenaline sports with spiritual peace.",
+    highlights: [
+      "White water river rafting from Shivpuri",
+      "Evening Ganga Aarti at Parmarth Niketan & Triveni Ghat",
+      "Exploring Lakshman Jhula, Ram Jhula & Beatles Ashram",
+      "Bungee jumping at Jumpin Heights"
+    ],
+    suggestedDays: 3,
+    recommendedPacking: ["Quick-dry shorts/t-shirts", "Waterproof shoes/sandals", "Yoga clothes", "Modest wear for ashrams"],
+    insiderTip: "Visit the Beatles Ashram (Chaurasi Kutia) in the late afternoon for quiet forest walks and colorful graffiti art."
   }
 ];
