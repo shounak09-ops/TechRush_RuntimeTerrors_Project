@@ -1,121 +1,231 @@
-import React from "react";
-import { X, Calendar, MapPin, Compass, CheckCircle2, Lightbulb } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { 
+  X, MapPin, Thermometer, Calendar, Heart, Plus, Sparkles, 
+  CheckCircle2, Clock, Lightbulb, Package 
+} from "lucide-react";
 
-export default function DestinationModal({ dest, onClose, onAddToItinerary }) {
+export default function DestinationModal({
+  dest,
+  onClose,
+  onAddToItinerary,
+  isFavorite,
+  onToggleFavorite
+}) {
+  // Safe fallback: use dest.images array, or fall back to single dest.image
+  const gallery = dest?.images && dest.images.length > 0 ? dest.images : [dest?.image];
+  const [selectedImage, setSelectedImage] = useState(gallery[0]);
+
+  // Update selected image whenever a new destination is opened
+  useEffect(() => {
+    if (dest) {
+      const initialGallery = dest.images && dest.images.length > 0 ? dest.images : [dest.image];
+      setSelectedImage(initialGallery[0]);
+    }
+  }, [dest]);
+
   if (!dest) return null;
 
-  // Fallbacks for optional dynamic fields
-  const bestTime = dest.bestTime || dest.bestSeason || "Oct - Mar";
-  const highlights = dest.highlights && dest.highlights.length > 0 
-    ? dest.highlights 
-    : [
-        "Guided cultural & heritage walks",
-        "Local cuisine & street food tours",
-        "Photography & viewpoint spots",
-        "Eco-friendly local transport"
-      ];
-
   return (
-    <div 
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in"
-      onClick={onClose}
-    >
-      <div 
-        className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative"
-        onClick={(e) => e.stopPropagation()}
-      >
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fadeIn">
+      <div className="relative w-full max-w-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
+        
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 z-10 p-2 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors"
+          className="absolute top-4 right-4 z-20 p-2 rounded-full bg-black/50 hover:bg-black/70 text-white backdrop-blur-md transition-colors"
+          aria-label="Close modal"
         >
           <X className="h-5 w-5" />
         </button>
 
-        {/* Modal Banner */}
-        <div className="relative h-64 sm:h-72">
-          <img src={dest.image} alt={dest.name} className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/30 to-transparent" />
-          <div className="absolute bottom-6 left-6 right-6 text-white space-y-1">
-            <span className="px-3 py-1 bg-sky-500 text-white text-xs font-bold rounded-full uppercase tracking-wider">
-              {dest.category}
-            </span>
-            <h2 className="text-3xl font-black">{dest.name}</h2>
-            <p className="text-sm text-slate-300 flex items-center gap-1">
-              <MapPin className="h-4 w-4 text-sky-400" /> {dest.country}
-            </p>
-          </div>
-        </div>
+        {/* Scrollable Modal Content */}
+        <div className="overflow-y-auto">
+          
+          {/* Main Selected Image */}
+          <div className="relative aspect-[16/9] w-full bg-slate-950">
+            <img
+              src={selectedImage}
+              alt={dest.name}
+              className="w-full h-full object-cover transition-all duration-300"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
 
-        {/* Modal Content */}
-        <div className="p-6 space-y-6">
-          <p className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
-            {dest.description}
-          </p>
-
-          {/* Quick Info Grid */}
-          <div className="grid grid-cols-3 gap-4 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 text-center">
-            <div>
-              <span className="text-xs text-slate-400 block font-semibold">Temperature</span>
-              <span className="text-base font-bold text-sky-500">{dest.temp}</span>
-            </div>
-            <div>
-              <span className="text-xs text-slate-400 block font-semibold">Budget Level</span>
-              <span className="text-base font-bold text-emerald-500">{dest.budget}</span>
-            </div>
-            <div>
-              <span className="text-xs text-slate-400 block font-semibold">Best Season</span>
-              <span className="text-base font-bold text-amber-500">{bestTime}</span>
+            {/* Over-Image Info */}
+            <div className="absolute bottom-4 left-6 right-6 text-white">
+              <span className="px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs font-semibold">
+                {dest.category}
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-black mt-2">{dest.name}</h2>
+              <div className="flex items-center gap-1.5 text-xs text-sky-300 font-medium mt-1">
+                <MapPin className="h-4 w-4" />
+                <span>
+                  {dest.country}{" "}
+                  {dest.region
+                    ? `• ${dest.region} India`
+                    : dest.continent
+                    ? `• ${dest.continent}`
+                    : ""}
+                </span>
+              </div>
             </div>
           </div>
 
-          {/* Dynamic Highlights */}
-          <div className="space-y-3">
-            <h4 className="font-bold text-sm text-slate-900 dark:text-white flex items-center gap-2">
-              <Compass className="h-4 w-4 text-sky-500" /> Key Highlights & Activities
-            </h4>
-            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-600 dark:text-slate-400">
-              {highlights.map((item, idx) => (
-                <li key={idx} className="flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" /> {item}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Dynamic Insider Tip (Renders if available) */}
-          {dest.insiderTip && (
-            <div className="bg-amber-500/10 border border-amber-500/20 p-4 rounded-2xl flex items-start gap-3">
-              <Lightbulb className="h-5 w-5 text-amber-500 shrink-0 mt-0.5" />
-              <div>
-                <h5 className="text-xs font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider">
-                  Insider Tip
-                </h5>
-                <p className="text-xs text-slate-600 dark:text-slate-300 mt-1 leading-relaxed">
-                  {dest.insiderTip}
-                </p>
+          {/* Thumbnail Strip for Multi-Image Support */}
+          {gallery.length > 1 && (
+            <div className="p-4 bg-slate-100 dark:bg-slate-950/50 border-b border-slate-200 dark:border-slate-800">
+              <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2">
+                Photo Gallery ({gallery.length})
+              </p>
+              <div className="flex items-center gap-3 overflow-x-auto pb-1 scrollbar-thin">
+                {gallery.map((imgUrl, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setSelectedImage(imgUrl)}
+                    className={`relative rounded-xl overflow-hidden shrink-0 transition-all duration-200 h-16 w-24 border-2 ${
+                      selectedImage === imgUrl
+                        ? "border-sky-500 scale-105 shadow-md"
+                        : "border-transparent opacity-70 hover:opacity-100"
+                    }`}
+                  >
+                    <img
+                      src={imgUrl}
+                      alt={`${dest.name} preview ${idx + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+                  </button>
+                ))}
               </div>
             </div>
           )}
 
-          {/* Action Footer */}
-          <div className="pt-4 border-t border-slate-200 dark:border-slate-800 flex justify-end gap-3">
+          {/* Details Body */}
+          <div className="p-6 space-y-6">
+            <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
+              {dest.description}
+            </p>
+
+            {/* Quick Specs Grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-4 border-t border-slate-100 dark:border-slate-800">
+              <div className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-2xl flex items-center gap-3">
+                <Thermometer className="h-5 w-5 text-amber-500 shrink-0" />
+                <div>
+                  <p className="text-[10px] text-slate-500 uppercase font-bold">Temperature</p>
+                  <p className="text-xs font-bold text-slate-800 dark:text-slate-100">{dest.temp}</p>
+                </div>
+              </div>
+
+              {dest.bestTime && (
+                <div className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-2xl flex items-center gap-3">
+                  <Calendar className="h-5 w-5 text-sky-500 shrink-0" />
+                  <div>
+                    <p className="text-[10px] text-slate-500 uppercase font-bold">Best Time</p>
+                    <p className="text-xs font-bold text-slate-800 dark:text-slate-100">{dest.bestTime}</p>
+                  </div>
+                </div>
+              )}
+
+              {dest.suggestedDays && (
+                <div className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-2xl flex items-center gap-3 col-span-2 sm:col-span-1">
+                  <Clock className="h-5 w-5 text-indigo-500 shrink-0" />
+                  <div>
+                    <p className="text-[10px] text-slate-500 uppercase font-bold">Suggested Trip</p>
+                    <p className="text-xs font-bold text-slate-800 dark:text-slate-100">{dest.suggestedDays} Days</p>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Highlights Section */}
+            {dest.highlights && dest.highlights.length > 0 && (
+              <div className="pt-4 border-t border-slate-100 dark:border-slate-800">
+                <div className="flex items-center gap-2 mb-3">
+                  <Sparkles className="h-4 w-4 text-sky-500" />
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                    Highlights
+                  </h4>
+                </div>
+                
+                <div className="grid grid-cols-1 gap-2.5">
+                  {dest.highlights.map((highlight, idx) => (
+                    <div
+                      key={idx}
+                      className="flex items-start gap-2.5 p-3 bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800 rounded-2xl"
+                    >
+                      <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
+                      <span className="text-xs font-medium text-slate-700 dark:text-slate-200 leading-relaxed">
+                        {highlight}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Recommended Packing Section */}
+            {dest.recommendedPacking && dest.recommendedPacking.length > 0 && (
+              <div className="pt-4 border-t border-slate-100 dark:border-slate-800">
+                <div className="flex items-center gap-2 mb-3">
+                  <Package className="h-4 w-4 text-indigo-500" />
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                    Recommended Packing
+                  </h4>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {dest.recommendedPacking.map((item, idx) => (
+                    <span
+                      key={idx}
+                      className="px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-medium rounded-xl"
+                    >
+                      {item}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Insider Tip Section */}
+            {dest.insiderTip && (
+              <div className="p-4 bg-amber-50 dark:bg-amber-950/30 border border-amber-200/60 dark:border-amber-800/40 rounded-2xl flex items-start gap-3">
+                <Lightbulb className="h-5 w-5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+                <div>
+                  <h5 className="text-xs font-bold uppercase tracking-wider text-amber-800 dark:text-amber-300 mb-1">
+                    Insider Tip
+                  </h5>
+                  <p className="text-xs text-amber-900 dark:text-amber-200 leading-relaxed">
+                    {dest.insiderTip}
+                  </p>
+                </div>
+              </div>
+            )}
+
+          </div>
+
+          {/* Bottom Actions */}
+          <div className="p-4 sm:p-6 bg-slate-50 dark:bg-slate-900/50 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-4">
             <button
-              onClick={onClose}
-              className="px-5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              onClick={() => onToggleFavorite(dest.id)}
+              className={`px-4 py-2.5 rounded-2xl font-bold text-xs flex items-center gap-2 transition-colors ${
+                isFavorite
+                  ? "bg-rose-500 text-white"
+                  : "bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-300 dark:hover:bg-slate-700"
+              }`}
             >
-              Close
+              <Heart className={`h-4 w-4 ${isFavorite ? "fill-current" : ""}`} />
+              {isFavorite ? "Saved" : "Favorite"}
             </button>
+
             <button
               onClick={() => {
                 onAddToItinerary(dest);
                 onClose();
               }}
-              className="px-6 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-600 text-white text-xs font-bold shadow-md transition-colors"
+              className="px-5 py-2.5 rounded-2xl bg-sky-500 hover:bg-sky-600 text-white font-bold text-xs flex items-center gap-2 shadow-md transition-colors"
             >
+              <Plus className="h-4 w-4" />
               Add to Itinerary
             </button>
           </div>
+
         </div>
       </div>
     </div>

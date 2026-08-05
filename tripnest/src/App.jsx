@@ -189,7 +189,7 @@ export default function App() {
             className="p-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-gradient-to-r from-sky-500 to-indigo-500 text-white hover:scale-105 transition-transform flex items-center gap-2 px-4"
           >
             <Bot className="h-5 w-5" />
-            <span className="hidden sm:inline font-semibold text-sm">Companion</span>
+            <span className="hidden sm:inline font-semibold text-black">Companion</span>
             {activeDestination && (
               <span className="bg-white/20 text-white text-xs px-2 py-0.5 rounded-full font-bold">
                 {activeDestination.name.substring(0, 3)}

@@ -1,5 +1,5 @@
-import React from "react";
-import { Heart, Plus, Check, Thermometer, MapPin, Eye } from "lucide-react";
+import React, { useState } from "react";
+import { Heart, Plus, Thermometer, MapPin, Eye, ChevronLeft, ChevronRight } from "lucide-react";
 
 export default function DestinationCard({
   dest,
@@ -10,21 +10,56 @@ export default function DestinationCard({
   onToggleCompare,
   onOpenDetails
 }) {
+  const [activeImgIndex, setActiveImgIndex] = useState(0);
+
+  // Fallback to single image if dest.images array isn't defined or is empty
+  const gallery = dest.images && dest.images.length > 0 ? dest.images : [dest.image];
+
+  const handleNextImage = (e) => {
+    e.stopPropagation();
+    setActiveImgIndex((prev) => (prev + 1) % gallery.length);
+  };
+
+  const handlePrevImage = (e) => {
+    e.stopPropagation();
+    setActiveImgIndex((prev) => (prev - 1 + gallery.length) % gallery.length);
+  };
+
   return (
     <div className="group relative bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
       
-      {/* Card Header & Image */}
-      <div className="relative overflow-hidden aspect-[4/3]">
+      {/* Card Header & Image Carousel Container */}
+      <div className="relative overflow-hidden aspect-[4/3] bg-slate-950">
         <img
-          src={dest.image}
-          alt={dest.name}
+          src={gallery[activeImgIndex]}
+          alt={`${dest.name} - ${activeImgIndex + 1}`}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
         />
         
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent pointer-events-none" />
+
+        {/* Quick Image Navigation Arrows (Visible on Card Hover) */}
+        {gallery.length > 1 && (
+          <div className="absolute inset-x-2 top-1/2 -translate-y-1/2 flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity z-10">
+            <button
+              onClick={handlePrevImage}
+              className="p-1 rounded-full bg-black/50 hover:bg-black/80 text-white backdrop-blur-xs transition-colors"
+              aria-label="Previous photo"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </button>
+            <button
+              onClick={handleNextImage}
+              className="p-1 rounded-full bg-black/50 hover:bg-black/80 text-white backdrop-blur-xs transition-colors"
+              aria-label="Next photo"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </button>
+          </div>
+        )}
 
         {/* Top Badges */}
-        <div className="absolute top-4 left-4 right-4 flex items-center justify-between">
+        <div className="absolute top-4 left-4 right-4 flex items-center justify-between z-10">
           <span className="px-3 py-1 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md rounded-full text-[11px] font-bold text-slate-800 dark:text-slate-100 shadow-sm">
             {dest.category}
           </span>
@@ -47,14 +82,29 @@ export default function DestinationCard({
                   ? "bg-rose-500 text-white"
                   : "bg-black/40 text-white hover:bg-black/60"
               }`}
+              aria-label="Toggle favorite"
             >
               <Heart className={`h-4 w-4 ${isFavorite ? "fill-current" : ""}`} />
             </button>
           </div>
         </div>
 
+        {/* Image Dots Indicator */}
+        {gallery.length > 1 && (
+          <div className="absolute bottom-14 left-1/2 -translate-x-1/2 flex items-center gap-1 z-10">
+            {gallery.map((_, idx) => (
+              <span
+                key={idx}
+                className={`h-1.5 rounded-full transition-all ${
+                  idx === activeImgIndex ? "w-4 bg-sky-400" : "w-1.5 bg-white/50"
+                }`}
+              />
+            ))}
+          </div>
+        )}
+
         {/* Title & Location Over Image */}
-        <div className="absolute bottom-4 left-4 right-4 text-white">
+        <div className="absolute bottom-4 left-4 right-4 text-white z-10 pointer-events-none">
           <div className="flex items-center gap-1.5 text-xs text-sky-300 font-medium mb-1">
             <MapPin className="h-3.5 w-3.5" />
             <span>{dest.country} {dest.region ? `• ${dest.region} India` : dest.continent ? `• ${dest.continent}` : ''}</span>
