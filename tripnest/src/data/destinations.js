@@ -57,7 +57,7 @@ export const DESTINATIONS = [
   {
     id: "bali-indonesia",
     name: "Bali",
-    category: "Beach",
+    category: "Beaches",
     continent: "Asia",
     country: "Indonesia",
     lat: -8.3405,
@@ -219,7 +219,7 @@ export const DESTINATIONS = [
   {
     id: "santorini-greece",
     name: "Santorini",
-    category: "Beach",
+    category: "Beaches",
     continent: "Europe",
     country: "Greece",
     lat: 36.3932,
@@ -273,7 +273,7 @@ export const DESTINATIONS = [
   {
     id: "sydney-australia",
     name: "Sydney",
-    category: "Culture",
+    category: "Beaches",
     continent: "Oceania",
     country: "Australia",
     lat: -33.8688,
@@ -383,6 +383,318 @@ export const DESTINATIONS = [
     insiderTip: "Hire a traditional canoe or shikara through smaller inner canals where large houseboats cannot fit."
   },
   {
+    id: "kaziranga-india",
+    name: "Kaziranga National Park",
+    category: "Wildlife & Nature",
+    continent: "Asia",
+    country: "India",
+    lat: 26.5775,
+    lon: 93.1711,
+    temp: "24°C",
+    bestTime: "Nov - Apr",
+    image: "https://images.unsplash.com/photo-1581852017103-68ac65514cf7?auto=format&fit=crop&w=1200&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1581852017103-68ac65514cf7?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1534177616072-ef7dc120449d?auto=format&fit=crop&w=1200&q=80"
+    ],
+    description: "A UNESCO World Heritage site home to two-thirds of the world's great one-horned rhinoceroses, sprawling across tall elephant grass and marshlands.",
+    highlights: [
+      "Jeep safari in Central Range",
+      "Early morning elephant safari",
+      "Birdwatching along Diphlu River",
+      "Visiting the Kaziranga Orchid Park"
+    ],
+    suggestedDays: 3,
+    recommendedPacking: ["Neutral tone safari clothing", "Binoculars", "Insect repellent", "Telephoto lens camera"],
+    insiderTip: "Book Kohora (Central) and Bagori (Western) ranges for the highest density of rhino sightings."
+  },
+  {
+    id: "jim-corbett-india",
+    name: "Jim Corbett National Park",
+    category: "Wildlife & Nature",
+    continent: "Asia",
+    country: "India",
+    lat: 29.5300,
+    lon: 78.7747,
+    temp: "22°C",
+    bestTime: "Nov - Jun",
+    image: "https://images.unsplash.com/photo-1602491453631-e2a5ad90a131?auto=format&fit=crop&w=1200&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1602491453631-e2a5ad90a131?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1549366021-9f761d450615?auto=format&fit=crop&w=1200&q=80"
+    ],
+    description: "India's oldest national park nestled in the Himalayan foothills, famed for Bengal tigers, wild elephants, and dense sal forests.",
+    highlights: [
+      "Dhikala zone overnight wilderness stay",
+      "Safaris along the Kosi River",
+      "Corbett Falls & Heritage Museum",
+      "Birdwatching in Bijrani zone"
+    ],
+    suggestedDays: 3,
+    recommendedPacking: ["Sturdy boots", "Warm layers for early mornings", "Sun hat & UV sunglasses", "Safari dust mask"],
+    insiderTip: "Stay overnight inside the Forest Rest House in the Dhikala zone for the rawest jungle experience."
+  },
+  {
+    id: "gir-national-park-india",
+    name: "Gir National Park",
+    category: "Wildlife & Nature",
+    continent: "Asia",
+    country: "India",
+    lat: 21.1243,
+    lon: 70.8242,
+    temp: "28°C",
+    bestTime: "Dec - Mar",
+    image: "https://images.unsplash.com/photo-1614027164847-1b28cfe1df60?auto=format&fit=crop&w=1200&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1614027164847-1b28cfe1df60?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1546182990-dffeafbe841d?auto=format&fit=crop&w=1200&q=80"
+    ],
+    description: "The sole remaining natural habitat of the Asiatic Lion, featuring rugged dry deciduous forests and rocky hill ridges.",
+    highlights: [
+      "Asiatic Lion tracking safari",
+      "Devalia Safari Park zone tour",
+      "Visiting Kamleshwar Dam for marsh crocodiles",
+      "Interacting with local Maldhari tribes"
+    ],
+    suggestedDays: 2,
+    recommendedPacking: ["Dust scarf or bandana", "Earthy colored cottons", "High SPF sunscreen", "Reusable water bottle"],
+    insiderTip: "Permits open 90 days prior online—book early as daily vehicle slots are strictly capped."
+  },
+  {
+    id: "kabini-india",
+    name: "Kabini Forest Reserve",
+    category: "Wildlife & Nature",
+    continent: "Asia",
+    country: "India",
+    lat: 11.9261,
+    lon: 76.2711,
+    temp: "25°C",
+    bestTime: "Oct - May",
+    image: "https://images.unsplash.com/photo-1561731216-c3a4d99437d5?auto=format&fit=crop&w=1200&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1561731216-c3a4d99437d5?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=1200&q=80"
+    ],
+    description: "A premier wildlife sanctuary in Southern India famous for leopards, black panthers, and massive herds of Asian elephants along the Kabini River.",
+    highlights: [
+      "Kabini River boat safari",
+      "Nagarhole National Park jeep drive",
+      "Coracle ride at sunset",
+      "Luxury jungle lodge stays"
+    ],
+    suggestedDays: 3,
+    recommendedPacking: ["Light jacket for boat trips", "Binoculars", "Neutral tone attire", "Moisturizer & lip balm"],
+    insiderTip: "Take the morning boat safari along the backwaters to see massive elephant herds gathering at the water's edge."
+  },
+  {
+    id: "mahabalipuram-india",
+    name: "Mahabalipuram",
+    category: "Heritage & Culture",
+    continent: "Asia",
+    country: "India",
+    lat: 12.6269,
+    lon: 80.1927,
+    temp: "29°C",
+    bestTime: "Nov - Feb",
+    image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=1200&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1621252179027-94459d278660?auto=format&fit=crop&w=1200&q=80"
+    ],
+    description: "A coastal town renowned for 7th and 8th-century Hindu monuments, monolithic rock-cut cave temples, and coastal relief sculptures.",
+    highlights: [
+      "Shore Temple sunrise view",
+      "Pancha Rathas monolithic temples",
+      "Descent of the Ganges relief",
+      "Krishna's Butterball rock balance photo"
+    ],
+    suggestedDays: 2,
+    recommendedPacking: ["Breathable cotton clothes", "Slip-on shoes for temple entry", "Sun hat & sunglasses", "Beachwear"],
+    insiderTip: "Hire an ASI-registered guide at Pancha Rathas to unlock the intricate architectural stories etched into the granite."
+  },
+  {
+    id: "hampta-pass-india",
+    name: "Hampta Pass",
+    category: "Adventure & Trekking",
+    continent: "Asia",
+    country: "India",
+    lat: 32.2227,
+    lon: 77.3639,
+    temp: "12°C",
+    bestTime: "Jun - Sep",
+    image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80"
+    ],
+    description: "A dramatic crossover trek in Himachal Pradesh connecting the lush green Kullu Valley to the stark, arid landscapes of Lahaul Valley.",
+    highlights: [
+      "Crossing the 14,000 ft Hampta Pass",
+      "Camping under stars at Shea Goru",
+      "Visiting pristine Chandratal Lake",
+      "Trekking through flower-blooming valleys"
+    ],
+    suggestedDays: 5,
+    recommendedPacking: ["Trekking poles", "Waterproof hiking boots", "Thermals & down jacket", "Personal medical kit"],
+    insiderTip: "Monsoon months (July-August) bring lush valley blooms, but bring reliable rain cover for your gear."
+  },
+  {
+    id: "sikkim-india",
+    name: "Sikkim",
+    category: "Mountains & Culture",
+    continent: "Asia",
+    country: "India",
+    lat: 27.5330,
+    lon: 88.5122,
+    temp: "15°C",
+    bestTime: "Mar - May, Oct - Dec",
+    image: "https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=1200&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=1200&q=80"
+    ],
+    description: "A Himalayan haven framed by Mount Kanchenjunga, featuring high-altitude glacial lakes, ancient Buddhist monasteries, and organic alpine valleys.",
+    highlights: [
+      "Tsomgo Lake & Nathula Pass day trip",
+      "Visiting Rumtek & Pemayangtse Monasteries",
+      "Exploring Yumthang Valley of Flowers",
+      "Sunrise views over Kanchenjunga from Pelling"
+    ],
+    suggestedDays: 7,
+    recommendedPacking: ["Warm thermals & fleece", "ILP (Inner Line Permit) documents", "Motion sickness medicine", "Comfortable walking shoes"],
+    insiderTip: "Nathula Pass requires a special Protected Area Permit (PAP); arrange this with your agent at least two days in advance."
+  },
+  {
+    id: "puri-india",
+    name: "Puri",
+    category: "Pilgrimage & Coastal",
+    continent: "Asia",
+    country: "India",
+    lat: 19.8135,
+    lon: 85.8312,
+    temp: "27°C",
+    bestTime: "Oct - Feb",
+    image: "https://images.unsplash.com/photo-1609949279531-cf48d64bed89?auto=format&fit=crop&w=1200&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1609949279531-cf48d64bed89?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=1200&q=80"
+    ],
+    description: "A sacred coastal city on the Bay of Bengal, world-renowned for the 12th-century Jagannath Temple and long golden sand beaches.",
+    highlights: [
+      "Darshan at Jagannath Temple",
+      "Golden Beach relaxing & strolls",
+      "Day trip to Konark Sun Temple",
+      "Irrawaddy dolphin sighting at Chilika Lake"
+    ],
+    suggestedDays: 3,
+    recommendedPacking: ["Modest traditional clothing for temples", "Flip flops", "Sunscreen & hat", "Small cotton pouch for temple offerings"],
+    insiderTip: "Non-Hindus cannot enter the inner sanctum of Jagannath Temple, but can view the complex from the nearby Raghunandan Library roof."
+  },
+  {
+    id: "gujarat-india",
+    name: "Gujarat",
+    category: "Heritage & Culture",
+    continent: "Asia",
+    country: "India",
+    lat: 22.2587,
+    lon: 71.1924,
+    temp: "26°C",
+    bestTime: "Nov - Feb",
+    image: "https://images.unsplash.com/photo-1609949279531-cf48d64bed89?auto=format&fit=crop&w=1200&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1609949279531-cf48d64bed89?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=1200&q=80"
+    ],
+    description: "A culturally vibrant western state known for historic stepwells, Mahatma Gandhi's legacy, intricate textiles, and distinct regional cuisine.",
+    highlights: [
+      "Sabarmati Ashram in Ahmedabad",
+      "Rani ki Vav stepwell in Patan",
+      "Statue of Unity visit in Kevadia",
+      "Sun Temple of Modhera"
+    ],
+    suggestedDays: 6,
+    recommendedPacking: ["Light cotton outfits", "Comfortable walking shoes", "Sun protection", "Extra luggage space for handicrafts"],
+    insiderTip: "Combine Ahmedabad's heritage walking tour with a traditional Gujarati Thali lunch in the old city."
+  },
+  {
+    id: "rann-of-kutch-india",
+    name: "Rann of Kutch",
+    category: "Desert & Culture",
+    continent: "Asia",
+    country: "India",
+    lat: 23.7337,
+    lon: 69.8597,
+    temp: "20°C",
+    bestTime: "Nov - Feb",
+    image: "https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=1200&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1609949279531-cf48d64bed89?auto=format&fit=crop&w=1200&q=80"
+    ],
+    description: "One of the world's largest salt deserts, transforming into an ethereal white expanse under full moon nights and hosting the vibrant Rann Utsav.",
+    highlights: [
+      "Full moon night walk on the salt desert",
+      "Rann Utsav tent city cultural performances",
+      "Kalo Dungar (Black Hill) panoramic view",
+      "Handicraft shopping in Bhujodi village"
+    ],
+    suggestedDays: 3,
+    recommendedPacking: ["Heavy jacket for cold desert nights", "Sunglasses for intense white salt glare", "Moisturizer", "Permit identification copy"],
+    insiderTip: "Plan your trip specifically around the full moon night to watch the salt desert glow under natural moonlight."
+  },
+  {
+    id: "moscow-russia",
+    name: "Moscow",
+    category: "Metropolis",
+    continent: "Europe",
+    country: "Russia",
+    lat: 55.7558,
+    lon: 37.6173,
+    temp: "8°C",
+    bestTime: "May - Sep",
+    image: "https://images.unsplash.com/photo-1513326718677-b964603b136d?auto=format&fit=crop&w=1200&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1513326718677-b964603b136d?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1520106212299-d99c443e4568?auto=format&fit=crop&w=1200&q=80"
+    ],
+    description: "Russia's iconic capital showcasing grand Red Square architecture, onion-domed cathedrals, underground palace-like metro stations, and rich history.",
+    highlights: [
+      "Red Square & St. Basil's Cathedral",
+      "Kremlin & Armoury Museum tour",
+      "Exploring decorated Moscow Metro stations",
+      "Bolshoi Theatre ballet performance"
+    ],
+    suggestedDays: 4,
+    recommendedPacking: ["Warm layers & coat", "Comfortable walking boots", "Power bank", "Translation app on phone"],
+    insiderTip: "Buy a Troika card to easily hop between Moscow's underground metro stations, which double as underground art museums."
+  },
+  {
+    id: "masai-mara-kenya",
+    name: "Masai Mara",
+    category: "Wildlife & Safari",
+    continent: "Africa",
+    country: "Kenya",
+    lat: -1.4061,
+    lon: 35.0085,
+    temp: "25°C",
+    bestTime: "Jul - Oct",
+    image: "https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=1200&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1534177616072-ef7dc120449d?auto=format&fit=crop&w=1200&q=80"
+    ],
+    description: "A world-famous savannah wilderness preserved for big cat sightings and the epic annual Great Migration of wildbeest and zebras.",
+    highlights: [
+      "Witnessing the Great Migration river crossing",
+      "Hot air balloon safari over savannah",
+      "Big Five wildlife game drives",
+      "Cultural visit to a Maasai Village"
+    ],
+    suggestedDays: 4,
+    recommendedPacking: ["Neutral canvas layers", "Good binoculars", "Telephoto lens kit", "Insect repellent & sun hat"],
+    insiderTip: "Book a hot air balloon safari early morning for breathtaking sunrise views of game herds moving across the Mara plains."
+  },
+  {
     id: "jaipur-india",
     name: "Jaipur",
     category: "Heritage",
@@ -413,7 +725,7 @@ export const DESTINATIONS = [
   {
     id: "goa-india",
     name: "Goa",
-    category: "Beach",
+    category: "Beaches",
     region: "West",
     continent: "Asia",
     country: "India",
