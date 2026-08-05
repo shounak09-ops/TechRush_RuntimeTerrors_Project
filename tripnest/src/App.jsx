@@ -3,6 +3,7 @@ import DestinationCard from "./components/DestinationCard";
 import DestinationModal from "./components/DestinationModal";
 import CompareDrawer from "./components/CompareDrawer";
 import ItineraryDrawer from "./components/ItineraryDrawer";
+import MapView from "./components/MapView";
 import { DESTINATIONS } from "./data/destinations";
 import { 
   MapPin, Search, Moon, Sun, Compass, 
@@ -22,6 +23,9 @@ export default function App() {
 
   // Modal & Persistence States
   const [selectedModalDest, setSelectedModalDest] = useState(null);
+
+  // Live Map Overlay State
+  const [isMapOpen, setIsMapOpen] = useState(false);
   
   const [favorites, setFavorites] = useState(() => {
     return JSON.parse(localStorage.getItem("tripnest_favorites") || "[]");
@@ -165,7 +169,12 @@ export default function App() {
 
           <nav className="hidden md:flex items-center gap-8 font-semibold text-sm text-slate-600 dark:text-slate-300">
             <a href="#explore" className="hover:text-sky-500 transition-colors">Destinations</a>
-            <a href="#map" className="hover:text-sky-500 transition-colors">Live Map</a>
+            <button
+              onClick={() => setIsMapOpen(true)}
+              className="hover:text-sky-500 transition-colors"
+            >
+              Live Map
+            </button>
           </nav>
 
           <button
@@ -337,6 +346,17 @@ export default function App() {
         </section>
 
       </main>
+
+      {/* LIVE MAP OVERLAY */}
+      <MapView
+        open={isMapOpen}
+        onClose={() => setIsMapOpen(false)}
+        destinations={DESTINATIONS}
+        onViewDetails={(dest) => {
+          setIsMapOpen(false);
+          setSelectedModalDest(dest);
+        }}
+      />
 
       {/* DETAIL MODAL */}
       <DestinationModal
