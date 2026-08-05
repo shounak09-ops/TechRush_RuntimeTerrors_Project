@@ -1,11 +1,25 @@
 import React from "react";
-import { X, Calendar, DollarSign, MapPin, Compass, CheckCircle2 } from "lucide-react";
+import { X, Calendar, MapPin, Compass, CheckCircle2, Lightbulb } from "lucide-react";
 
 export default function DestinationModal({ dest, onClose, onAddToItinerary }) {
   if (!dest) return null;
 
+  // Fallbacks for optional dynamic fields
+  const bestTime = dest.bestTime || dest.bestSeason || "Oct - Mar";
+  const highlights = dest.highlights && dest.highlights.length > 0 
+    ? dest.highlights 
+    : [
+        "Guided cultural & heritage walks",
+        "Local cuisine & street food tours",
+        "Photography & viewpoint spots",
+        "Eco-friendly local transport"
+      ];
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
+    <div 
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in"
+      onClick={onClose}
+    >
       <div 
         className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative"
         onClick={(e) => e.stopPropagation()}
@@ -51,36 +65,44 @@ export default function DestinationModal({ dest, onClose, onAddToItinerary }) {
             </div>
             <div>
               <span className="text-xs text-slate-400 block font-semibold">Best Season</span>
-              <span className="text-base font-bold text-amber-500">Oct - Mar</span>
+              <span className="text-base font-bold text-amber-500">{bestTime}</span>
             </div>
           </div>
 
-          {/* Highlights */}
+          {/* Dynamic Highlights */}
           <div className="space-y-3">
             <h4 className="font-bold text-sm text-slate-900 dark:text-white flex items-center gap-2">
               <Compass className="h-4 w-4 text-sky-500" /> Key Highlights & Activities
             </h4>
             <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-600 dark:text-slate-400">
-              <li className="flex items-center gap-2">
-                <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" /> Guided cultural & heritage walks
-              </li>
-              <li className="flex items-center gap-2">
-                <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" /> Local cuisine & street food tours
-              </li>
-              <li className="flex items-center gap-2">
-                <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" /> Photography & viewpoint spots
-              </li>
-              <li className="flex items-center gap-2">
-                <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" /> Eco-friendly local transport
-              </li>
+              {highlights.map((item, idx) => (
+                <li key={idx} className="flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" /> {item}
+                </li>
+              ))}
             </ul>
           </div>
+
+          {/* Dynamic Insider Tip (Renders if available) */}
+          {dest.insiderTip && (
+            <div className="bg-amber-500/10 border border-amber-500/20 p-4 rounded-2xl flex items-start gap-3">
+              <Lightbulb className="h-5 w-5 text-amber-500 shrink-0 mt-0.5" />
+              <div>
+                <h5 className="text-xs font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider">
+                  Insider Tip
+                </h5>
+                <p className="text-xs text-slate-600 dark:text-slate-300 mt-1 leading-relaxed">
+                  {dest.insiderTip}
+                </p>
+              </div>
+            </div>
+          )}
 
           {/* Action Footer */}
           <div className="pt-4 border-t border-slate-200 dark:border-slate-800 flex justify-end gap-3">
             <button
               onClick={onClose}
-              className="px-5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-bold"
+              className="px-5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
             >
               Close
             </button>
@@ -89,7 +111,7 @@ export default function DestinationModal({ dest, onClose, onAddToItinerary }) {
                 onAddToItinerary(dest);
                 onClose();
               }}
-              className="px-6 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-600 text-white text-xs font-bold shadow-md"
+              className="px-6 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-600 text-white text-xs font-bold shadow-md transition-colors"
             >
               Add to Itinerary
             </button>

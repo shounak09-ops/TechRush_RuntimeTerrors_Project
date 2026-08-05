@@ -13,7 +13,14 @@ export const DESTINATIONS = [
     temp: "32°C", budget: "$",
     description: "Iconic ivory-white marble mausoleum on the Yamuna River.",
     suggestedDays: 2,
-    recommendedPacking: ["Sunscreen SPF 50+", "Comfortable walking shoes", "Light breathable clothing", "Camera", "Hat/cap for sun protection"]
+    recommendedPacking: ["Sunscreen SPF 50+", "Comfortable walking shoes", "Light breathable clothing", "Camera", "Hat/cap for sun protection"],
+    bestTime: "Oct - Mar",
+    highlights: [
+      "Sunrise viewing of changing marble hues",
+      "Explore Agra Fort and Mehtab Bagh gardens",
+      "Taste authentic Agra Petha in local bazaars"
+    ],
+    insiderTip: "Arrive 30 minutes before sunrise at the East Gate for the shortest lines and softest lighting."
   },
   {
     id: 102,
@@ -26,7 +33,14 @@ export const DESTINATIONS = [
     temp: "31°C", budget: "$",
     description: "Royal pink sandstone architecture and forts in the heart of Rajasthan.",
     suggestedDays: 3,
-    recommendedPacking: ["Sunscreen SPF 50+", "Comfortable walking shoes", "Light cotton clothing", "Camera", "Sunglasses", "Hat/cap"]
+    recommendedPacking: ["Sunscreen SPF 50+", "Comfortable walking shoes", "Light cotton clothing", "Camera", "Sunglasses", "Hat/cap"],
+    bestTime: "Nov - Feb",
+    highlights: [
+      "Photograph the 953 carved honeycomb windows of Hawa Mahal",
+      "Jeep or elephant ride up to the hilltops of Amber Fort",
+      "Savor an authentic Rajasthani Thali at Chokhi Dhani"
+    ],
+    insiderTip: "Buy a composite ticket at Amber Fort to save money across all major city heritage monuments."
   },
   {
     id: 103,
@@ -39,7 +53,14 @@ export const DESTINATIONS = [
     temp: "12°C", budget: "$$",
     description: "High-altitude Himalayan mountain passes and glacial lakes.",
     suggestedDays: 5,
-    recommendedPacking: ["Thermal base layers", "Warm jacket", "Windproof outer layer", "Sunscreen SPF 50+", "Lip balm", "Sunglasses", "Comfortable hiking boots"]
+    recommendedPacking: ["Thermal base layers", "Warm jacket", "Windproof outer layer", "Sunscreen SPF 50+", "Lip balm", "Sunglasses", "Comfortable hiking boots"],
+    bestTime: "May - Sep",
+    highlights: [
+      "Drive across Khardung La pass toward Nubra Valley",
+      "Overnight camping along the turquoise waters of Pangong Tso",
+      "Explore the cliffside monastic architecture of Thiksey"
+    ],
+    insiderTip: "Rest completely for your first 36 hours in Leh to avoid severe High Altitude Sickness (AMS)."
   },
   {
     id: 104,
@@ -52,7 +73,14 @@ export const DESTINATIONS = [
     temp: "15°C", budget: "$",
     description: "Snowy peaks, pine forests, and mountain valley adventures.",
     suggestedDays: 4,
-    recommendedPacking: ["Warm jacket", "Thermal wear", "Waterproof boots", "Gloves", "Beanie/hat", "Sunscreen", "Sunglasses"]
+    recommendedPacking: ["Warm jacket", "Thermal wear", "Waterproof boots", "Gloves", "Beanie/hat", "Sunscreen", "Sunglasses"],
+    bestTime: "Oct - Jun",
+    highlights: [
+      "Paragliding and zorbing in Solang Valley",
+      "Drive through Atal Tunnel toward Lahaul Valley",
+      "Café hopping and wooden handicrafts in Old Manali"
+    ],
+    insiderTip: "Book Rohtang Pass permits online 2 days in advance as daily vehicle counts are strictly capped."
   },
   {
     id: 105,
@@ -65,7 +93,14 @@ export const DESTINATIONS = [
     temp: "26°C", budget: "$$",
     description: "India's oldest national park famous for Bengal Tigers and sal forests.",
     suggestedDays: 3,
-    recommendedPacking: ["Binoculars", "Camera with zoom lens", "Earth-toned clothing", "Insect repellent", "Comfortable walking shoes", "Flashlight"]
+    recommendedPacking: ["Binoculars", "Camera with zoom lens", "Earth-toned clothing", "Insect repellent", "Comfortable walking shoes", "Flashlight"],
+    bestTime: "Nov - Jun",
+    highlights: [
+      "Open-top 4x4 Jeep safaris through Dhikala and Bijrani zones",
+      "Birdwatching along the Ramganga River banks",
+      "Stay in historic British-era forest rest houses"
+    ],
+    insiderTip: "Reserve safari slots on the official portal 45 days prior, especially for the popular Dhikala zone."
   },
 
   // ==========================================
@@ -82,7 +117,14 @@ export const DESTINATIONS = [
     temp: "30°C", budget: "$",
     description: "UNESCO World Heritage site with ancient Vijayanagara empire ruins.",
     suggestedDays: 3,
-    recommendedPacking: ["Comfortable walking shoes", "Sunscreen SPF 50+", "Light breathable clothing", "Camera", "Hat/cap", "Water bottle"]
+    recommendedPacking: ["Comfortable walking shoes", "Sunscreen SPF 50+", "Light breathable clothing", "Camera", "Hat/cap", "Water bottle"],
+    bestTime: "Oct - Feb",
+    highlights: [
+      "Marvel at the stone chariot inside Vittala Temple",
+      "Watch the sunset from atop boulder-strewn Matanga Hill",
+      "Take a traditional coracle boat ride across Tungabhadra River"
+    ],
+    insiderTip: "Rent a scooter or bicycle on the Anegundi side to cover distant ruins efficiently."
   },
   {
     id: 202,
@@ -95,7 +137,14 @@ export const DESTINATIONS = [
     temp: "31°C", budget: "$",
     description: "7th-century rock-cut coastal Shore Temple and monolithic rathas.",
     suggestedDays: 2,
-    recommendedPacking: ["Sunscreen SPF 50+", "Comfortable walking shoes", "Light cotton clothing", "Camera", "Beach wear", "Hat/cap"]
+    recommendedPacking: ["Sunscreen SPF 50+", "Comfortable walking shoes", "Light cotton clothing", "Camera", "Beach wear", "Hat/cap"],
+    bestTime: "Nov - Feb",
+    highlights: [
+      "Explore the 7th-century rock-cut Shore Temple by the ocean",
+      "Inspect the giant open-air relief carving of Arjuna's Penance",
+      "Try fresh catch of the day at seaside seafood shacks"
+    ],
+    insiderTip: "Visit Arjuna's Penance late in the afternoon when sunlight highlights the stone detail."
   },
   {
     id: 203,
@@ -108,7 +157,14 @@ export const DESTINATIONS = [
     temp: "28°C", budget: "$",
     description: "Serene network of palm-fringed coastal backwater canals.",
     suggestedDays: 3,
-    recommendedPacking: ["Light breathable clothing", "Sunscreen SPF 50+", "Insect repellent", "Camera", "Waterproof bag", "Comfortable sandals"]
+    recommendedPacking: ["Light breathable clothing", "Sunscreen SPF 50+", "Insect repellent", "Camera", "Waterproof bag", "Comfortable sandals"],
+    bestTime: "Sep - Mar",
+    highlights: [
+      "Overnight houseboat cruise along Punnamada Lake",
+      "Shallow canal country-canoe trips through paddy fields",
+      "Sample authentic Karimeen Pollichathu (pearl spot fish) on banana leaf"
+    ],
+    insiderTip: "Book a small non-motorized canoe ride to explore narrow interior canals where houseboats can't go."
   },
   {
     id: 204,
@@ -121,7 +177,14 @@ export const DESTINATIONS = [
     temp: "29°C", budget: "$",
     description: "Dramatic red cliffs adjacent to the Arabian Sea coastline.",
     suggestedDays: 3,
-    recommendedPacking: ["Beach wear", "Sunscreen SPF 50+", "Comfortable walking shoes", "Camera", "Light cover-up", "Sunglasses"]
+    recommendedPacking: ["Beach wear", "Sunscreen SPF 50+", "Comfortable walking shoes", "Camera", "Light cover-up", "Sunglasses"],
+    bestTime: "Oct - Mar",
+    highlights: [
+      "Sunset dining along the cliffside cafes overlooking Papanasam Beach",
+      "Ayurvedic massage treatments at cliffside wellness retreats",
+      "Surfing lessons along North Cliff beach swells"
+    ],
+    insiderTip: "Papanasam Beach is considered holy; dress modestly near the main temple entry path."
   },
   {
     id: 205,
@@ -134,7 +197,14 @@ export const DESTINATIONS = [
     temp: "20°C", budget: "$",
     description: "Rolling tea garden estates nestled in Western Ghats mountain ranges.",
     suggestedDays: 3,
-    recommendedPacking: ["Light jacket", "Comfortable walking shoes", "Rain jacket/umbrella", "Camera", "Insect repellent", "Sunscreen"]
+    recommendedPacking: ["Light jacket", "Comfortable walking shoes", "Rain jacket/umbrella", "Camera", "Insect repellent", "Sunscreen"],
+    bestTime: "Sep - May",
+    highlights: [
+      "Tour tea plantations and sample freshly brewed orthodox teas",
+      "Spot endangered Nilgiri Tahr goats at Eravikulam National Park",
+      "Boating at Mattupetty Dam surrounded by tea slopes"
+    ],
+    insiderTip: "Book Eravikulam National Park bus tickets online early in the morning to avoid long queues."
   },
   {
     id: 206,
@@ -147,7 +217,14 @@ export const DESTINATIONS = [
     temp: "25°C", budget: "$$$",
     description: "Premier leopard and black panther habitat along Kabini river backwaters.",
     suggestedDays: 3,
-    recommendedPacking: ["Binoculars", "Camera with zoom lens", "Earth-toned clothing", "Insect repellent", "Comfortable walking shoes", "Flashlight"]
+    recommendedPacking: ["Binoculars", "Camera with zoom lens", "Earth-toned clothing", "Insect repellent", "Comfortable walking shoes", "Flashlight"],
+    bestTime: "Oct - May",
+    highlights: [
+      "Boat safari along the reservoir to see large herds of Asian elephants",
+      "Spot leopards and rare black panthers in Nagarhole zone",
+      "Guided nature walks with resident naturalists"
+    ],
+    insiderTip: "Summer months (March to May) yield the best big cat and elephant sightings around receding waters."
   },
 
   // ==========================================
@@ -164,7 +241,14 @@ export const DESTINATIONS = [
     temp: "29°C", budget: "$",
     description: "Golden sand beaches, palm groves, and energetic coastline vibes.",
     suggestedDays: 4,
-    recommendedPacking: ["Beach wear", "Sunscreen SPF 50+", "Sunglasses", "Flip-flops", "Light cover-up", "Camera", "Insect repellent"]
+    recommendedPacking: ["Beach wear", "Sunscreen SPF 50+", "Sunglasses", "Flip-flops", "Light cover-up", "Camera", "Insect repellent"],
+    bestTime: "Nov - Feb",
+    highlights: [
+      "Water sports like parasailing and jet skiing at Calangute & Baga",
+      "Explore Portuguese heritage at Aguada Fort and Old Goa churches",
+      "Sunset flea market shopping at Anjuna Beach"
+    ],
+    insiderTip: "Head to Ashwem or Morjim Beach further north for cleaner sands and quieter crowds."
   },
   {
     id: 302,
@@ -177,7 +261,14 @@ export const DESTINATIONS = [
     temp: "30°C", budget: "$",
     description: "Ancient rock-cut cave monuments and the massive monolithic Kailasa Temple.",
     suggestedDays: 3,
-    recommendedPacking: ["Comfortable walking shoes", "Sunscreen SPF 50+", "Light breathable clothing", "Camera", "Flashlight", "Water bottle"]
+    recommendedPacking: ["Comfortable walking shoes", "Sunscreen SPF 50+", "Light breathable clothing", "Camera", "Flashlight", "Water bottle"],
+    bestTime: "Nov - Mar",
+    highlights: [
+      "Behold Cave 16 (Kailasa Temple), carved top-down from a single rock mass",
+      "Study ancient Buddhist frescoes inside Ajanta's horseshoe ravine",
+      "Explore Hindu, Jain, and Buddhist rock carving styles side-by-side"
+    ],
+    insiderTip: "Ajanta Caves are closed on Mondays; Ellora Caves are closed on Tuesdays."
   },
   {
     id: 303,
@@ -190,7 +281,14 @@ export const DESTINATIONS = [
     temp: "33°C", budget: "$$",
     description: "The sole wild sanctuary for majestic Asiatic Lions in Gujarat.",
     suggestedDays: 3,
-    recommendedPacking: ["Binoculars", "Camera with zoom lens", "Earth-toned clothing", "Insect repellent", "Comfortable walking shoes", "Sunscreen SPF 50+", "Hat/cap"]
+    recommendedPacking: ["Binoculars", "Camera with zoom lens", "Earth-toned clothing", "Insect repellent", "Comfortable walking shoes", "Sunscreen SPF 50+", "Hat/cap"],
+    bestTime: "Dec - Apr",
+    highlights: [
+      "Open jeep safari tracking wild Asiatic Lion prides",
+      "Spot chinkara gazelles, spotted deer, and marsh crocodiles",
+      "Visit the Maldhari tribal settlements inside the buffer forest"
+    ],
+    insiderTip: "The park remains completely closed during monsoon season (June 16 to October 15)."
   },
   {
     id: 304,
@@ -203,7 +301,14 @@ export const DESTINATIONS = [
     temp: "31°C", budget: "$$",
     description: "Royal hunting grounds turned wildlife reserve dominated by historic fort ruins.",
     suggestedDays: 3,
-    recommendedPacking: ["Binoculars", "Camera with zoom lens", "Earth-toned clothing", "Insect repellent", "Comfortable walking shoes", "Sunscreen SPF 50+", "Flashlight"]
+    recommendedPacking: ["Binoculars", "Camera with zoom lens", "Earth-toned clothing", "Insect repellent", "Comfortable walking shoes", "Sunscreen SPF 50+", "Flashlight"],
+    bestTime: "Oct - Apr",
+    highlights: [
+      "Safari through ancient fort ruins where tigers freely roam",
+      "Climb up Ranthambore Fort for panoramic park views",
+      "Birdwatching around Padam Talao and Raj Bagh lakes"
+    ],
+    insiderTip: "Zones 1 through 5 offer higher tiger activity compared to peripheral outer zones 6 through 10."
   },
 
   // ==========================================
@@ -220,7 +325,14 @@ export const DESTINATIONS = [
     temp: "16°C", budget: "$",
     description: "Famed tea gardens with views of Kangchenjunga peak.",
     suggestedDays: 3,
-    recommendedPacking: ["Light jacket", "Comfortable walking shoes", "Rain jacket/umbrella", "Camera", "Warm layers", "Sunscreen"]
+    recommendedPacking: ["Light jacket", "Comfortable walking shoes", "Rain jacket/umbrella", "Camera", "Warm layers", "Sunscreen"],
+    bestTime: "Mar - May, Oct - Nov",
+    highlights: [
+      "Early morning sunrise over Mt. Kangchenjunga at Tiger Hill",
+      "Ride the UNESCO World Heritage Darjeeling Himalayan Himalayan Toy Train",
+      "Tour Happy Valley Tea Estate and sip freshly plucked First Flush tea"
+    ],
+    insiderTip: "Leave for Tiger Hill by 3:30 AM to secure a front-row view before sunrise crowds arrive."
   },
   {
     id: 402,
@@ -233,7 +345,14 @@ export const DESTINATIONS = [
     temp: "31°C", budget: "$",
     description: "13th-century stone chariot architecture dedicated to the Sun God.",
     suggestedDays: 2,
-    recommendedPacking: ["Sunscreen SPF 50+", "Comfortable walking shoes", "Light breathable clothing", "Camera", "Hat/cap", "Water bottle"]
+    recommendedPacking: ["Sunscreen SPF 50+", "Comfortable walking shoes", "Light breathable clothing", "Camera", "Hat/cap", "Water bottle"],
+    bestTime: "Oct - Feb",
+    highlights: [
+      "Examine the 24 carved stone wheels functioning as accurate sundials",
+      "Attend the evening Light and Sound show illuminating temple history",
+      "Visit nearby Chandrabhaga Beach during early mornings"
+    ],
+    insiderTip: "Hire an ASI-certified guide to understand how the carved wheels tell precise time."
   },
   {
     id: 403,
@@ -246,7 +365,14 @@ export const DESTINATIONS = [
     temp: "30°C", budget: "$",
     description: "Blue Flag certified sacred coastal shoreline along the Bay of Bengal.",
     suggestedDays: 3,
-    recommendedPacking: ["Beach wear", "Sunscreen SPF 50+", "Comfortable walking shoes", "Light cover-up", "Camera", "Sunglasses"]
+    recommendedPacking: ["Beach wear", "Sunscreen SPF 50+", "Comfortable walking shoes", "Light cover-up", "Camera", "Sunglasses"],
+    bestTime: "Nov - Feb",
+    highlights: [
+      "Stroll along the clean Blue Flag eco-certified beach zone",
+      "View intricate sand art sculptures created by local artisans",
+      "Pilgrimage visit to the historic Shree Jagannath Temple"
+    ],
+    insiderTip: "Foreign nationals and non-Hindus are not allowed inside Jagannath Temple, but can view it from Raghunandan Library roof."
   },
   {
     id: 404,
@@ -259,7 +385,14 @@ export const DESTINATIONS = [
     temp: "24°C", budget: "$$",
     description: "Assam's wetland grass plains hosting two-thirds of the world's Great One-horned Rhinos.",
     suggestedDays: 3,
-    recommendedPacking: ["Binoculars", "Camera with zoom lens", "Earth-toned clothing", "Insect repellent", "Comfortable walking shoes", "Rain jacket", "Flashlight"]
+    recommendedPacking: ["Binoculars", "Camera with zoom lens", "Earth-toned clothing", "Insect repellent", "Comfortable walking shoes", "Rain jacket", "Flashlight"],
+    bestTime: "Nov - Apr",
+    highlights: [
+      "Early morning elephant safari in Central Range for close rhino sightings",
+      "Jeep safari through tall elephant grass to spot wild water buffalo",
+      "Birdwatching around Kaziranga's extensive freshwater wetlands"
+    ],
+    insiderTip: "Book the 5:00 AM elephant safari in Kohora zone for guaranteed close encounters with rhinos."
   },
 
   // ==========================================
@@ -276,7 +409,14 @@ export const DESTINATIONS = [
     temp: "26°C", budget: "$$$",
     description: "Iconic cliffside white villas and Mediterranean sunsets.",
     suggestedDays: 4,
-    recommendedPacking: ["Light breathable clothing", "Sunscreen SPF 50+", "Sunglasses", "Comfortable walking shoes", "Swimwear", "Camera", "Light jacket for evenings"]
+    recommendedPacking: ["Light breathable clothing", "Sunscreen SPF 50+", "Sunglasses", "Comfortable walking shoes", "Swimwear", "Camera", "Light jacket for evenings"],
+    bestTime: "May - Oct",
+    highlights: [
+      "Sunset watching over the Aegean Sea from Oia Castle",
+      "Catamaran sailing cruise into the volcanic Caldera",
+      "Explore Red Beach and the ancient Minoan site of Akrotiri"
+    ],
+    insiderTip: "Stay in Imerovigli to get the identical Caldera sunset views with far fewer cruise ship crowds."
   },
   {
     id: 502,
@@ -289,7 +429,14 @@ export const DESTINATIONS = [
     temp: "4°C", budget: "$$$",
     description: "Alpine skiing, mountain railways, and views of the Matterhorn.",
     suggestedDays: 5,
-    recommendedPacking: ["Thermal base layers", "Warm jacket", "Waterproof outer layer", "Insulated gloves", "Beanie/hat", "Ski goggles", "Warm waterproof boots"]
+    recommendedPacking: ["Thermal base layers", "Warm jacket", "Waterproof outer layer", "Insulated gloves", "Beanie/hat", "Ski goggles", "Warm waterproof boots"],
+    bestTime: "Dec - Apr (Skiing), Jul - Sep (Hiking)",
+    highlights: [
+      "Ride the Gornergrat cogwheel railway for up-close Matterhorn views",
+      "Skiing on glacier slopes open 365 days a year",
+      "Explore car-free Zermatt village with traditional chalet architecture"
+    ],
+    insiderTip: "Zermatt is completely car-free; park your car at Täsch and take the shuttle train into town."
   },
   {
     id: 503,
@@ -302,7 +449,14 @@ export const DESTINATIONS = [
     temp: "25°C", budget: "$$$",
     description: "Ancient Roman amphitheater and historic empire center.",
     suggestedDays: 3,
-    recommendedPacking: ["Comfortable walking shoes", "Sunscreen SPF 50+", "Light breathable clothing", "Camera", "Modest clothing for churches", "Day bag"]
+    recommendedPacking: ["Comfortable walking shoes", "Sunscreen SPF 50+", "Light breathable clothing", "Camera", "Modest clothing for churches", "Day bag"],
+    bestTime: "Apr - May, Sep - Oct",
+    highlights: [
+      "Walk the arena floor and underground gladiator chambers",
+      "Explore the adjacent Roman Forum and Palatine Hill ruins",
+      "Toss a coin over your shoulder into the Trevi Fountain"
+    ],
+    insiderTip: "Book 'Underground & Arena Floor' access tickets 30 days in advance; they sell out instantly."
   },
   {
     id: 504,
@@ -315,7 +469,14 @@ export const DESTINATIONS = [
     temp: "22°C", budget: "$$$",
     description: "World-famous architectural landmark and cultural arts hub.",
     suggestedDays: 3,
-    recommendedPacking: ["Comfortable walking shoes", "Light jacket", "Sunscreen SPF 50+", "Camera", "Stylish casual clothing", "Day bag", "Umbrella"]
+    recommendedPacking: ["Comfortable walking shoes", "Light jacket", "Sunscreen SPF 50+", "Camera", "Stylish casual clothing", "Day bag", "Umbrella"],
+    bestTime: "Jun - Sep",
+    highlights: [
+      "Ascend to the Summit for 360-degree views across Paris",
+      "Sunset picnic on Champ de Mars lawns with glowing tower lights",
+      "Evening Seine River cruise under illuminated bridges"
+    ],
+    insiderTip: "Book elevator summit tickets 60 days early on the official site to skip multi-hour waiting lines."
   },
   {
     id: 505,
@@ -328,7 +489,14 @@ export const DESTINATIONS = [
     temp: "27°C", budget: "$$$",
     description: "Dramatic coastal cliffs, pastel villages, and Tyrrhenian sea waters.",
     suggestedDays: 4,
-    recommendedPacking: ["Light breathable clothing", "Sunscreen SPF 50+", "Swimwear", "Comfortable walking shoes", "Camera", "Sunglasses", "Light jacket for boat rides"]
+    recommendedPacking: ["Light breathable clothing", "Sunscreen SPF 50+", "Swimwear", "Comfortable walking shoes", "Camera", "Sunglasses", "Light jacket for boat rides"],
+    bestTime: "May - Sep",
+    highlights: [
+      "Hike the breathtaking Path of the Gods trail above cliffside villages",
+      "Explore pastel-colored cliff buildings in Positano and Ravello",
+      "Boat trip to Capri Island and the Blue Grotto cave"
+    ],
+    insiderTip: "Use ferry boats instead of buses to travel between coastal towns—it avoids traffic and offers better views."
   },
 
   // ==========================================
@@ -345,7 +513,14 @@ export const DESTINATIONS = [
     temp: "28°C", budget: "$$$",
     description: "Famous Great Migration savannah hosting lions, elephants, and wildebeest.",
     suggestedDays: 4,
-    recommendedPacking: ["Binoculars", "Camera with zoom lens", "Earth-toned clothing", "Insect repellent", "Sunscreen SPF 50+", "Comfortable walking shoes", "Flashlight", "Hat/cap"]
+    recommendedPacking: ["Binoculars", "Camera with zoom lens", "Earth-toned clothing", "Insect repellent", "Sunscreen SPF 50+", "Comfortable walking shoes", "Flashlight", "Hat/cap"],
+    bestTime: "Jun - Oct",
+    highlights: [
+      "Witness Mara River crossings during the Great Migration",
+      "Sunrise hot-air balloon safari floating over plains",
+      "Track the Big Five (Lions, Leopards, Elephants, Rhinos, Buffaloes)"
+    ],
+    insiderTip: "Travel between July and September if seeing dramatic river migration crossings is your primary goal."
   },
   {
     id: 602,
@@ -358,7 +533,14 @@ export const DESTINATIONS = [
     temp: "26°C", budget: "$$$",
     description: "Vast bushveld game reserve renowned for Africa's 'Big Five'.",
     suggestedDays: 4,
-    recommendedPacking: ["Binoculars", "Camera with zoom lens", "Earth-toned clothing", "Insect repellent", "Sunscreen SPF 50+", "Comfortable walking shoes", "Flashlight", "Light jacket"]
+    recommendedPacking: ["Binoculars", "Camera with zoom lens", "Earth-toned clothing", "Insect repellent", "Sunscreen SPF 50+", "Comfortable walking shoes", "Flashlight", "Light jacket"],
+    bestTime: "May - Sep",
+    highlights: [
+      "Self-drive or guided open 4x4 safaris across bushveld terrain",
+      "Night safaris to spot nocturnal hunters like leopards and hyenas",
+      "Stay in authentic private game lodges along Sabie River"
+    ],
+    insiderTip: "The dry winter season (May–September) reduces foliage density, making wildlife much easier to spot."
   },
 
   // ==========================================
@@ -375,7 +557,14 @@ export const DESTINATIONS = [
     temp: "21°C", budget: "$$",
     description: "Classical Buddhist temples, gardens, and imperial palaces.",
     suggestedDays: 3,
-    recommendedPacking: ["Comfortable walking shoes", "Light breathable clothing", "Camera", "Modest clothing for temples", "Day bag", "Umbrella", "Sunscreen"]
+    recommendedPacking: ["Comfortable walking shoes", "Light breathable clothing", "Camera", "Modest clothing for temples", "Day bag", "Umbrella", "Sunscreen"],
+    bestTime: "Mar - May, Oct - Nov",
+    highlights: [
+      "Walk through thousands of vermilion gates at Fushimi Inari Shrine",
+      "Visit the Golden Pavilion (Kinkaku-ji) reflected over the pond",
+      "Stroll through Arashiyama Bamboo Grove at early dawn"
+    ],
+    insiderTip: "Visit Fushimi Inari either before 7:30 AM or after sunset to enjoy quiet walks free of crowd surges."
   },
   {
     id: 702,
@@ -388,7 +577,14 @@ export const DESTINATIONS = [
     temp: "29°C", budget: "$$",
     description: "Tropical beaches, coral reefs, and cliffside sanctuaries.",
     suggestedDays: 4,
-    recommendedPacking: ["Light breathable clothing", "Sunscreen SPF 50+", "Swimwear", "Comfortable walking shoes", "Camera", "Insect repellent", "Light cover-up"]
+    recommendedPacking: ["Light breathable clothing", "Sunscreen SPF 50+", "Swimwear", "Comfortable walking shoes", "Camera", "Insect repellent", "Light cover-up"],
+    bestTime: "Apr - Oct",
+    highlights: [
+      "Cliffside Kecak fire dance performance at Uluwatu Temple",
+      "Surfing lessons along Uluwatu and Canggu beach breaks",
+      "Snorkeling with manta rays near Nusa Penida island"
+    ],
+    insiderTip: "Take speedboats from Sanur Harbor early in the morning to explore Nusa Penida on day trips."
   },
   {
     id: 703,
@@ -401,7 +597,14 @@ export const DESTINATIONS = [
     temp: "14°C", budget: "$$$",
     description: "Turquoise glacial lakes and Rocky Mountain hiking trails.",
     suggestedDays: 4,
-    recommendedPacking: ["Warm jacket", "Thermal base layers", "Hiking boots", "Waterproof outer layer", "Sunscreen SPF 50+", "Camera", "Bear spray (if hiking)"]
+    recommendedPacking: ["Warm jacket", "Thermal base layers", "Hiking boots", "Waterproof outer layer", "Sunscreen SPF 50+", "Camera", "Bear spray (if hiking)"],
+    bestTime: "Jun - Aug (Hiking), Dec - Mar (Skiing)",
+    highlights: [
+      "Canoeing across the turquoise waters of Lake Louise & Moraine Lake",
+      "Drive along the scenic Icefields Parkway past glaciers",
+      "Soak in Banff Upper Hot Springs with mountain summit views"
+    ],
+    insiderTip: "Moraine Lake road is closed to private vehicles; reserve shuttle seats months ahead on Parks Canada site."
   },
   {
     id: 704,
@@ -414,7 +617,13 @@ export const DESTINATIONS = [
     temp: "18°C", budget: "$$",
     description: "Ancient Incan citadel high in the Andes mountains.",
     suggestedDays: 4,
-    recommendedPacking: ["Comfortable hiking boots", "Light breathable clothing", "Warm jacket", "Rain jacket", "Sunscreen SPF 50+", "Camera", "Altitude sickness medication", "Water bottle"]
+    recommendedPacking: ["Comfortable hiking boots", "Light breathable clothing", "Warm jacket", "Rain jacket", "Sunscreen SPF 50+", "Camera", "Altitude sickness medication", "Water bottle"],
+    bestTime: "May - Oct",
+    highlights: [
+      "Guided circuit tour through the stone citadel ruins",
+      "Climb Huayna Picchu or Machu Picchu Mountain peak",
+      "Ride the panoramic Vistadome train through Sacred Valley"
+    ],
+    insiderTip: "Citadel entry circuits are strictly timed and directional; book 3–4 months prior and carry your passport."
   }
 ];
-
