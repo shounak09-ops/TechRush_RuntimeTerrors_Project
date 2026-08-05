@@ -166,7 +166,7 @@ export const DESTINATIONS = [
     id: "new-york-usa",
     name: "New York City",
     category: "Metropolis",
-    continent: "North America",
+    continent: "Americas",
     country: "United States",
     lat: 40.7128,
     lon: -74.006,
