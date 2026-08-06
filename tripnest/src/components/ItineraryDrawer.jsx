@@ -14,10 +14,11 @@ import {
   Printer,
   Compass,
   Pin,
+  Loader2,
 } from "lucide-react"
 import PackingChecklist from "./PackingCheckList"
 
-const CATEGORY_STYLES = {
+export const CATEGORY_STYLES = {
   Sightseeing: "bg-indigo-500/15 text-indigo-600 dark:text-indigo-400",
   Food: "bg-amber-500/15 text-amber-600 dark:text-amber-400",
   Adventure: "bg-teal-500/15 text-teal-600 dark:text-teal-400",
@@ -30,7 +31,7 @@ const CATEGORY_STYLES = {
   Wildlife: "bg-orange-500/15 text-orange-600 dark:text-orange-400",
 }
 
-function currency(n) {
+export function currency(n) {
   return `$${Number(n || 10).toLocaleString(undefined, { maximumFractionDigits: 2 })}`
 }
 
@@ -46,6 +47,7 @@ export default function ItineraryDrawer({
   onTogglePacking,
   onExportJSON,
   onExportPDF,
+  loading = false,
 }) {
   const [tab, setTab] = useState("itinerary")
   const [selectedDay, setSelectedDay] = useState(1)
@@ -166,7 +168,17 @@ export default function ItineraryDrawer({
 
         {/* Scrollable body */}
         <div className="tn-scroll flex-1 overflow-y-auto p-4">
-          {tab === "itinerary" ? (
+          {loading ? (
+            <div className="flex flex-col items-center justify-center gap-3 py-24 text-center">
+              <Loader2 className={`h-8 w-8 animate-spin ${theme === 'dark' ? 'text-teal-400' : 'text-teal-500'}`} />
+              <p className={`text-sm font-semibold ${theme === 'dark' ? 'text-slate-200' : 'text-slate-700'}`}>
+                Building your itinerary...
+              </p>
+              <p className={`text-xs ${theme === 'dark' ? 'text-slate-500' : 'text-slate-400'}`}>
+                Mapping out days, activities, and your packing list
+              </p>
+            </div>
+          ) : tab === "itinerary" ? (
             <div className="flex flex-col gap-5">
               {/* Day navigation wheel */}
               <div>
@@ -335,7 +347,7 @@ export default function ItineraryDrawer({
   )
 }
 
-function TabButton({ active, onClick, icon, full, short, theme }) {
+export function TabButton({ active, onClick, icon, full, short, theme }) {
   return (
     <button
       type="button"

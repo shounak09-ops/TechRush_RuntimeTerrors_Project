@@ -6,7 +6,7 @@ import { Check, Luggage, Pin } from "lucide-react"
 const CATEGORY_ORDER = ["Documents", "Electronics", "Toiletries", "Health", "Clothing", "Custom"]
 
 // Standard essentials that apply to all trips
-const STANDARD_ESSENTIALS = [
+export const STANDARD_ESSENTIALS = [
   { id: "std_1", label: "Passport & ID", category: "Documents", packed: false },
   { id: "std_2", label: "Travel insurance documents", category: "Documents", packed: false },
   { id: "std_3", label: "Wallet/Cash/Cards", category: "Documents", packed: false },

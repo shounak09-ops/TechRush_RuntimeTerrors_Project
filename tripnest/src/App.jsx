@@ -4,10 +4,12 @@ import DestinationModal from "./components/DestinationModal";
 import CompareDrawer from "./components/CompareDrawer";
 import ItineraryDrawer from "./components/ItineraryDrawer";
 import MapView from "./components/MapView";
+import AITripPlanner from "./components/AITripPlanner";
 import { DESTINATIONS } from "./data/destinations";
+import { planItineraryForDestination } from "./services/aiService";
 import { 
   MapPin, Search, Moon, Sun, Compass, 
-  Filter, Globe, Heart, Bot
+  Filter, Globe, Heart, Bot, Luggage, Loader2
 } from "lucide-react";
 
 export default function App() {
@@ -36,8 +38,12 @@ export default function App() {
   // Active Destination State (Destination Lock System)
   const [activeDestination, setActiveDestination] = useState(null);
 
-  // Itinerary Drawer State
+  // Itinerary Drawer State ("My Itinerary" — separate from the AI Companion)
   const [itineraryDrawerOpen, setItineraryDrawerOpen] = useState(false);
+  const [itineraryLoading, setItineraryLoading] = useState(false);
+
+  // AI Trip Companion State
+  const [aiPlannerOpen, setAiPlannerOpen] = useState(false);
   const [isCompareOpen, setIsCompareOpen] = useState(false);
   const [activitiesByDay, setActivitiesByDay] = useState(() => {
     return JSON.parse(localStorage.getItem("tripnest_activities") || "{}");
@@ -89,24 +95,64 @@ export default function App() {
 
   const comparedObjects = DESTINATIONS.filter(item => compared.includes(item.id));
 
-  // Destination Lock System Handler
-  const handleAddToItinerary = (destination) => {
+  // Applies a fully-generated trip payload (same shape produced by both the
+  // AI Trip Companion and the manual "My Itinerary" generator) to the
+  // shared itinerary state, so the drawer always shows a fully locked,
+  // day-by-day plan no matter which flow produced it.
+  const applyGeneratedTrip = (trip) => {
+    setActiveDestination(trip.destination);
+
+    const byDay = {};
+    trip.dayWiseItinerary.forEach(({ day, slots }) => {
+      byDay[day] = slots.map((slot, idx) => ({
+        id: `${trip.destination.id}-d${day}-${idx}`,
+        title: slot.title,
+        location: `${trip.destination.name}, ${trip.destination.country}`,
+        category: slot.category,
+        cost: slot.cost,
+        destinationId: trip.destination.id,
+      }));
+    });
+    setActivitiesByDay(byDay);
+  };
+
+  // Destination Lock System Handler — used when a destination is picked
+  // manually (destination cards, the compare drawer, the detail modal, or
+  // an "alternate" suggestion). Generates the same kind of day-wise plan +
+  // packing checklist the AI Companion builds, just for the exact
+  // destination the person chose, instead of a single placeholder entry.
+  const handleAddToItinerary = async (destination) => {
     setActiveDestination(destination);
-    
-    // Pre-populate Day 1 with the destination's primary attraction
-    setActivitiesByDay(prev => ({
-      ...prev,
-      1: [{
-        id: Date.now(),
-        title: destination.name,
-        location: destination.country,
-        category: destination.category,
-        cost: 0,
-        destinationId: destination.id
-      }]
-    }));
-    
-    // Open the Itinerary Drawer
+    setItineraryDrawerOpen(true);
+    setItineraryLoading(true);
+    try {
+      const trip = await planItineraryForDestination(destination);
+      applyGeneratedTrip(trip);
+    } catch (err) {
+      console.error(err);
+      // Fall back to a minimal single entry so the drawer is never empty
+      setActivitiesByDay(prev => ({
+        ...prev,
+        1: [{
+          id: Date.now(),
+          title: destination.name,
+          location: destination.country,
+          category: destination.category,
+          cost: 0,
+          destinationId: destination.id
+        }]
+      }));
+    } finally {
+      setItineraryLoading(false);
+    }
+  };
+
+  // Called when a trip is locked from inside the AI Trip Companion. The
+  // Companion already generated the full trip (respecting the traveler's
+  // chosen days/budget/mood), so it's applied directly instead of being
+  // regenerated with defaults.
+  const handleLockTrip = (trip) => {
+    applyGeneratedTrip(trip);
     setItineraryDrawerOpen(true);
   };
 
@@ -185,14 +231,32 @@ export default function App() {
           </button>
 
           <button
-            onClick={() => setItineraryDrawerOpen(true)}
+            onClick={() => setAiPlannerOpen(true)}
             className="p-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-gradient-to-r from-sky-500 to-indigo-500 text-white hover:scale-105 transition-transform flex items-center gap-2 px-4"
           >
             <Bot className="h-5 w-5" />
             <span className="hidden sm:inline font-semibold text-black">Companion</span>
+          </button>
+
+          {/* My Itinerary — standalone button, independent of the AI Companion.
+              Opens the shared ItineraryDrawer (itinerary + packing checklist),
+              whether the active destination came from a manual pick or the AI. */}
+          <button
+            onClick={() => setItineraryDrawerOpen(true)}
+            className="p-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:scale-105 transition-transform flex items-center gap-2 px-4"
+          >
+            {itineraryLoading ? (
+              <Loader2 className="h-5 w-5 animate-spin" />
+            ) : (
+              <Luggage className="h-5 w-5" />
+            )}
+            <span className="hidden sm:inline font-semibold">My Itinerary</span>
             {activeDestination && (
-              <span className="bg-white/20 text-white text-xs px-2 py-0.5 rounded-full font-bold">
-                {activeDestination.name.substring(0, 3)}
+              <span
+                title={activeDestination.name}
+                className="bg-sky-500/15 text-sky-600 dark:text-sky-400 text-[10px] px-2 py-0.5 rounded-full font-bold max-w-[70px] truncate"
+              >
+                {activeDestination.name}
               </span>
             )}
           </button>
@@ -358,6 +422,20 @@ export default function App() {
         }}
       />
 
+      {/* AI TRIP COMPANION */}
+      <AITripPlanner
+        open={aiPlannerOpen}
+        onClose={() => setAiPlannerOpen(false)}
+        theme={theme}
+        onAddToItinerary={handleAddToItinerary}
+        onLockTrip={handleLockTrip}
+        favorites={favorites}
+        onToggleFavorite={handleToggleFavorite}
+        compared={compared}
+        onToggleCompare={handleToggleCompare}
+        onOpenDetails={(d) => setSelectedModalDest(d)}
+      />
+
       {/* DETAIL MODAL */}
       <DestinationModal
         dest={selectedModalDest}
@@ -377,7 +455,8 @@ export default function App() {
         />
       )}
 
-      {/* ITINERARY DRAWER */}
+      {/* ITINERARY DRAWER — "My Itinerary": itinerary tab + packing checklist,
+          shared by both the manual selection flow and the AI Companion lock */}
       <ItineraryDrawer
         open={itineraryDrawerOpen}
         onClose={() => setItineraryDrawerOpen(false)}
@@ -386,6 +465,7 @@ export default function App() {
         activeDestination={activeDestination}
         activitiesByDay={activitiesByDay}
         totalBudget={totalBudget}
+        loading={itineraryLoading}
         packingItems={[]}
         onTogglePacking={() => {}}
         onExportJSON={handleExportJSON}
