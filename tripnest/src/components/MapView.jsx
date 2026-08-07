@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { X, MapPin } from "lucide-react";
+import { X, MapPin, Search, LocateFixed } from "lucide-react";
 import "leaflet/dist/leaflet.css";
 import "./MapView.css";
 import L from "leaflet";
@@ -65,7 +65,7 @@ export default function MapView({ open, onClose, destinations, onViewDetails }) 
 
     const startIcon = L.divIcon({
       className: "",
-      html: '<div style="background:#16a34a;width:14px;height:14px;border-radius:50%;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.3)"></div>',
+      html: '<div style="background:#10b981;width:14px;height:14px;border-radius:50%;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.3)"></div>',
     });
     mapRef.current.__startIcon = startIcon;
 
@@ -140,7 +140,7 @@ export default function MapView({ open, onClose, destinations, onViewDetails }) 
 
       const route = data.routes[0];
       const coords = route.geometry.coordinates.map(([lng, lat]) => [lat, lng]);
-      routeLayerRef.current = L.polyline(coords, { color: "#2563eb", weight: 5, opacity: 0.85 }).addTo(map);
+      routeLayerRef.current = L.polyline(coords, { color: "#0ea5e9", weight: 5, opacity: 0.85 }).addTo(map);
       routeStartMarkerRef.current = L.marker([startLat, startLng], { icon: map.__startIcon })
         .addTo(map)
         .bindPopup("You are here");
@@ -278,11 +278,12 @@ export default function MapView({ open, onClose, destinations, onViewDetails }) 
 
         {/* Controls */}
         <div className="tn-map-controls">
-          <div className="tn-search-wrap">
+          <div className="tn-search-wrap flex items-center">
+            <Search className="h-4 w-4 text-slate-400 shrink-0" />
             <input
               ref={searchInputRef}
               type="text"
-              placeholder="🔍 Search destinations..."
+              placeholder="Search destinations..."
               autoComplete="off"
               onChange={(e) => renderSearchResults(e.target.value)}
               onFocus={(e) => e.target.value && renderSearchResults(e.target.value)}
@@ -295,17 +296,19 @@ export default function MapView({ open, onClose, destinations, onViewDetails }) 
               onClick={handleSearchResultsClick}
             />
           </div>
-          <button onClick={handleLocateMe} className="tn-locate-btn">
-            📍 Use my location
+          <button onClick={handleLocateMe} className="tn-locate-btn flex items-center gap-1.5">
+            <LocateFixed className="h-3.5 w-3.5" />
+            Use my location
           </button>
         </div>
 
         <button
           ref={clearRouteBtnRef}
           onClick={() => window.__tripnestClearRoute?.()}
-          className="tn-clear-route-btn"
+          className="tn-clear-route-btn flex items-center gap-1.5"
         >
-          ✕ Clear route
+          <X className="h-3.5 w-3.5" />
+          Clear route
         </button>
         <div ref={routeInfoRef} className="tn-route-info" />
 
