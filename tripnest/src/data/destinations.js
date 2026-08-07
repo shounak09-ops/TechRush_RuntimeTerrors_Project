@@ -175,7 +175,7 @@ export const DESTINATIONS = [
     image: "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format&fit=crop&w=1200&q=80",
     images: [
       "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format&fit=crop&w=1200&q=80",
-      "https://images.unsplash.com/photo-1538688525198-9b88f6f53126?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1496588152823-86ff7695e68f?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1518391846015-55a9cc003b25?auto=format&fit=crop&w=1200&q=80"
     ],
     description: "The global hub of culture, entertainment, and fashion—renowned for soaring skyscrapers, Broadway theatre, and vibrant neighborhoods.",
@@ -283,7 +283,7 @@ export const DESTINATIONS = [
     image: "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?auto=format&fit=crop&w=1200&q=80",
     images: [
       "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?auto=format&fit=crop&w=1200&q=80",
-      "https://images.unsplash.com/photo-1523428096881-5bd79d04300f?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1528072164453-f4e8ef0d475a?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80"
     ],
     description: "A harbor metropolis where striking modern architecture meets world-famous surf beaches, national parks, and coastal walks.",
@@ -340,8 +340,8 @@ export const DESTINATIONS = [
     image: "https://images.unsplash.com/photo-1581793745862-99fde7fa73d2?auto=format&fit=crop&w=1200&q=80",
     images: [
       "https://images.unsplash.com/photo-1581793745862-99fde7fa73d2?auto=format&fit=crop&w=1200&q=80",
-      "https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=1200&q=80",
-      "https://images.unsplash.com/photo-1506197603052-3cc9c3a201bd?auto=format&fit=crop&w=1200&q=80"
+      "https://images.unsplash.com/photo-1600356033695-a003690a6351?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1558187424-f786111643b0?auto=format&fit=crop&w=800&q=80"
     ],
     description: "High-altitude desert wonderland featuring azure lakes, rugged mountain passes, and historic Buddhist monasteries.",
     highlights: [
@@ -392,10 +392,11 @@ export const DESTINATIONS = [
     lon: 93.1711,
     temp: "24°C",
     bestTime: "Nov - Apr",
-    image: "https://images.unsplash.com/photo-1581852017103-68ac65514cf7?auto=format&fit=crop&w=1200&q=80",
+    image: "https://images.unsplash.com/photo-1675296098308-f9f526c6b724?auto=format&fit=crop&w=800&q=80",
     images: [
-      "https://images.unsplash.com/photo-1581852017103-68ac65514cf7?auto=format&fit=crop&w=1200&q=80",
-      "https://images.unsplash.com/photo-1534177616072-ef7dc120449d?auto=format&fit=crop&w=1200&q=80"
+     "https://images.unsplash.com/photo-1675296098308-f9f526c6b724?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1655288212750-dedac22f84d7?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1709008502171-091ceb32b28b?auto=format&fit=crop&w=800&q=80"
     ],
     description: "A UNESCO World Heritage site home to two-thirds of the world's great one-horned rhinoceroses, sprawling across tall elephant grass and marshlands.",
     highlights: [
@@ -418,10 +419,11 @@ export const DESTINATIONS = [
     lon: 78.7747,
     temp: "22°C",
     bestTime: "Nov - Jun",
-    image: "https://images.unsplash.com/photo-1602491453631-e2a5ad90a131?auto=format&fit=crop&w=1200&q=80",
+    image: "https://images.unsplash.com/photo-1669021820355-7186908380d9?auto=format&fit=crop&w=800&q=80",
     images: [
-      "https://images.unsplash.com/photo-1602491453631-e2a5ad90a131?auto=format&fit=crop&w=1200&q=80",
-      "https://images.unsplash.com/photo-1549366021-9f761d450615?auto=format&fit=crop&w=1200&q=80"
+      "https://images.unsplash.com/photo-1669021820355-7186908380d9?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1656828059237-add66db82a2b?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1665129967399-f28a228d064e?auto=format&fit=crop&w=800&q=80"
     ],
     description: "India's oldest national park nestled in the Himalayan foothills, famed for Bengal tigers, wild elephants, and dense sal forests.",
     highlights: [
@@ -444,10 +446,11 @@ export const DESTINATIONS = [
     lon: 70.8242,
     temp: "28°C",
     bestTime: "Dec - Mar",
-    image: "https://images.unsplash.com/photo-1614027164847-1b28cfe1df60?auto=format&fit=crop&w=1200&q=80",
+    image: "https://images.unsplash.com/photo-1634046808105-ce0ec912691e?auto=format&fit=crop&w=800&q=80",
     images: [
-      "https://images.unsplash.com/photo-1614027164847-1b28cfe1df60?auto=format&fit=crop&w=1200&q=80",
-      "https://images.unsplash.com/photo-1546182990-dffeafbe841d?auto=format&fit=crop&w=1200&q=80"
+      "https://images.unsplash.com/photo-1634046808105-ce0ec912691e?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1545895411-5af40c24f29a?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1715601719007-0fd056192675?auto=format&fit=crop&w=800&q=80"
     ],
     description: "The sole remaining natural habitat of the Asiatic Lion, featuring rugged dry deciduous forests and rocky hill ridges.",
     highlights: [
@@ -470,10 +473,11 @@ export const DESTINATIONS = [
     lon: 76.2711,
     temp: "25°C",
     bestTime: "Oct - May",
-    image: "https://images.unsplash.com/photo-1561731216-c3a4d99437d5?auto=format&fit=crop&w=1200&q=80",
+    image: "https://images.unsplash.com/photo-1713373291884-f1215718cd89?auto=format&fit=crop&w=800&q=80",
     images: [
-      "https://images.unsplash.com/photo-1561731216-c3a4d99437d5?auto=format&fit=crop&w=1200&q=80",
-      "https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=1200&q=80"
+      "https://images.unsplash.com/photo-1698382439843-ca033a6079c0?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1634304467229-5a4c1c8ef091?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1713373291884-f1215718cd89?auto=format&fit=crop&w=800&q=80"
     ],
     description: "A premier wildlife sanctuary in Southern India famous for leopards, black panthers, and massive herds of Asian elephants along the Kabini River.",
     highlights: [
@@ -496,10 +500,10 @@ export const DESTINATIONS = [
     lon: 80.1927,
     temp: "29°C",
     bestTime: "Nov - Feb",
-    image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=1200&q=80",
+    image: "https://images.unsplash.com/photo-1640715751438-7120b3019712?auto=format&fit=crop&w=800&q=80",
     images: [
-      "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=1200&q=80",
-      "https://images.unsplash.com/photo-1621252179027-94459d278660?auto=format&fit=crop&w=1200&q=80"
+      "https://images.unsplash.com/photo-1717480103667-fc55675a9ae4?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1640715751438-7120b3019712?auto=format&fit=crop&w=800&q=80"
     ],
     description: "A coastal town renowned for 7th and 8th-century Hindu monuments, monolithic rock-cut cave temples, and coastal relief sculptures.",
     highlights: [
@@ -522,10 +526,10 @@ export const DESTINATIONS = [
     lon: 77.3639,
     temp: "12°C",
     bestTime: "Jun - Sep",
-    image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80",
+    image: "https://images.unsplash.com/photo-1656833111546-07d98abab448?auto=format&fit=crop&w=800&q=80",
     images: [
-      "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80",
-      "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80"
+      "https://images.unsplash.com/photo-1688804470994-271ad19db477?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1656833111546-07d98abab448?auto=format&fit=crop&w=800&q=80"
     ],
     description: "A dramatic crossover trek in Himachal Pradesh connecting the lush green Kullu Valley to the stark, arid landscapes of Lahaul Valley.",
     highlights: [
@@ -548,10 +552,10 @@ export const DESTINATIONS = [
     lon: 88.5122,
     temp: "15°C",
     bestTime: "Mar - May, Oct - Dec",
-    image: "https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=1200&q=80",
+    image: "https://images.unsplash.com/photo-1573398643956-2b9e6ade3456?auto=format&fit=crop&w=800&q=80",
     images: [
-      "https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=1200&q=80",
-      "https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=1200&q=80"
+      "https://images.unsplash.com/photo-1600402808924-9c591a6dace8?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1573398643956-2b9e6ade3456?auto=format&fit=crop&w=800&q=80"
     ],
     description: "A Himalayan haven framed by Mount Kanchenjunga, featuring high-altitude glacial lakes, ancient Buddhist monasteries, and organic alpine valleys.",
     highlights: [
@@ -574,10 +578,10 @@ export const DESTINATIONS = [
     lon: 85.8312,
     temp: "27°C",
     bestTime: "Oct - Feb",
-    image: "https://images.unsplash.com/photo-1609949279531-cf48d64bed89?auto=format&fit=crop&w=1200&q=80",
+    image: "https://images.unsplash.com/photo-1706790574525-d218c4c52b5c?auto=format&fit=crop&w=800&q=80",
     images: [
-      "https://images.unsplash.com/photo-1609949279531-cf48d64bed89?auto=format&fit=crop&w=1200&q=80",
-      "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=1200&q=80"
+      "https://images.unsplash.com/photo-1706790574525-d218c4c52b5c?auto=format&fit=crop&w=800&q=80",
+     "https://images.unsplash.com/photo-1655352710727-6c89536454b3?auto=format&fit=crop&w=800&q=80"
     ],
     description: "A sacred coastal city on the Bay of Bengal, world-renowned for the 12th-century Jagannath Temple and long golden sand beaches.",
     highlights: [
@@ -600,10 +604,10 @@ export const DESTINATIONS = [
     lon: 71.1924,
     temp: "26°C",
     bestTime: "Nov - Feb",
-    image: "https://images.unsplash.com/photo-1609949279531-cf48d64bed89?auto=format&fit=crop&w=1200&q=80",
+    image: "https://images.unsplash.com/photo-1642841819300-20ed449c02a1?auto=format&fit=crop&w=800&q=80",
     images: [
-      "https://images.unsplash.com/photo-1609949279531-cf48d64bed89?auto=format&fit=crop&w=1200&q=80",
-      "https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=1200&q=80"
+     "https://images.unsplash.com/photo-1673183191406-5987fda2fa24?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1642841819300-20ed449c02a1?auto=format&fit=crop&w=800&q=80"
     ],
     description: "A culturally vibrant western state known for historic stepwells, Mahatma Gandhi's legacy, intricate textiles, and distinct regional cuisine.",
     highlights: [
@@ -626,10 +630,10 @@ export const DESTINATIONS = [
     lon: 69.8597,
     temp: "20°C",
     bestTime: "Nov - Feb",
-    image: "https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=1200&q=80",
+    image: "https://images.unsplash.com/photo-1628265512314-a9464859fe0c?auto=format&fit=crop&w=800&q=80",
     images: [
-      "https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=1200&q=80",
-      "https://images.unsplash.com/photo-1609949279531-cf48d64bed89?auto=format&fit=crop&w=1200&q=80"
+     "https://images.unsplash.com/photo-1670406312373-6d4d1776e4aa?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1628265512314-a9464859fe0c?auto=format&fit=crop&w=800&q=80"
     ],
     description: "One of the world's largest salt deserts, transforming into an ethereal white expanse under full moon nights and hosting the vibrant Rann Utsav.",
     highlights: [
@@ -652,9 +656,9 @@ export const DESTINATIONS = [
     lon: 37.6173,
     temp: "8°C",
     bestTime: "May - Sep",
-    image: "https://images.unsplash.com/photo-1513326718677-b964603b136d?auto=format&fit=crop&w=1200&q=80",
+    image: "https://images.unsplash.com/photo-1520106212299-d99c443e4568?auto=format&fit=crop&w=1200&q=80",
     images: [
-      "https://images.unsplash.com/photo-1513326718677-b964603b136d?auto=format&fit=crop&w=1200&q=80",
+     "https://images.unsplash.com/photo-1652342532673-59a848be8a0a?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1520106212299-d99c443e4568?auto=format&fit=crop&w=1200&q=80"
     ],
     description: "Russia's iconic capital showcasing grand Red Square architecture, onion-domed cathedrals, underground palace-like metro stations, and rich history.",
@@ -678,10 +682,11 @@ export const DESTINATIONS = [
     lon: 35.0085,
     temp: "25°C",
     bestTime: "Jul - Oct",
-    image: "https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=1200&q=80",
+    image: "https://images.unsplash.com/photo-1623951578056-5082d34a9859?auto=format&fit=crop&w=800&q=80",
     images: [
-      "https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=1200&q=80",
-      "https://images.unsplash.com/photo-1534177616072-ef7dc120449d?auto=format&fit=crop&w=1200&q=80"
+      "https://images.unsplash.com/photo-1519659528534-7fd733a832a0?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1535940587896-3a4e0ce292f4?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1623951578056-5082d34a9859?auto=format&fit=crop&w=800&q=80"
     ],
     description: "A world-famous savannah wilderness preserved for big cat sightings and the epic annual Great Migration of wildbeest and zebras.",
     highlights: [
@@ -733,11 +738,11 @@ export const DESTINATIONS = [
     lon: 74.124,
     temp: "31°C",
     bestTime: "Nov - Feb",
-    image: "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=1200&q=80",
+    image:"https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=800&q=80",
     images: [
-      "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=1200&q=80",
-      "https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1200&q=80",
-      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80"
+      "https://images.unsplash.com/photo-1560179406-1c6c60e0dc76?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1682743710558-b338ba285925?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=800&q=80"
     ],
     description: "India's coastal haven featuring golden beaches, Portuguese heritage architecture, water sports, and lively nightlife.",
     highlights: [
@@ -761,11 +766,11 @@ export const DESTINATIONS = [
     lon: 82.9739,
     temp: "25°C",
     bestTime: "Oct - Mar",
-    image: "https://images.unsplash.com/photo-1561361513-2d000a50f0dc?auto=format&fit=crop&w=1200&q=80",
+    image: "https://images.unsplash.com/photo-1627938823193-fd13c1c867dd?auto=format&fit=crop&w=800&q=80",
     images: [
-      "https://images.unsplash.com/photo-1561361513-2d000a50f0dc?auto=format&fit=crop&w=1200&q=80",
-      "https://images.unsplash.com/photo-1571536802807-30451e3955d8?auto=format&fit=crop&w=1200&q=80",
-      "https://images.unsplash.com/photo-1627894483216-2138af692e32?auto=format&fit=crop&w=1200&q=80"
+      "https://images.unsplash.com/photo-1706186839147-0d708602587b?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1627894483216-2138af692e32?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1627938823193-fd13c1c867dd?auto=format&fit=crop&w=800&q=80"
     ],
     description: "One of the world's oldest continually inhabited cities, renowned for spiritual ghats along the sacred Ganges river.",
     highlights: [
@@ -817,11 +822,11 @@ export const DESTINATIONS = [
     lon: 74.7973,
     temp: "14°C",
     bestTime: "Apr - Oct (Greenery) / Dec - Feb (Snow)",
-    image: "https://images.unsplash.com/photo-1598091383021-15ddea10925d?auto=format&fit=crop&w=1200&q=80",
+    image: "https://images.unsplash.com/photo-1598091383021-15ddea10925d?auto=format&fit=crop&w=800&q=80",
     images: [
-      "https://images.unsplash.com/photo-1598091383021-15ddea10925d?auto=format&fit=crop&w=1200&q=80",
-      "https://images.unsplash.com/photo-1566837945700-30057527ade0?auto=format&fit=crop&w=1200&q=80",
-      "https://images.unsplash.com/photo-1617868186608-87ae598cb729?auto=format&fit=crop&w=1200&q=80"
+      "https://images.unsplash.com/photo-1715457573748-8e8a70b2c1be?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1566837497312-7be7830ae9b1?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1598091383021-15ddea10925d?auto=format&fit=crop&w=800&q=80"
     ],
     description: "Heaven on Earth featuring serene mirror lakes, wooden houseboats, lush alpine meadows, and world-class ski slopes.",
     highlights: [
@@ -845,11 +850,11 @@ export const DESTINATIONS = [
     lon: 92.6586,
     temp: "29°C",
     bestTime: "Oct - May",
-    image: "https://images.unsplash.com/photo-1589308078059-be1415eab4c3?auto=format&fit=crop&w=1200&q=80",
+    image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1200&q=80",
     images: [
-      "https://images.unsplash.com/photo-1589308078059-be1415eab4c3?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1586053226626-febc8817962f?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1200&q=80",
-      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80"
+     "https://images.unsplash.com/photo-1631364377744-2d0a1e5c40cf?auto=format&fit=crop&w=800&q=80"
     ],
     description: "Pristine tropical archipelago offering turquoise ocean waters, white sand beaches, coral reef diving, and dense rainforests.",
     highlights: [
@@ -873,11 +878,11 @@ export const DESTINATIONS = [
     lon: 91.8933,
     temp: "19°C",
     bestTime: "Oct - Apr",
-    image: "https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=1200&q=80",
+    image: "https://images.unsplash.com/photo-1698429358246-807d8972da9a?auto=format&fit=crop&w=800&q=80",
     images: [
-      "https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=1200&q=80",
-      "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80",
-      "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1200&q=80"
+     "https://images.unsplash.com/photo-1698429358246-807d8972da9a?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1568535459885-b4fc72e035a4?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1629465659213-d28388bc05ff?auto=format&fit=crop&w=800&q=80"
     ],
     description: "The Abode of Clouds featuring living root bridges, cascading waterfalls, crystal-clear rivers, and limestone cave networks.",
     highlights: [
@@ -901,11 +906,11 @@ export const DESTINATIONS = [
     lon: 76.46,
     temp: "29°C",
     bestTime: "Nov - Feb",
-    image: "https://images.unsplash.com/photo-1600100397608-f010e423b971?auto=format&fit=crop&w=1200&q=80",
+    image: "https://images.unsplash.com/photo-1722934804353-0d9f6a55ab5e?auto=format&fit=crop&w=800&q=80",
     images: [
-      "https://images.unsplash.com/photo-1600100397608-f010e423b971?auto=format&fit=crop&w=1200&q=80",
-      "https://images.unsplash.com/photo-1609946782782-7771746f3a76?auto=format&fit=crop&w=1200&q=80",
-      "https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1200&q=80"
+      "https://images.unsplash.com/photo-1722934804353-0d9f6a55ab5e?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1596018382916-56d2e341d784?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/flagged/photo-1582271542392-c4ca315c0663?auto=format&fit=crop&w=800&q=80"
     ],
     description: "A UNESCO World Heritage landscape of boulder-strewn hills dotted with magnificent 14th-century Vijayanagara Empire ruins.",
     highlights: [
@@ -929,11 +934,11 @@ export const DESTINATIONS = [
     lon: 88.2663,
     temp: "15°C",
     bestTime: "Oct - Dec, Mar - May",
-    image: "https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=1200&q=80",
+    image: "https://images.unsplash.com/photo-1622308644420-b20142dc993c?auto=format&fit=crop&w=800&q=80",
     images: [
-      "https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=1200&q=80",
-      "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80",
-      "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1200&q=80"
+      "https://images.unsplash.com/photo-1622308644420-b20142dc993c?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1671711847762-b8308b444a42?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1637737118663-f1a53ee1d5a7?auto=format&fit=crop&w=800&q=80"
     ],
     description: "Queen of the Hills famous for world-class tea gardens, heritage Himalayan railways, and views of Mount Kanchenjunga.",
     highlights: [
@@ -957,11 +962,11 @@ export const DESTINATIONS = [
     lon: 78.2676,
     temp: "22°C",
     bestTime: "Sep - Nov, Feb - May",
-    image: "https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?auto=format&fit=crop&w=1200&q=80",
+    image: "https://images.unsplash.com/photo-1650341259809-9314b0de9268?auto=format&fit=crop&w=800&q=80",
     images: [
-      "https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?auto=format&fit=crop&w=1200&q=80",
-      "https://images.unsplash.com/photo-1600100397608-f010e423b971?auto=format&fit=crop&w=1200&q=80",
-      "https://images.unsplash.com/photo-1561361513-2d000a50f0dc?auto=format&fit=crop&w=1200&q=80"
+      "https://images.unsplash.com/photo-1650341259809-9314b0de9268?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1720819029162-8500607ae232?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1603867106100-0d2039fc8757?auto=format&fit=crop&w=800&q=80"
     ],
     description: "Yoga Capital of the World where the clear blue Ganges exits the Himalayas, blending adrenaline sports with spiritual peace.",
     highlights: [
