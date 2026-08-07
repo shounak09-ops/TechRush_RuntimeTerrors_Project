@@ -43,14 +43,14 @@ export default function DestinationCard({
           <div className="absolute inset-x-2 top-1/2 -translate-y-1/2 flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity z-10">
             <button
               onClick={handlePrevImage}
-              className="p-1 rounded-full bg-black/50 hover:bg-black/80 text-white backdrop-blur-xs transition-colors"
+              className="p-1 rounded-full bg-white/90 hover:bg-white text-slate-700 backdrop-blur-xs transition-colors shadow-sm"
               aria-label="Previous photo"
             >
               <ChevronLeft className="h-4 w-4" />
             </button>
             <button
               onClick={handleNextImage}
-              className="p-1 rounded-full bg-black/50 hover:bg-black/80 text-white backdrop-blur-xs transition-colors"
+              className="p-1 rounded-full bg-white/90 hover:bg-white text-slate-700 backdrop-blur-xs transition-colors shadow-sm"
               aria-label="Next photo"
             >
               <ChevronRight className="h-4 w-4" />
@@ -66,8 +66,8 @@ export default function DestinationCard({
 
           <div className="flex items-center gap-2">
             {/* Weather Badge */}
-            <span className="flex items-center gap-1 px-2.5 py-1 bg-black/50 backdrop-blur-md rounded-full text-[11px] font-semibold text-white">
-              <Thermometer className="h-3 w-3 text-amber-400" />
+            <span className="flex items-center gap-1 px-2.5 py-1 bg-white/90 backdrop-blur-md rounded-full text-[11px] font-semibold text-slate-800 shadow-sm">
+              <Thermometer className="h-3 w-3 text-amber-500" />
               {dest.temp}
             </span>
 
@@ -77,10 +77,10 @@ export default function DestinationCard({
                 e.stopPropagation();
                 onToggleFavorite(dest.id);
               }}
-              className={`p-2 rounded-full backdrop-blur-md transition-transform active:scale-95 ${
+              className={`p-2 rounded-full backdrop-blur-md transition-transform active:scale-95 shadow-sm ${
                 isFavorite
                   ? "bg-rose-500 text-white"
-                  : "bg-black/40 text-white hover:bg-black/60"
+                  : "bg-white/90 text-slate-700 hover:bg-white"
               }`}
               aria-label="Toggle favorite"
             >

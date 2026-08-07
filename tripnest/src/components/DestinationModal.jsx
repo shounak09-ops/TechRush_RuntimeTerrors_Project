@@ -32,7 +32,7 @@ export default function DestinationModal({
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 z-20 p-2 rounded-full bg-black/50 hover:bg-black/70 text-white backdrop-blur-md transition-colors"
+          className="absolute top-4 right-4 z-20 p-2 rounded-full bg-white/90 hover:bg-white text-slate-700 backdrop-blur-md transition-colors shadow-sm"
           aria-label="Close modal"
         >
           <X className="h-5 w-5" />
