@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import {
   X,
   Sun,
@@ -10,11 +10,13 @@ import {
   Luggage,
   Wallet,
   FileDown,
-  FileJson,
-  Printer,
   Compass,
   Pin,
   Loader2,
+  GripVertical,
+  RotateCcw,
+  Plus,
+  Trash2,
 } from "lucide-react"
 import PackingChecklist from "./PackingCheckList"
 
@@ -31,8 +33,12 @@ export const CATEGORY_STYLES = {
   Wildlife: "bg-orange-500/15 text-orange-600 dark:text-orange-400",
 }
 
+const ACTIVITY_CATEGORIES = Object.keys(CATEGORY_STYLES)
+
 export function currency(n) {
-  return `$${Number(n || 10).toLocaleString(undefined, { maximumFractionDigits: 2 })}`
+  const amount = Number.isFinite(Number(n)) ? Number(n) : 0
+  const inr = Math.round(amount * 83)
+  return `₹${inr.toLocaleString("en-IN")}`
 }
 
 export default function ItineraryDrawer({
@@ -42,29 +48,132 @@ export default function ItineraryDrawer({
   onToggleTheme,
   activeDestination,
   activitiesByDay,
+  dayCount,
   totalBudget,
   packingItems,
   onTogglePacking,
-  onExportJSON,
-  onExportPDF,
+  onReorderDay,
+  onAddDay,
+  onRemoveDay,
+  onAddActivity,
+  onDeleteActivity,
+  onEditActivityCost,
+  onMoveActivity,
+  onResetItinerary,
   loading = false,
 }) {
   const [tab, setTab] = useState("itinerary")
   const [selectedDay, setSelectedDay] = useState(1)
+  const [dragIndex, setDragIndex] = useState(null)
+  const [dragOverIndex, setDragOverIndex] = useState(null)
+  const [pdfBusy, setPdfBusy] = useState(false)
+  const [showAddForm, setShowAddForm] = useState(false)
+  const [newActivity, setNewActivity] = useState({ title: "", category: "Sightseeing", location: "", cost: "" })
+  const [editingCostId, setEditingCostId] = useState(null)
   const dayBarRef = useRef(null)
+  const printableRef = useRef(null)
 
-  // Generate fixed days based on active destination
-  const fixedDays = activeDestination 
-    ? Array.from({ length: activeDestination.suggestedDays }, (_, i) => i + 1)
+  const effectiveDayCount = dayCount > 0 ? dayCount : (activeDestination ? activeDestination.suggestedDays : 1)
+
+  // Generate the day list from the live, user-editable day count
+  const fixedDays = effectiveDayCount > 0
+    ? Array.from({ length: effectiveDayCount }, (_, i) => i + 1)
     : [1]
 
+  // Keep the selected day valid if days are removed
+  useEffect(() => {
+    if (selectedDay > fixedDays.length) setSelectedDay(fixedDays.length)
+  }, [fixedDays.length, selectedDay])
+
   const dayActivities = activitiesByDay[selectedDay] || []
+
+  // Live per-day cost, recalculated on every reorder/add/delete/edit
+  const dayBudget = useMemo(
+    () => dayActivities.reduce((sum, a) => sum + (a.cost || 0), 0),
+    [dayActivities]
+  )
 
   function handleWheel(e) {
     const el = dayBarRef.current
     if (!el) return
     if (e.deltaY === 0) return
     el.scrollLeft += e.deltaY
+  }
+
+  function handleDragStart(index) {
+    setDragIndex(index)
+  }
+
+  function handleDragOver(e, index) {
+    e.preventDefault()
+    if (index !== dragOverIndex) setDragOverIndex(index)
+  }
+
+  function handleDrop(index) {
+    if (dragIndex === null || dragIndex === index) {
+      setDragIndex(null)
+      setDragOverIndex(null)
+      return
+    }
+    const reordered = [...dayActivities]
+    const [moved] = reordered.splice(dragIndex, 1)
+    reordered.splice(index, 0, moved)
+    onReorderDay?.(selectedDay, reordered)
+    setDragIndex(null)
+    setDragOverIndex(null)
+  }
+
+  function handleDragEnd() {
+    setDragIndex(null)
+    setDragOverIndex(null)
+  }
+
+  function handleReset() {
+    const confirmed = window.confirm("Reset your itinerary? This clears every day's activities and unlocks your destination.")
+    if (confirmed) onResetItinerary?.()
+  }
+
+  function handleRemoveDay(day) {
+    if (fixedDays.length <= 1) return
+    const hasActivities = (activitiesByDay[day] || []).length > 0
+    if (hasActivities && !window.confirm(`Remove Day ${day}? Its activities will be deleted.`)) return
+    onRemoveDay?.(day)
+  }
+
+  function handleSubmitAddActivity(e) {
+    e.preventDefault()
+    if (!newActivity.title.trim()) return
+    onAddActivity?.(selectedDay, {
+      title: newActivity.title.trim(),
+      category: newActivity.category,
+      location: newActivity.location.trim() || (activeDestination ? `${activeDestination.name}, ${activeDestination.country}` : ""),
+      cost: Number(newActivity.cost) || 0,
+    })
+    setNewActivity({ title: "", category: "Sightseeing", location: "", cost: "" })
+    setShowAddForm(false)
+  }
+
+  // Builds a structured, styled itinerary document and hands it to html2pdf
+  async function handleSavePDF() {
+    if (pdfBusy) return
+    setPdfBusy(true)
+    try {
+      const html2pdf = (await import("html2pdf.js")).default
+      const el = printableRef.current
+      if (!el) return
+      const filenameBase = activeDestination ? activeDestination.name.replace(/\s+/g, "_") : "itinerary"
+      await html2pdf()
+        .set({
+          margin: 10,
+          filename: `${filenameBase}_itinerary.pdf`,
+          html2canvas: { scale: 2, useCORS: true },
+          jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+        })
+        .from(el)
+        .save()
+    } finally {
+      setPdfBusy(false)
+    }
   }
 
   return (
@@ -139,7 +248,7 @@ export default function ItineraryDrawer({
           }`}>
             <Pin className="h-4 w-4 text-sky-500" />
             <span className="text-xs font-semibold">
-              📌 Fixed {activeDestination.suggestedDays}-Day Plan: {activeDestination.name}
+              📌 {fixedDays.length}-Day Plan: {activeDestination.name}
             </span>
           </div>
         )}
@@ -188,6 +297,11 @@ export default function ItineraryDrawer({
                   }`}>
                     Days
                   </span>
+                  {dayActivities.length > 0 && (
+                    <span className={`text-[10px] ${theme === 'dark' ? 'text-slate-500' : 'text-slate-400'}`}>
+                      Drag a card onto a day to move it there
+                    </span>
+                  )}
                 </div>
                 <div
                   ref={dayBarRef}
@@ -202,8 +316,16 @@ export default function ItineraryDrawer({
                         key={day}
                         type="button"
                         onClick={() => setSelectedDay(day)}
+                        onDragOver={(e) => e.preventDefault()}
+                        onDrop={() => {
+                          if (dragIndex === null || day === selectedDay) return
+                          const moving = dayActivities[dragIndex]
+                          if (moving) onMoveActivity?.(moving.id, selectedDay, day)
+                          setDragIndex(null)
+                          setDragOverIndex(null)
+                        }}
                         aria-pressed={active}
-                        className={`flex min-w-[84px] snap-start flex-col items-center rounded-xl border px-3 py-2.5 transition-all ${
+                        className={`relative flex min-w-[84px] snap-start flex-col items-center rounded-xl border px-3 py-2.5 transition-all ${
                           active
                             ? "border-teal-500 bg-teal-500 text-white shadow-lg shadow-teal-500/25"
                             : theme === 'dark'
@@ -211,6 +333,23 @@ export default function ItineraryDrawer({
                               : "border-slate-200 bg-white text-slate-600 hover:border-teal-400"
                         }`}
                       >
+                        {fixedDays.length > 1 && (
+                          <span
+                            role="button"
+                            tabIndex={0}
+                            onClick={(e) => { e.stopPropagation(); handleRemoveDay(day) }}
+                            aria-label={`Remove Day ${day}`}
+                            className={`absolute -top-1.5 -right-1.5 grid h-4 w-4 place-items-center rounded-full border text-[9px] leading-none ${
+                              active
+                                ? "bg-white text-teal-600 border-white"
+                                : theme === 'dark'
+                                  ? "bg-slate-700 text-slate-300 border-slate-600"
+                                  : "bg-white text-slate-500 border-slate-300"
+                            }`}
+                          >
+                            ×
+                          </span>
+                        )}
                         <span className="text-xs font-medium opacity-80">Day</span>
                         <span className="text-lg font-bold leading-tight">{day}</span>
                         <span className={`text-[10px] ${active ? "text-white/80" : "text-slate-400"}`}>
@@ -219,14 +358,119 @@ export default function ItineraryDrawer({
                       </button>
                     )
                   })}
+                  <button
+                    type="button"
+                    onClick={onAddDay}
+                    disabled={fixedDays.length >= 30}
+                    aria-label="Add day"
+                    className={`flex min-w-[56px] snap-start flex-col items-center justify-center gap-1 rounded-xl border border-dashed px-3 py-2.5 transition-all disabled:opacity-40 ${
+                      theme === 'dark'
+                        ? "border-slate-700 text-slate-400 hover:border-teal-400 hover:text-teal-400"
+                        : "border-slate-300 text-slate-400 hover:border-teal-400 hover:text-teal-500"
+                    }`}
+                  >
+                    <Plus className="h-4 w-4" />
+                    <span className="text-[10px] font-semibold">Add day</span>
+                  </button>
                 </div>
               </div>
 
               {/* Activities */}
               <div className="flex flex-col gap-2">
-                <h3 className={`text-sm font-semibold ${
-                  theme === 'dark' ? 'text-slate-200' : 'text-slate-700'
-                }`}>Day {selectedDay} activities</h3>
+                <div className="flex items-center justify-between">
+                  <h3 className={`text-sm font-semibold ${
+                    theme === 'dark' ? 'text-slate-200' : 'text-slate-700'
+                  }`}>Day {selectedDay} activities</h3>
+                  <div className="flex items-center gap-2">
+                    {dayActivities.length > 0 && (
+                      <span className={`text-xs font-bold ${
+                        theme === 'dark' ? 'text-teal-400' : 'text-teal-600'
+                      }`}>{currency(dayBudget)}</span>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => setShowAddForm(v => !v)}
+                      className={`inline-flex items-center gap-1 rounded-lg px-2 py-1 text-[11px] font-bold transition-colors ${
+                        theme === 'dark' ? 'bg-teal-500/15 text-teal-400 hover:bg-teal-500/25' : 'bg-teal-500/10 text-teal-600 hover:bg-teal-500/20'
+                      }`}
+                    >
+                      <Plus className="h-3 w-3" /> Add
+                    </button>
+                  </div>
+                </div>
+
+                {showAddForm && (
+                  <form
+                    onSubmit={handleSubmitAddActivity}
+                    className={`flex flex-col gap-2 rounded-xl border p-3 ${
+                      theme === 'dark' ? 'border-slate-700 bg-slate-800/60' : 'border-slate-200 bg-slate-50'
+                    }`}
+                  >
+                    <input
+                      type="text"
+                      placeholder="Activity title"
+                      value={newActivity.title}
+                      onChange={(e) => setNewActivity(v => ({ ...v, title: e.target.value }))}
+                      autoFocus
+                      className={`w-full rounded-lg border px-2.5 py-2 text-xs outline-none ${
+                        theme === 'dark' ? 'bg-slate-900 border-slate-700 text-slate-100' : 'bg-white border-slate-200 text-slate-900'
+                      }`}
+                    />
+                    <div className="flex gap-2">
+                      <select
+                        value={newActivity.category}
+                        onChange={(e) => setNewActivity(v => ({ ...v, category: e.target.value }))}
+                        className={`flex-1 rounded-lg border px-2 py-2 text-xs outline-none ${
+                          theme === 'dark' ? 'bg-slate-900 border-slate-700 text-slate-100' : 'bg-white border-slate-200 text-slate-900'
+                        }`}
+                      >
+                        {ACTIVITY_CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
+                      </select>
+                      <input
+                        type="number"
+                        min="0"
+                        placeholder="Cost (₹)"
+                        value={newActivity.cost}
+                        onChange={(e) => setNewActivity(v => ({ ...v, cost: e.target.value }))}
+                        className={`w-24 rounded-lg border px-2 py-2 text-xs outline-none ${
+                          theme === 'dark' ? 'bg-slate-900 border-slate-700 text-slate-100' : 'bg-white border-slate-200 text-slate-900'
+                        }`}
+                      />
+                    </div>
+                    <input
+                      type="text"
+                      placeholder="Location (optional)"
+                      value={newActivity.location}
+                      onChange={(e) => setNewActivity(v => ({ ...v, location: e.target.value }))}
+                      className={`w-full rounded-lg border px-2.5 py-2 text-xs outline-none ${
+                        theme === 'dark' ? 'bg-slate-900 border-slate-700 text-slate-100' : 'bg-white border-slate-200 text-slate-900'
+                      }`}
+                    />
+                    <div className="flex gap-2">
+                      <button
+                        type="submit"
+                        className="flex-1 rounded-lg bg-teal-500 px-3 py-2 text-xs font-bold text-white hover:bg-teal-600 transition-colors"
+                      >
+                        Add activity
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setShowAddForm(false)}
+                        className={`rounded-lg px-3 py-2 text-xs font-semibold ${
+                          theme === 'dark' ? 'text-slate-300 hover:bg-slate-800' : 'text-slate-600 hover:bg-slate-200'
+                        }`}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </form>
+                )}
+
+                {dayActivities.length > 1 && (
+                  <p className={`-mt-1 text-[11px] ${theme === 'dark' ? 'text-slate-500' : 'text-slate-400'}`}>
+                    Drag <GripVertical className="inline h-3 w-3 -mt-0.5" aria-hidden="true" /> to reorder
+                  </p>
+                )}
                 {dayActivities.length === 0 ? (
                   <div className={`flex flex-col items-center gap-3 rounded-2xl border border-dashed py-10 text-center ${
                     theme === 'dark' ? 'border-slate-700' : 'border-slate-300'
@@ -247,15 +491,25 @@ export default function ItineraryDrawer({
                   </div>
                 ) : (
                   <ul className="flex flex-col gap-2">
-                    {dayActivities.map((a) => (
+                    {dayActivities.map((a, index) => (
                       <li
                         key={a.id}
-                        className={`group flex items-start gap-3 rounded-xl border p-3 shadow-sm transition-colors hover:border-slate-300 ${
-                          theme === 'dark'
-                            ? 'border-slate-800 bg-slate-800/50 hover:border-slate-700'
-                            : 'border-slate-200 bg-white hover:border-slate-300'
-                        }`}
+                        draggable
+                        onDragStart={() => handleDragStart(index)}
+                        onDragOver={(e) => handleDragOver(e, index)}
+                        onDrop={() => handleDrop(index)}
+                        onDragEnd={handleDragEnd}
+                        className={`group flex items-start gap-2 rounded-xl border p-3 shadow-sm transition-colors cursor-grab active:cursor-grabbing ${
+                          dragOverIndex === index && dragIndex !== null && dragIndex !== index
+                            ? 'border-teal-500 ring-1 ring-teal-500'
+                            : theme === 'dark'
+                              ? 'border-slate-800 bg-slate-800/50 hover:border-slate-700'
+                              : 'border-slate-200 bg-white hover:border-slate-300'
+                        } ${dragIndex === index ? 'opacity-50' : ''}`}
                       >
+                        <span className={`mt-0.5 shrink-0 ${theme === 'dark' ? 'text-slate-600' : 'text-slate-300'}`} aria-hidden="true">
+                          <GripVertical className="h-4 w-4" />
+                        </span>
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center gap-2">
                             <p className={`truncate text-sm font-semibold ${
@@ -275,11 +529,68 @@ export default function ItineraryDrawer({
                             <MapPin className="h-3 w-3" aria-hidden="true" />
                             <span className="truncate">{a.location}</span>
                           </p>
+                          <div className="mt-1.5 flex items-center gap-2">
+                            {fixedDays.length > 1 && (
+                              <select
+                                value=""
+                                onChange={(e) => {
+                                  const toDay = Number(e.target.value)
+                                  if (toDay) onMoveActivity?.(a.id, selectedDay, toDay)
+                                }}
+                                aria-label={`Move ${a.title} to another day`}
+                                className={`rounded-md border px-1.5 py-1 text-[10px] font-semibold outline-none ${
+                                  theme === 'dark' ? 'bg-slate-900 border-slate-700 text-slate-300' : 'bg-white border-slate-200 text-slate-500'
+                                }`}
+                              >
+                                <option value="" disabled>Move to day...</option>
+                                {fixedDays.filter(d => d !== selectedDay).map(d => (
+                                  <option key={d} value={d}>Day {d}</option>
+                                ))}
+                              </select>
+                            )}
+                          </div>
                         </div>
-                        <div className="flex flex-col items-end gap-1">
-                          <span className={`text-sm font-bold ${
-                            theme === 'dark' ? 'text-slate-100' : 'text-slate-900'
-                          }`}>{currency(a.cost)}</span>
+                        <div className="flex flex-col items-end gap-1.5">
+                          <button
+                            type="button"
+                            onClick={() => onDeleteActivity?.(selectedDay, a.id)}
+                            aria-label={`Delete ${a.title}`}
+                            className={`rounded-md p-1 transition-colors ${
+                              theme === 'dark' ? 'text-slate-500 hover:bg-rose-500/15 hover:text-rose-400' : 'text-slate-400 hover:bg-rose-500/10 hover:text-rose-500'
+                            }`}
+                          >
+                            <Trash2 className="h-3.5 w-3.5" />
+                          </button>
+                          {editingCostId === a.id ? (
+                            <input
+                              type="number"
+                              min="0"
+                              autoFocus
+                              defaultValue={a.cost}
+                              onBlur={(e) => {
+                                onEditActivityCost?.(selectedDay, a.id, Number(e.target.value) || 0)
+                                setEditingCostId(null)
+                              }}
+                              onKeyDown={(e) => {
+                                if (e.key === "Enter") e.currentTarget.blur()
+                                if (e.key === "Escape") setEditingCostId(null)
+                              }}
+                              className={`w-20 rounded-md border px-1.5 py-1 text-right text-xs font-bold outline-none ${
+                                theme === 'dark' ? 'bg-slate-900 border-teal-500 text-slate-100' : 'bg-white border-teal-500 text-slate-900'
+                              }`}
+                            />
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={() => setEditingCostId(a.id)}
+                              title="Click to edit cost"
+                              className={`text-sm font-bold underline decoration-dotted underline-offset-2 ${
+                                theme === 'dark' ? 'text-slate-100' : 'text-slate-900'
+                              }`}
+                            >
+                              {currency(a.cost)}
+                            </button>
+                          )}
                         </div>
                       </li>
                     ))}
@@ -318,31 +629,82 @@ export default function ItineraryDrawer({
         </div>
 
         {/* Footer action bar */}
-        <footer className={`tn-no-print grid grid-cols-2 gap-2 border-t p-3 ${
+        <footer className={`tn-no-print flex flex-col gap-2 border-t p-3 ${
           theme === 'dark' ? 'border-slate-800' : 'border-slate-200'
         }`}>
           <button
             type="button"
-            onClick={() => window.print()}
-            className={`inline-flex items-center justify-center gap-1.5 rounded-xl border px-2 py-2.5 text-xs font-semibold transition-colors hover:bg-slate-100 ${
+            onClick={handleSavePDF}
+            disabled={pdfBusy || !activeDestination}
+            className={`inline-flex items-center justify-center gap-1.5 rounded-xl border px-2 py-2.5 text-xs font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
               theme === 'dark'
                 ? 'border-slate-700 text-slate-200 hover:bg-slate-800'
-                : 'border-slate-200 text-slate-700'
+                : 'border-slate-200 text-slate-700 hover:bg-slate-100'
             }`}
           >
-            <Printer className="h-4 w-4" aria-hidden="true" />
-            Save as PDF
+            {pdfBusy ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" /> : <FileDown className="h-4 w-4" aria-hidden="true" />}
+            {pdfBusy ? "Preparing PDF..." : "Save as PDF"}
           </button>
           <button
             type="button"
-            onClick={onExportJSON}
-            className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-indigo-600 px-2 py-2.5 text-xs font-semibold text-white transition-colors hover:bg-indigo-500"
+            onClick={handleReset}
+            disabled={!activeDestination}
+            className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-rose-500/30 bg-rose-500/10 px-2 py-2.5 text-xs font-semibold text-rose-600 dark:text-rose-400 transition-colors hover:bg-rose-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <FileJson className="h-4 w-4" aria-hidden="true" />
-            Export JSON
+            <RotateCcw className="h-4 w-4" aria-hidden="true" />
+            Reset itinerary
           </button>
         </footer>
       </aside>
+
+      {/* Offscreen printable template — rendered every time so it stays in
+          sync, captured by html2pdf only when "Save as PDF" is clicked */}
+      <div style={{ position: "fixed", top: 0, left: "-9999px", width: "700px" }} aria-hidden="true">
+        <div ref={printableRef} style={{ fontFamily: "Helvetica, Arial, sans-serif", background: "#ffffff", color: "#1e293b", padding: "36px" }}>
+          <div style={{ borderBottom: "3px solid #0f766e", paddingBottom: "16px", marginBottom: "20px" }}>
+            <p style={{ margin: 0, fontSize: "11px", letterSpacing: "2px", color: "#0f766e", fontWeight: "bold" }}>TRIPNEST ITINERARY</p>
+            <h1 style={{ margin: "4px 0 0", fontSize: "26px", color: "#0f172a" }}>
+              {activeDestination ? `${activeDestination.name}, ${activeDestination.country}` : "Your trip"}
+            </h1>
+            {activeDestination && (
+              <p style={{ margin: "6px 0 0", fontSize: "13px", color: "#64748b" }}>
+                {fixedDays.length}-day plan · Total estimated cost: {currency(totalBudget)}
+              </p>
+            )}
+          </div>
+
+          {fixedDays.map((day) => {
+            const items = activitiesByDay[day] || []
+            const dayTotal = items.reduce((sum, a) => sum + (a.cost || 0), 0)
+            return (
+              <div key={day} style={{ marginBottom: "22px", breakInside: "avoid" }}>
+                <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", background: "#ecfdf5", borderRadius: "8px", padding: "8px 14px", marginBottom: "8px" }}>
+                  <h2 style={{ margin: 0, fontSize: "15px", color: "#065f46" }}>Day {day}</h2>
+                  <span style={{ fontSize: "12px", fontWeight: "bold", color: "#0f766e" }}>{currency(dayTotal)}</span>
+                </div>
+                {items.length === 0 ? (
+                  <p style={{ fontSize: "12px", color: "#94a3b8", padding: "0 14px" }}>No activities planned for this day.</p>
+                ) : (
+                  items.map((a, idx) => (
+                    <div key={a.id} style={{ display: "flex", justifyContent: "space-between", gap: "12px", padding: "8px 14px", borderBottom: idx === items.length - 1 ? "none" : "1px solid #e2e8f0" }}>
+                      <div style={{ minWidth: 0 }}>
+                        <p style={{ margin: 0, fontSize: "13px", fontWeight: "bold", color: "#0f172a" }}>{a.title} <span style={{ fontWeight: "normal", color: "#0f766e", fontSize: "10px" }}>· {a.category}</span></p>
+                        <p style={{ margin: "2px 0 0", fontSize: "11px", color: "#64748b" }}>{a.location}</p>
+                      </div>
+                      <p style={{ margin: 0, fontSize: "13px", fontWeight: "bold", color: "#0f172a", whiteSpace: "nowrap" }}>{currency(a.cost)}</p>
+                    </div>
+                  ))
+                )}
+              </div>
+            )
+          })}
+
+          <div style={{ marginTop: "24px", borderTop: "2px solid #0f766e", paddingTop: "12px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <p style={{ margin: 0, fontSize: "12px", color: "#64748b" }}>Generated with TripNest — plans subject to change</p>
+            <p style={{ margin: 0, fontSize: "16px", fontWeight: "bold", color: "#0f172a" }}>Total: {currency(totalBudget)}</p>
+          </div>
+        </div>
+      </div>
     </>
   )
 }

@@ -48,6 +48,11 @@ export default function App() {
   const [activitiesByDay, setActivitiesByDay] = useState(() => {
     return JSON.parse(localStorage.getItem("tripnest_activities") || "{}");
   });
+  // Number of days in the active itinerary — separate from a destination's
+  // suggestedDays so the traveler can add/remove days freely.
+  const [dayCount, setDayCount] = useState(() => {
+    return Number(localStorage.getItem("tripnest_daycount")) || 0;
+  });
 
   // Sync state to LocalStorage
   useEffect(() => {
@@ -57,6 +62,10 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem("tripnest_activities", JSON.stringify(activitiesByDay));
   }, [activitiesByDay]);
+
+  useEffect(() => {
+    localStorage.setItem("tripnest_daycount", String(dayCount));
+  }, [dayCount]);
 
   const toggleTheme = () => setTheme(prev => prev === "light" ? "dark" : "light");
 
@@ -101,6 +110,7 @@ export default function App() {
   // day-by-day plan no matter which flow produced it.
   const applyGeneratedTrip = (trip) => {
     setActiveDestination(trip.destination);
+    setDayCount(trip.dayWiseItinerary.length || trip.destination.suggestedDays || 1);
 
     const byDay = {};
     trip.dayWiseItinerary.forEach(({ day, slots }) => {
@@ -131,6 +141,7 @@ export default function App() {
     } catch (err) {
       console.error(err);
       // Fall back to a minimal single entry so the drawer is never empty
+      setDayCount(1);
       setActivitiesByDay(prev => ({
         ...prev,
         1: [{
@@ -176,27 +187,70 @@ export default function App() {
     });
   };
 
-  const handleExportJSON = () => {
-    const data = {
-      activeDestination,
-      activitiesByDay,
-      favorites,
-      compared
-    };
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'tripnest_itinerary.json';
-    a.click();
-    URL.revokeObjectURL(url);
+  const handleReorderDay = (day, newList) => {
+    setActivitiesByDay(prev => ({ ...prev, [day]: newList }));
+  };
+
+  const handleAddDay = () => {
+    setDayCount(prev => Math.min(30, (prev || 0) + 1));
+  };
+
+  const handleRemoveDay = (day) => {
+    setDayCount(prev => Math.max(1, (prev || 1) - 1));
+    setActivitiesByDay(prev => {
+      const next = {};
+      Object.keys(prev).map(Number).sort((a, b) => a - b).forEach((d) => {
+        if (d === day) return; // drop this day
+        next[d > day ? d - 1 : d] = prev[d]; // shift later days down by one
+      });
+      return next;
+    });
+  };
+
+  const handleAddActivity = (day, activity) => {
+    setActivitiesByDay(prev => ({
+      ...prev,
+      [day]: [...(prev[day] || []), { id: `custom-${Date.now()}`, ...activity }]
+    }));
+  };
+
+  const handleDeleteActivity = (day, activityId) => {
+    setActivitiesByDay(prev => ({
+      ...prev,
+      [day]: (prev[day] || []).filter(a => a.id !== activityId)
+    }));
+  };
+
+  const handleEditActivityCost = (day, activityId, newCost) => {
+    setActivitiesByDay(prev => ({
+      ...prev,
+      [day]: (prev[day] || []).map(a => a.id === activityId ? { ...a, cost: newCost } : a)
+    }));
+  };
+
+  const handleMoveActivity = (activityId, fromDay, toDay) => {
+    if (fromDay === toDay) return;
+    setActivitiesByDay(prev => {
+      const fromList = prev[fromDay] || [];
+      const moving = fromList.find(a => a.id === activityId);
+      if (!moving) return prev;
+      return {
+        ...prev,
+        [fromDay]: fromList.filter(a => a.id !== activityId),
+        [toDay]: [...(prev[toDay] || []), moving],
+      };
+    });
+  };
+
+  const handleResetItinerary = () => {
+    setActivitiesByDay({});
+    setActiveDestination(null);
+    setDayCount(0);
+    localStorage.removeItem("tripnest_activities");
+    localStorage.removeItem("tripnest_daycount");
   };
 
   const totalBudget = Object.values(activitiesByDay).flat().reduce((sum, activity) => sum + (activity.cost || 0), 0);
-
-  const handleExportPDF = () => {
-    window.print();
-  };
 
   return (
     <div className={`min-h-screen ${theme === 'dark' ? 'bg-slate-950 text-white' : 'bg-slate-50 text-slate-900'} transition-colors duration-300 font-sans`}>
@@ -209,7 +263,7 @@ export default function App() {
               <MapPin className="h-5 w-5" />
             </span>
             <span className="text-2xl font-black tracking-tight">
-              Trip<span className="text-sky-500">Nest</span>
+              <span className="text-emerald-500">Trip</span><span className="text-sky-500">Nest</span>
             </span>
           </a>
 
@@ -232,7 +286,7 @@ export default function App() {
 
           <button
             onClick={() => setAiPlannerOpen(true)}
-            className="p-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-gradient-to-r from-sky-500 to-indigo-500 text-white hover:scale-105 transition-transform flex items-center gap-2 px-4"
+            className="p-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-gradient-to-r from-emerald-500 to-teal-500 text-white hover:scale-105 transition-transform flex items-center gap-2 px-4"
           >
             <Bot className="h-5 w-5" />
             <span className="hidden sm:inline font-semibold text-black">Companion</span>
@@ -464,12 +518,19 @@ export default function App() {
         onToggleTheme={toggleTheme}
         activeDestination={activeDestination}
         activitiesByDay={activitiesByDay}
+        dayCount={dayCount}
         totalBudget={totalBudget}
         loading={itineraryLoading}
         packingItems={[]}
         onTogglePacking={() => {}}
-        onExportJSON={handleExportJSON}
-        onExportPDF={() => window.print()}
+        onReorderDay={handleReorderDay}
+        onAddDay={handleAddDay}
+        onRemoveDay={handleRemoveDay}
+        onAddActivity={handleAddActivity}
+        onDeleteActivity={handleDeleteActivity}
+        onEditActivityCost={handleEditActivityCost}
+        onMoveActivity={handleMoveActivity}
+        onResetItinerary={handleResetItinerary}
       />
 
     </div>

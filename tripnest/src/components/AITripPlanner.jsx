@@ -162,8 +162,8 @@ export default function AITripPlanner({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
       <div className={`relative w-full max-w-4xl border rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh] ${panelClasses}`}>
         {/* Header */}
-        <div className="flex items-center gap-3 p-5 border-b border-slate-200 dark:border-slate-800 bg-gradient-to-r from-sky-500/10 to-indigo-500/10">
-          <span className="p-2.5 bg-gradient-to-tr from-sky-500 to-indigo-500 text-white rounded-xl shadow-md">
+        <div className="flex items-center gap-3 p-5 border-b border-slate-200 dark:border-slate-800 bg-gradient-to-r from-emerald-500/10 to-teal-500/10">
+          <span className="p-2.5 bg-gradient-to-tr from-emerald-500 to-teal-500 text-white rounded-xl shadow-md">
             <Bot className="h-5 w-5" />
           </span>
           <div className="flex-1 min-w-0">
@@ -248,7 +248,7 @@ export default function AITripPlanner({
               <button
                 type="button"
                 onClick={handleGenerate}
-                className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-sky-500 to-indigo-500 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-sky-500/25 hover:from-sky-600 hover:to-indigo-600 transition-all"
+                className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/25 hover:from-emerald-600 hover:to-teal-600 transition-all"
               >
                 <Sparkles className="h-4 w-4" />
                 Generate My Trip
@@ -258,7 +258,7 @@ export default function AITripPlanner({
 
           {step === "loading" && (
             <div className="flex flex-col items-center justify-center gap-4 py-24 text-center">
-              <Loader2 className="h-10 w-10 text-sky-500 animate-spin" />
+              <Loader2 className="h-10 w-10 text-emerald-500 animate-spin" />
               <p className={`text-sm font-semibold ${bodyText}`}>{LOADING_MESSAGES[loadingMsgIndex]}</p>
               <p className={`text-xs ${mutedText}`}>Your AI Trip Companion is working on it</p>
             </div>
