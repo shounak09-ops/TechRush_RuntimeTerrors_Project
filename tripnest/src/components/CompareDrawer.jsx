@@ -1,4 +1,5 @@
 import React from "react";
+//import{totalBudget, } from "ItineraryDrawer"
 import { X, MapPin, DollarSign, Calendar, Sparkles, CheckCircle2 } from "lucide-react";
 
 export default function CompareDrawer({ comparedItems, onRemoveCompare, onClearAll, theme, onChooseDestination, onClose }) {
@@ -106,7 +107,7 @@ export default function CompareDrawer({ comparedItems, onRemoveCompare, onClearA
                 <div className="flex items-center gap-2 mb-4">
                   <DollarSign className={`h-4 w-4 ${theme === 'dark' ? 'text-slate-400' : 'text-slate-500'}`} />
                   <span className={`text-sm ${theme === 'dark' ? 'text-slate-300' : 'text-slate-600'}`}>
-                    Budget: <span className="font-bold text-emerald-500">{item.budget}</span>
+                    Budget: <span className="font-bold text-emerald-500">{item.totalBudget}₹</span>
                   </span>
                 </div>
 

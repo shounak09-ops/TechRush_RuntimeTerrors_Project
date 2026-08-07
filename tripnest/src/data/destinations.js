@@ -9,6 +9,7 @@ export const DESTINATIONS = [
     lat: 48.8566,
     lon: 2.3522,
     temp: "18°C",
+    totalBudget: "32,121",
     bestTime: "Apr - Oct",
     image: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=1200&q=80",
     images: [
@@ -36,6 +37,7 @@ export const DESTINATIONS = [
     lat: 35.6762,
     lon: 139.6503,
     temp: "22°C",
+    totalBudget: "90,802",
     bestTime: "Mar - May, Sep - Nov",
     image: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=1200&q=80",
     images: [
@@ -63,6 +65,7 @@ export const DESTINATIONS = [
     lat: -8.3405,
     lon: 115.092,
     temp: "29°C",
+    totalBudget: "44,571",
     bestTime: "Apr - Oct",
     image: "https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1200&q=80",
     images: [
@@ -90,6 +93,7 @@ export const DESTINATIONS = [
     lat: 41.9028,
     lon: 12.4964,
     temp: "24°C",
+    totalBudget: "25,896",
     bestTime: "Apr - Jun, Sep - Oct",
     image: "https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=1200&q=80",
     images: [
@@ -117,6 +121,7 @@ export const DESTINATIONS = [
     lat: 46.6863,
     lon: 7.8632,
     temp: "12°C",
+    totalBudget: "76,028",
     bestTime: "Dec - Mar (Ski) / Jun - Sep (Hike)",
     image: "https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?auto=format&fit=crop&w=1200&q=80",
     images: [
@@ -144,6 +149,7 @@ export const DESTINATIONS = [
     lat: 25.2048,
     lon: 55.2708,
     temp: "33°C",
+    totalBudget: "61,254",
     bestTime: "Nov - Mar",
     image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1200&q=80",
     images: [
@@ -171,6 +177,7 @@ export const DESTINATIONS = [
     lat: 40.7128,
     lon: -74.006,
     temp: "20°C",
+    totalBudget: "76,028",
     bestTime: "Apr - Jun, Sep - Nov",
     image: "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format&fit=crop&w=1200&q=80",
     images: [
@@ -198,6 +205,7 @@ export const DESTINATIONS = [
     lat: 1.3521,
     lon: 103.8198,
     temp: "30°C",
+    totalBudget: "61,254",
     bestTime: "Year-round",
     image: "https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&w=1200&q=80",
     images: [
@@ -225,6 +233,7 @@ export const DESTINATIONS = [
     lat: 36.3932,
     lon: 25.4615,
     temp: "25°C",
+    totalBudget: "46,480",
     bestTime: "Late Apr - Oct",
     image: "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format&fit=crop&w=1200&q=80",
     images: [
@@ -252,6 +261,7 @@ export const DESTINATIONS = [
     lat: 30.0444,
     lon: 31.2357,
     temp: "27°C",
+    totalBudget: "25,896",
     bestTime: "Oct - Apr",
     image: "https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?auto=format&fit=crop&w=1200&q=80",
     images: [
@@ -279,6 +289,7 @@ export const DESTINATIONS = [
     lat: -33.8688,
     lon: 151.2093,
     temp: "23°C",
+    totalBudget: "76,028",
     bestTime: "Sep - Nov, Feb - Apr",
     image: "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?auto=format&fit=crop&w=1200&q=80",
     images: [
@@ -306,6 +317,7 @@ export const DESTINATIONS = [
     lat: -45.0312,
     lon: 168.6626,
     temp: "15°C",
+    totalBudget: "76,028",
     bestTime: "Dec - Feb (Summer) / Jun - Aug (Ski)",
     image: "https://images.unsplash.com/photo-1589802829985-817e51171b92?auto=format&fit=crop&w=1200&q=80",
     images: [
@@ -336,6 +348,7 @@ export const DESTINATIONS = [
     lat: 34.1526,
     lon: 77.5771,
     temp: "10°C",
+    totalBudget: "44,571",
     bestTime: "May - Sep",
     image: "https://images.unsplash.com/photo-1581793745862-99fde7fa73d2?auto=format&fit=crop&w=1200&q=80",
     images: [
@@ -364,6 +377,7 @@ export const DESTINATIONS = [
     lat: 9.4981,
     lon: 76.3388,
     temp: "26°C",
+    totalBudget: "76,028",
     bestTime: "Sep - Mar",
     image: "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=1200&q=80",
     images: [
@@ -391,6 +405,7 @@ export const DESTINATIONS = [
     lat: 26.5775,
     lon: 93.1711,
     temp: "24°C",
+    totalBudget: "19,671",
     bestTime: "Nov - Apr",
     image: "https://images.unsplash.com/photo-1675296098308-f9f526c6b724?auto=format&fit=crop&w=800&q=80",
     images: [
@@ -418,6 +433,7 @@ export const DESTINATIONS = [
     lat: 29.5300,
     lon: 78.7747,
     temp: "22°C",
+    totalBudget: "19,671",
     bestTime: "Nov - Jun",
     image: "https://images.unsplash.com/photo-1669021820355-7186908380d9?auto=format&fit=crop&w=800&q=80",
     images: [
@@ -445,6 +461,7 @@ export const DESTINATIONS = [
     lat: 21.1243,
     lon: 70.8242,
     temp: "28°C",
+    totalBudget: "13,446",
     bestTime: "Dec - Mar",
     image: "https://images.unsplash.com/photo-1634046808105-ce0ec912691e?auto=format&fit=crop&w=800&q=80",
     images: [
@@ -472,6 +489,7 @@ export const DESTINATIONS = [
     lat: 11.9261,
     lon: 76.2711,
     temp: "25°C",
+    totalBudget: "19,671",
     bestTime: "Oct - May",
     image: "https://images.unsplash.com/photo-1713373291884-f1215718cd89?auto=format&fit=crop&w=800&q=80",
     images: [
@@ -499,6 +517,7 @@ export const DESTINATIONS = [
     lat: 12.6269,
     lon: 80.1927,
     temp: "29°C",
+    totalBudget: "6,723",
     bestTime: "Nov - Feb",
     image: "https://images.unsplash.com/photo-1640715751438-7120b3019712?auto=format&fit=crop&w=800&q=80",
     images: [
@@ -525,6 +544,7 @@ export const DESTINATIONS = [
     lat: 32.2227,
     lon: 77.3639,
     temp: "12°C",
+    totalBudget: "15,936",
     bestTime: "Jun - Sep",
     image: "https://images.unsplash.com/photo-1656833111546-07d98abab448?auto=format&fit=crop&w=800&q=80",
     images: [
@@ -551,6 +571,7 @@ export const DESTINATIONS = [
     lat: 27.5330,
     lon: 88.5122,
     temp: "15°C",
+    totalBudget: "44,571",
     bestTime: "Mar - May, Oct - Dec",
     image: "https://images.unsplash.com/photo-1573398643956-2b9e6ade3456?auto=format&fit=crop&w=800&q=80",
     images: [
@@ -577,6 +598,7 @@ export const DESTINATIONS = [
     lat: 19.8135,
     lon: 85.8312,
     temp: "27°C",
+    totalBudget: "9,794",
     bestTime: "Oct - Feb",
     image: "https://images.unsplash.com/photo-1706790574525-d218c4c52b5c?auto=format&fit=crop&w=800&q=80",
     images: [
@@ -603,6 +625,7 @@ export const DESTINATIONS = [
     lat: 22.2587,
     lon: 71.1924,
     temp: "26°C",
+    totalBudget: "19,007",
     bestTime: "Nov - Feb",
     image: "https://images.unsplash.com/photo-1642841819300-20ed449c02a1?auto=format&fit=crop&w=800&q=80",
     images: [
@@ -629,6 +652,7 @@ export const DESTINATIONS = [
     lat: 23.7337,
     lon: 69.8597,
     temp: "20°C",
+    totalBudget: "19,671",
     bestTime: "Nov - Feb",
     image: "https://images.unsplash.com/photo-1628265512314-a9464859fe0c?auto=format&fit=crop&w=800&q=80",
     images: [
@@ -655,6 +679,7 @@ export const DESTINATIONS = [
     lat: 55.7558,
     lon: 37.6173,
     temp: "8°C",
+    totalBudget: "25,896",
     bestTime: "May - Sep",
     image: "https://images.unsplash.com/photo-1520106212299-d99c443e4568?auto=format&fit=crop&w=1200&q=80",
     images: [
@@ -681,6 +706,7 @@ export const DESTINATIONS = [
     lat: -1.4061,
     lon: 35.0085,
     temp: "25°C",
+    totalBudget: "61,254",
     bestTime: "Jul - Oct",
     image: "https://images.unsplash.com/photo-1623951578056-5082d34a9859?auto=format&fit=crop&w=800&q=80",
     images: [
@@ -709,6 +735,7 @@ export const DESTINATIONS = [
     lat: 26.9124,
     lon: 75.7873,
     temp: "28°C",
+    totalBudget: "19,671",
     bestTime: "Oct - Mar",
     image: "https://images.unsplash.com/photo-1477587458883-47145ed94245?auto=format&fit=crop&w=1200&q=80",
     images: [
@@ -737,6 +764,7 @@ export const DESTINATIONS = [
     lat: 15.2993,
     lon: 74.124,
     temp: "31°C",
+    totalBudget: "25,896",
     bestTime: "Nov - Feb",
     image:"https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=800&q=80",
     images: [
@@ -765,6 +793,7 @@ export const DESTINATIONS = [
     lat: 25.3176,
     lon: 82.9739,
     temp: "25°C",
+    totalBudget: "9,794",
     bestTime: "Oct - Mar",
     image: "https://images.unsplash.com/photo-1627938823193-fd13c1c867dd?auto=format&fit=crop&w=800&q=80",
     images: [
@@ -793,6 +822,7 @@ export const DESTINATIONS = [
     lat: 27.1751,
     lon: 78.0421,
     temp: "27°C",
+    totalBudget: "13,446",
     bestTime: "Oct - Mar",
     image: "https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=1200&q=80",
     images: [
@@ -821,6 +851,7 @@ export const DESTINATIONS = [
     lat: 34.0837,
     lon: 74.7973,
     temp: "14°C",
+    totalBudget: "32,121",
     bestTime: "Apr - Oct (Greenery) / Dec - Feb (Snow)",
     image: "https://images.unsplash.com/photo-1598091383021-15ddea10925d?auto=format&fit=crop&w=800&q=80",
     images: [
@@ -849,6 +880,7 @@ export const DESTINATIONS = [
     lat: 11.7401,
     lon: 92.6586,
     temp: "29°C",
+    totalBudget: "90,802",
     bestTime: "Oct - May",
     image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1200&q=80",
     images: [
@@ -877,6 +909,7 @@ export const DESTINATIONS = [
     lat: 25.5788,
     lon: 91.8933,
     temp: "19°C",
+    totalBudget: "15,936",
     bestTime: "Oct - Apr",
     image: "https://images.unsplash.com/photo-1698429358246-807d8972da9a?auto=format&fit=crop&w=800&q=80",
     images: [
@@ -905,6 +938,7 @@ export const DESTINATIONS = [
     lat: 15.335,
     lon: 76.46,
     temp: "29°C",
+    totalBudget: "9,794",
     bestTime: "Nov - Feb",
     image: "https://images.unsplash.com/photo-1722934804353-0d9f6a55ab5e?auto=format&fit=crop&w=800&q=80",
     images: [
@@ -933,6 +967,7 @@ export const DESTINATIONS = [
     lat: 27.041,
     lon: 88.2663,
     temp: "15°C",
+    totalBudget: "9,794",
     bestTime: "Oct - Dec, Mar - May",
     image: "https://images.unsplash.com/photo-1622308644420-b20142dc993c?auto=format&fit=crop&w=800&q=80",
     images: [
@@ -961,6 +996,7 @@ export const DESTINATIONS = [
     lat: 30.0869,
     lon: 78.2676,
     temp: "22°C",
+    totalBudget: "9,794",
     bestTime: "Sep - Nov, Feb - May",
     image: "https://images.unsplash.com/photo-1650341259809-9314b0de9268?auto=format&fit=crop&w=800&q=80",
     images: [

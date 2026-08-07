@@ -83,6 +83,7 @@ export default function AITripPlanner({
   onClose,
   theme,
   onAddToItinerary,
+  onBookNow,
   onLockTrip,
   favorites,
   onToggleFavorite,
@@ -280,6 +281,7 @@ export default function AITripPlanner({
               onToggleCompare={onToggleCompare}
               onOpenDetails={onOpenDetails}
               onAddToItinerary={onAddToItinerary}
+              onBookNow={onBookNow}
             />
           )}
         </div>
@@ -327,6 +329,7 @@ function ResultView({
   onToggleCompare,
   onOpenDetails,
   onAddToItinerary,
+  onBookNow,
 }) {
   const { destination: dest } = trip
   const mutedText = theme === "dark" ? "text-slate-400" : "text-slate-500"
@@ -509,6 +512,7 @@ function ResultView({
                 key={alt.id}
                 dest={alt}
                 onAddToItinerary={onAddToItinerary}
+                onBookNow={onBookNow}
                 isFavorite={favorites.includes(alt.id)}
                 onToggleFavorite={onToggleFavorite}
                 isCompared={compared.includes(alt.id)}

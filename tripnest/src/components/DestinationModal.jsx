@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { 
   X, MapPin, Thermometer, Calendar, Heart, Plus, Sparkles, 
-  CheckCircle2, Clock, Lightbulb, Package 
+  CheckCircle2, Clock, Lightbulb, Package, Ticket 
 } from "lucide-react";
 
 export default function DestinationModal({
   dest,
   onClose,
   onAddToItinerary,
+  onBookNow,
   isFavorite,
   onToggleFavorite
 }) {
@@ -201,7 +202,7 @@ export default function DestinationModal({
           </div>
 
           {/* Bottom Actions */}
-          <div className="p-4 sm:p-6 bg-slate-50 dark:bg-slate-900/50 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-4">
+          <div className="p-4 sm:p-6 bg-slate-50 dark:bg-slate-900/50 border-t border-slate-100 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3">
             <button
               onClick={() => onToggleFavorite(dest.id)}
               className={`px-4 py-2.5 rounded-2xl font-bold text-xs flex items-center gap-2 transition-colors ${
@@ -214,16 +215,29 @@ export default function DestinationModal({
               {isFavorite ? "Saved" : "Favorite"}
             </button>
 
-            <button
-              onClick={() => {
-                onAddToItinerary(dest);
-                onClose();
-              }}
-              className="px-5 py-2.5 rounded-2xl bg-sky-500 hover:bg-sky-600 text-white font-bold text-xs flex items-center gap-2 shadow-md transition-colors"
-            >
-              <Plus className="h-4 w-4" />
-              Add to Itinerary
-            </button>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => {
+                  onAddToItinerary(dest);
+                  onClose();
+                }}
+                className="px-5 py-2.5 rounded-2xl bg-sky-500 hover:bg-sky-600 text-white font-bold text-xs flex items-center gap-2 shadow-md transition-colors"
+              >
+                <Plus className="h-4 w-4" />
+                Add to Itinerary
+              </button>
+
+              <button
+                onClick={() => {
+                  onBookNow(dest);
+                  onClose();
+                }}
+                className="px-5 py-2.5 rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs flex items-center gap-2 shadow-md transition-colors"
+              >
+                <Ticket className="h-4 w-4" />
+                Book Now
+              </button>
+            </div>
           </div>
 
         </div>
