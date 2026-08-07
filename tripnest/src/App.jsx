@@ -4,17 +4,16 @@ import DestinationModal from "./components/DestinationModal";
 import CompareDrawer from "./components/CompareDrawer";
 import ItineraryDrawer from "./components/ItineraryDrawer";
 import MapView from "./components/MapView";
-import BookingModal from "./components/BookingModal";
-import BookingsDrawer from "./components/BookingsDrawer";
+import AITripPlanner from "./components/AITripPlanner";
 import { DESTINATIONS } from "./data/destinations";
+import { planItineraryForDestination } from "./services/aiService";
 import { 
   MapPin, Search, Moon, Sun, Compass, 
-  Filter, Globe, Heart, Bot, Ticket, Menu, X
+  Filter, Globe, Heart, Bot, Luggage, Loader2
 } from "lucide-react";
 
 export default function App() {
   const [theme, setTheme] = useState("light");
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
   // Filter States
   const [scope, setScope] = useState("All"); 
@@ -34,23 +33,25 @@ export default function App() {
     return JSON.parse(localStorage.getItem("tripnest_favorites") || "[]");
   });
 
-  // Booking States
-  const [bookingDest, setBookingDest] = useState(null);
-  const [isBookingsOpen, setIsBookingsOpen] = useState(false);
-  const [bookings, setBookings] = useState(() => {
-    return JSON.parse(localStorage.getItem("tripnest_bookings") || "[]");
-  });
-
   const [compared, setCompared] = useState([]);
 
   // Active Destination State (Destination Lock System)
   const [activeDestination, setActiveDestination] = useState(null);
 
-  // Itinerary Drawer State
+  // Itinerary Drawer State ("My Itinerary" — separate from the AI Companion)
   const [itineraryDrawerOpen, setItineraryDrawerOpen] = useState(false);
+  const [itineraryLoading, setItineraryLoading] = useState(false);
+
+  // AI Trip Companion State
+  const [aiPlannerOpen, setAiPlannerOpen] = useState(false);
   const [isCompareOpen, setIsCompareOpen] = useState(false);
   const [activitiesByDay, setActivitiesByDay] = useState(() => {
     return JSON.parse(localStorage.getItem("tripnest_activities") || "{}");
+  });
+  // Number of days in the active itinerary — separate from a destination's
+  // suggestedDays so the traveler can add/remove days freely.
+  const [dayCount, setDayCount] = useState(() => {
+    return Number(localStorage.getItem("tripnest_daycount")) || 0;
   });
 
   // Sync state to LocalStorage
@@ -63,8 +64,8 @@ export default function App() {
   }, [activitiesByDay]);
 
   useEffect(() => {
-    localStorage.setItem("tripnest_bookings", JSON.stringify(bookings));
-  }, [bookings]);
+    localStorage.setItem("tripnest_daycount", String(dayCount));
+  }, [dayCount]);
 
   const toggleTheme = () => setTheme(prev => prev === "light" ? "dark" : "light");
 
@@ -72,10 +73,6 @@ export default function App() {
     setFavorites(prev => 
       prev.includes(id) ? prev.filter(favId => favId !== id) : [...prev, id]
     );
-  };
-
-  const handleConfirmBooking = (booking) => {
-    setBookings(prev => [...prev, booking]);
   };
 
   // Multi-Level Filtering Logic
@@ -107,24 +104,66 @@ export default function App() {
 
   const comparedObjects = DESTINATIONS.filter(item => compared.includes(item.id));
 
-  // Destination Lock System Handler
-  const handleAddToItinerary = (destination) => {
+  // Applies a fully-generated trip payload (same shape produced by both the
+  // AI Trip Companion and the manual "My Itinerary" generator) to the
+  // shared itinerary state, so the drawer always shows a fully locked,
+  // day-by-day plan no matter which flow produced it.
+  const applyGeneratedTrip = (trip) => {
+    setActiveDestination(trip.destination);
+    setDayCount(trip.dayWiseItinerary.length || trip.destination.suggestedDays || 1);
+
+    const byDay = {};
+    trip.dayWiseItinerary.forEach(({ day, slots }) => {
+      byDay[day] = slots.map((slot, idx) => ({
+        id: `${trip.destination.id}-d${day}-${idx}`,
+        title: slot.title,
+        location: `${trip.destination.name}, ${trip.destination.country}`,
+        category: slot.category,
+        cost: slot.cost,
+        destinationId: trip.destination.id,
+      }));
+    });
+    setActivitiesByDay(byDay);
+  };
+
+  // Destination Lock System Handler — used when a destination is picked
+  // manually (destination cards, the compare drawer, the detail modal, or
+  // an "alternate" suggestion). Generates the same kind of day-wise plan +
+  // packing checklist the AI Companion builds, just for the exact
+  // destination the person chose, instead of a single placeholder entry.
+  const handleAddToItinerary = async (destination) => {
     setActiveDestination(destination);
-    
-    // Pre-populate Day 1 with the destination's primary attraction
-    setActivitiesByDay(prev => ({
-      ...prev,
-      1: [{
-        id: Date.now(),
-        title: destination.name,
-        location: destination.country,
-        category: destination.category,
-        cost: 0,
-        destinationId: destination.id
-      }]
-    }));
-    
-    // Open the Itinerary Drawer
+    setItineraryDrawerOpen(true);
+    setItineraryLoading(true);
+    try {
+      const trip = await planItineraryForDestination(destination);
+      applyGeneratedTrip(trip);
+    } catch (err) {
+      console.error(err);
+      // Fall back to a minimal single entry so the drawer is never empty
+      setDayCount(1);
+      setActivitiesByDay(prev => ({
+        ...prev,
+        1: [{
+          id: Date.now(),
+          title: destination.name,
+          location: destination.country,
+          category: destination.category,
+          cost: 0,
+          destinationId: destination.id
+        }]
+      }));
+    } finally {
+      setItineraryLoading(false);
+    }
+  };
+
+  // Called when a trip is locked from inside the AI Trip Companion. The
+  // Companion already generated the full trip (respecting the traveler's
+  // chosen days/budget/mood), so it's applied directly instead of being
+  // regenerated with defaults.
+  const handleLockTrip = (trip) => {
+    applyGeneratedTrip(trip);
     setItineraryDrawerOpen(true);
   };
 
@@ -139,6 +178,7 @@ export default function App() {
       const isAdding = !prev.includes(id);
       const newCompared = isAdding ? [...prev, id] : prev.filter(compId => compId !== id);
       
+      // Open compare drawer when items are added
       if (isAdding) {
         setIsCompareOpen(true);
       }
@@ -147,20 +187,67 @@ export default function App() {
     });
   };
 
-  const handleExportJSON = () => {
-    const data = {
-      activeDestination,
-      activitiesByDay,
-      favorites,
-      compared
-    };
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'tripnest_itinerary.json';
-    a.click();
-    URL.revokeObjectURL(url);
+  const handleReorderDay = (day, newList) => {
+    setActivitiesByDay(prev => ({ ...prev, [day]: newList }));
+  };
+
+  const handleAddDay = () => {
+    setDayCount(prev => Math.min(30, (prev || 0) + 1));
+  };
+
+  const handleRemoveDay = (day) => {
+    setDayCount(prev => Math.max(1, (prev || 1) - 1));
+    setActivitiesByDay(prev => {
+      const next = {};
+      Object.keys(prev).map(Number).sort((a, b) => a - b).forEach((d) => {
+        if (d === day) return; // drop this day
+        next[d > day ? d - 1 : d] = prev[d]; // shift later days down by one
+      });
+      return next;
+    });
+  };
+
+  const handleAddActivity = (day, activity) => {
+    setActivitiesByDay(prev => ({
+      ...prev,
+      [day]: [...(prev[day] || []), { id: `custom-${Date.now()}`, ...activity }]
+    }));
+  };
+
+  const handleDeleteActivity = (day, activityId) => {
+    setActivitiesByDay(prev => ({
+      ...prev,
+      [day]: (prev[day] || []).filter(a => a.id !== activityId)
+    }));
+  };
+
+  const handleEditActivityCost = (day, activityId, newCost) => {
+    setActivitiesByDay(prev => ({
+      ...prev,
+      [day]: (prev[day] || []).map(a => a.id === activityId ? { ...a, cost: newCost } : a)
+    }));
+  };
+
+  const handleMoveActivity = (activityId, fromDay, toDay) => {
+    if (fromDay === toDay) return;
+    setActivitiesByDay(prev => {
+      const fromList = prev[fromDay] || [];
+      const moving = fromList.find(a => a.id === activityId);
+      if (!moving) return prev;
+      return {
+        ...prev,
+        [fromDay]: fromList.filter(a => a.id !== activityId),
+        [toDay]: [...(prev[toDay] || []), moving],
+      };
+    });
+  };
+
+  const handleResetItinerary = () => {
+    setActivitiesByDay({});
+    setActiveDestination(null);
+    setDayCount(0);
+    localStorage.removeItem("tripnest_activities");
+    localStorage.removeItem("tripnest_daycount");
   };
 
   const totalBudget = Object.values(activitiesByDay).flat().reduce((sum, activity) => sum + (activity.cost || 0), 0);
@@ -170,18 +257,17 @@ export default function App() {
       
       {/* HEADER */}
       <header className="sticky top-0 z-40 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
-          <a href="#" className="flex items-center gap-2">
-            <span className="p-2 sm:p-2.5 bg-gradient-to-tr from-sky-500 to-emerald-400 text-white rounded-xl shadow-md">
-              <MapPin className="h-4 w-4 sm:h-5 sm:w-5" />
+        <div className="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
+          <a href="#" className="flex items-center gap-2.5">
+            <span className="p-2.5 bg-gradient-to-tr from-sky-500 to-emerald-400 text-white rounded-xl shadow-md">
+              <MapPin className="h-5 w-5" />
             </span>
-            <span className="text-xl sm:text-2xl font-black tracking-tight">
-              Trip<span className="text-sky-500">Nest</span>
+            <span className="text-2xl font-black tracking-tight">
+              <span className="text-emerald-500">Trip</span><span className="text-sky-500">Nest</span>
             </span>
           </a>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-8 font-semibold text-sm text-slate-600 dark:text-slate-300">
+          <nav className="hidden md:flex items-center gap-8 font-semibold text-sm text-slate-600 dark:text-slate-300">
             <a href="#explore" className="hover:text-sky-500 transition-colors">Destinations</a>
             <button
               onClick={() => setIsMapOpen(true)}
@@ -191,144 +277,89 @@ export default function App() {
             </button>
           </nav>
 
-          {/* Desktop Quick Actions */}
-          <div className="hidden sm:flex items-center gap-3">
-            <button
-              onClick={toggleTheme}
-              className="p-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-amber-400 hover:scale-105 transition-transform"
-              aria-label="Toggle theme"
-            >
-              {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-            </button>
+          <button
+            onClick={toggleTheme}
+            className="p-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-amber-400 hover:scale-105 transition-transform"
+          >
+            {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+          </button>
 
-            <button
-              onClick={() => setIsBookingsOpen(true)}
-              className="p-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 hover:scale-105 transition-transform flex items-center gap-2 px-3 sm:px-4"
-            >
-              <Ticket className="h-5 w-5" />
-              <span className="hidden md:inline font-semibold text-sm">Bookings</span>
-              {bookings.length > 0 && (
-                <span className="bg-emerald-500 text-white text-xs px-2 py-0.5 rounded-full font-bold">
-                  {bookings.length}
-                </span>
-              )}
-            </button>
+          <button
+            onClick={() => setAiPlannerOpen(true)}
+            className="p-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-gradient-to-r from-emerald-500 to-teal-500 text-white hover:scale-105 transition-transform flex items-center gap-2 px-4"
+          >
+            <Bot className="h-5 w-5" />
+            <span className="hidden sm:inline font-semibold text-black">Companion</span>
+          </button>
 
-            <button
-              onClick={() => setItineraryDrawerOpen(true)}
-              className="p-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-gradient-to-r from-sky-500 to-indigo-500 text-white hover:scale-105 transition-transform flex items-center gap-2 px-3 sm:px-4"
-            >
-              <Bot className="h-5 w-5" />
-              <span className="hidden md:inline font-semibold text-sm text-slate-950 dark:text-white">Companion</span>
-              {activeDestination && (
-                <span className="bg-white/20 text-white text-xs px-2 py-0.5 rounded-full font-bold">
-                  {activeDestination.name.substring(0, 3)}
-                </span>
-              )}
-            </button>
-          </div>
-
-          {/* Mobile Controls */}
-          <div className="flex sm:hidden items-center gap-2">
-            <button
-              onClick={toggleTheme}
-              className="p-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-amber-400"
-            >
-              {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-            </button>
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200"
-            >
-              {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </button>
-          </div>
+          {/* My Itinerary — standalone button, independent of the AI Companion.
+              Opens the shared ItineraryDrawer (itinerary + packing checklist),
+              whether the active destination came from a manual pick or the AI. */}
+          <button
+            onClick={() => setItineraryDrawerOpen(true)}
+            className="p-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:scale-105 transition-transform flex items-center gap-2 px-4"
+          >
+            {itineraryLoading ? (
+              <Loader2 className="h-5 w-5 animate-spin" />
+            ) : (
+              <Luggage className="h-5 w-5" />
+            )}
+            <span className="hidden sm:inline font-semibold">My Itinerary</span>
+            {activeDestination && (
+              <span
+                title={activeDestination.name}
+                className="bg-sky-500/15 text-sky-600 dark:text-sky-400 text-[10px] px-2 py-0.5 rounded-full font-bold max-w-[70px] truncate"
+              >
+                {activeDestination.name}
+              </span>
+            )}
+          </button>
         </div>
-
-        {/* Mobile Dropdown Drawer */}
-        {mobileMenuOpen && (
-          <div className="sm:hidden border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-4 space-y-3">
-            <a 
-              href="#explore" 
-              onClick={() => setMobileMenuOpen(false)}
-              className="block px-3 py-2 rounded-xl text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800"
-            >
-              Destinations
-            </a>
-            <button
-              onClick={() => { setIsMapOpen(true); setMobileMenuOpen(false); }}
-              className="w-full text-left px-3 py-2 rounded-xl text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800"
-            >
-              Live Map
-            </button>
-            <div className="pt-2 border-t border-slate-200 dark:border-slate-800 flex gap-2">
-              <button
-                onClick={() => { setIsBookingsOpen(true); setMobileMenuOpen(false); }}
-                className="flex-1 py-2.5 px-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 flex items-center justify-center gap-2 text-sm font-semibold"
-              >
-                <Ticket className="h-4 w-4" />
-                Bookings
-                {bookings.length > 0 && (
-                  <span className="bg-emerald-500 text-white text-xs px-1.5 py-0.5 rounded-full font-bold">
-                    {bookings.length}
-                  </span>
-                )}
-              </button>
-              <button
-                onClick={() => { setItineraryDrawerOpen(true); setMobileMenuOpen(false); }}
-                className="flex-1 py-2.5 px-3 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-500 text-white flex items-center justify-center gap-2 text-sm font-semibold"
-              >
-                <Bot className="h-4 w-4" />
-                Companion
-              </button>
-            </div>
-          </div>
-        )}
       </header>
 
       {/* HERO SECTION */}
-      <section className="py-10 sm:py-16 px-4 sm:px-6 text-center max-w-4xl mx-auto space-y-4 sm:space-y-6">
-        <span className="inline-flex items-center gap-2 px-3 py-1 sm:px-4 sm:py-1.5 rounded-full bg-sky-500/10 text-sky-600 dark:text-sky-400 font-bold text-xs tracking-wider uppercase">
-          <Compass className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> Smart Travel Planner
+      <section className="py-16 px-6 text-center max-w-4xl mx-auto space-y-6">
+        <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-sky-500/10 text-sky-600 dark:text-sky-400 font-bold text-xs tracking-wider uppercase">
+          <Compass className="h-4 w-4" /> Smart Travel Planner
         </span>
 
-        <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight">
+        <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight leading-tight">
           Explore India & The World <br className="hidden sm:inline"/>
           <span className="bg-gradient-to-r from-sky-600 via-teal-500 to-emerald-600 bg-clip-text text-transparent drop-shadow-[0_1px_2px_rgba(0,0,0,0.15)] font-bold">
-            With Rich Insights
+           With Rich Insights
           </span>
         </h1>
 
         {/* Search Bar */}
         <div className="pt-2 max-w-xl mx-auto">
-          <div className="flex items-center bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl sm:rounded-full shadow-lg p-2">
-            <Search className="h-5 w-5 text-slate-400 ml-2 sm:ml-3 shrink-0" />
+          <div className="flex items-center bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-full shadow-lg p-2">
+            <Search className="h-5 w-5 text-slate-400 ml-3 shrink-0" />
             <input
               type="text"
-              placeholder="Search by city, country, region..."
+              placeholder="Search by city, country, region, or continent..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full px-2 sm:px-3 py-1.5 sm:py-2 bg-transparent outline-none text-sm text-slate-900 dark:text-white placeholder:text-slate-400"
+              className="w-full px-3 py-2 bg-transparent outline-none text-sm text-slate-900 dark:text-white placeholder:text-slate-400"
             />
           </div>
         </div>
       </section>
 
       {/* MAIN CONTAINER */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 pb-24 space-y-12 sm:space-y-16">
+      <main className="max-w-6xl mx-auto px-6 pb-24 space-y-16">
 
         {/* FILTER BAR */}
-        <section id="explore" className="space-y-6 sm:space-y-8">
-          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-sm space-y-4 sm:space-y-6">
+        <section id="explore" className="space-y-8">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm space-y-6">
             
             {/* Scope Row */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-slate-800 pb-4 sm:pb-5">
-              <div className="flex items-center gap-2 text-slate-900 dark:text-white font-bold text-base sm:text-lg">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-5">
+              <div className="flex items-center gap-2 text-slate-900 dark:text-white font-bold text-lg">
                 <Globe className="h-5 w-5 text-sky-500" />
                 <span>Scope</span>
               </div>
 
-              <div className="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl sm:rounded-2xl w-full sm:w-auto">
+              <div className="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-2xl w-full sm:w-auto">
                 {["All", "India", "International"].map((item) => (
                   <button
                     key={item}
@@ -337,7 +368,7 @@ export default function App() {
                       if (item !== "India") setSelectedRegion("All");
                       if (item !== "International") setSelectedContinent("All");
                     }}
-                    className={`flex-1 sm:flex-none px-3 sm:px-5 py-2 rounded-lg sm:rounded-xl text-xs font-bold transition-all ${
+                    className={`flex-1 sm:flex-none px-5 py-2 rounded-xl text-xs font-bold transition-all ${
                       scope === item
                         ? "bg-white dark:bg-slate-900 text-sky-500 shadow-sm"
                         : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
@@ -350,15 +381,13 @@ export default function App() {
             </div>
 
             {/* Category Pills & Dropdowns */}
-            <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4">
-              
-              {/* Category Pills - Horizontal Scroll on Mobile */}
-              <div className="flex items-center gap-2 overflow-x-auto pb-2 lg:pb-0 scrollbar-none -mx-2 px-2 sm:mx-0 sm:px-0">
-                {["All", "Heritage", "Beaches", "Mountains", "Wildlife", "Metropolis", "Nature"].map((cat) => (
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+              <div className="flex flex-wrap gap-2">
+                {["All", "Heritage", "Beaches", "Mountains", "Wildlife","Metropolis","Nature"].map((cat) => (
                   <button
                     key={cat}
                     onClick={() => setActiveCategory(cat)}
-                    className={`whitespace-nowrap px-3.5 py-2 rounded-xl text-xs font-bold transition-all shrink-0 ${
+                    className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
                       activeCategory === cat
                         ? "bg-sky-500 text-white shadow-md shadow-sky-500/30"
                         : "bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 text-slate-600 dark:text-slate-300"
@@ -371,7 +400,7 @@ export default function App() {
                 {/* Favorite Quick Filter Pill */}
                 <button
                   onClick={() => setShowOnlyFavorites(!showOnlyFavorites)}
-                  className={`whitespace-nowrap px-3.5 py-2 rounded-xl text-xs font-bold transition-all shrink-0 flex items-center gap-1.5 ${
+                  className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
                     showOnlyFavorites
                       ? "bg-rose-500 text-white shadow-md shadow-rose-500/30"
                       : "bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 text-rose-500"
@@ -383,53 +412,47 @@ export default function App() {
               </div>
 
               {/* Region/Continent Selectors */}
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 w-full lg:w-auto">
+              <div className="flex items-center gap-3 w-full md:w-auto">
+                <Filter className="h-4 w-4 text-slate-400 shrink-0" />
                 {(scope === "All" || scope === "India") && (
-                  <div className="flex items-center gap-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 w-full sm:w-auto">
-                    <Filter className="h-4 w-4 text-slate-400 shrink-0" />
-                    <select
-                      value={selectedRegion}
-                      onChange={(e) => setSelectedRegion(e.target.value)}
-                      className="bg-transparent text-slate-700 dark:text-slate-200 text-xs font-semibold outline-none w-full"
-                    >
-                      <option value="All">All Indian Regions</option>
-                      <option value="North">North India</option>
-                      <option value="South">South India</option>
-                      <option value="East">East India</option>
-                      <option value="West">West India</option>
-                    </select>
-                  </div>
+                  <select
+                    value={selectedRegion}
+                    onChange={(e) => setSelectedRegion(e.target.value)}
+                    className="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 rounded-xl px-3 py-2 text-xs font-semibold outline-none w-full sm:w-auto"
+                  >
+                    <option value="All">All Indian Regions</option>
+                    <option value="North">North India</option>
+                    <option value="South">South India</option>
+                    <option value="East">East India</option>
+                    <option value="West">West India</option>
+                  </select>
                 )}
 
                 {(scope === "All" || scope === "International") && (
-                  <div className="flex items-center gap-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 w-full sm:w-auto">
-                    <Filter className="h-4 w-4 text-slate-400 shrink-0" />
-                    <select
-                      value={selectedContinent}
-                      onChange={(e) => setSelectedContinent(e.target.value)}
-                      className="bg-transparent text-slate-700 dark:text-slate-200 text-xs font-semibold outline-none w-full"
-                    >
-                      <option value="All">All Continents</option>
-                      <option value="Europe">Europe</option>
-                      <option value="Asia">Asia</option>
-                      <option value="Americas">Americas</option>
-                      <option value="Africa">Africa</option>
-                    </select>
-                  </div>
+                  <select
+                    value={selectedContinent}
+                    onChange={(e) => setSelectedContinent(e.target.value)}
+                    className="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 rounded-xl px-3 py-2 text-xs font-semibold outline-none w-full sm:w-auto"
+                  >
+                    <option value="All">All Continents</option>
+                    <option value="Europe">Europe</option>
+                    <option value="Asia">Asia</option>
+                    <option value="Americas">Americas</option>
+                    <option value="Africa">Africa</option>
+                  </select>
                 )}
               </div>
             </div>
 
           </div>
 
-          {/* Cards Grid: 1 col on phone, 2 cols on tablet, 3 cols on desktop */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          {/* Cards Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredDestinations.map((dest) => (
               <DestinationCard
                 key={dest.id}
                 dest={dest}
                 onAddToItinerary={handleAddToItinerary}
-                onBookNow={setBookingDest}
                 isFavorite={favorites.includes(dest.id)}
                 onToggleFavorite={handleToggleFavorite}
                 isCompared={compared.includes(dest.id)}
@@ -453,28 +476,25 @@ export default function App() {
         }}
       />
 
+      {/* AI TRIP COMPANION */}
+      <AITripPlanner
+        open={aiPlannerOpen}
+        onClose={() => setAiPlannerOpen(false)}
+        theme={theme}
+        onAddToItinerary={handleAddToItinerary}
+        onLockTrip={handleLockTrip}
+        favorites={favorites}
+        onToggleFavorite={handleToggleFavorite}
+        compared={compared}
+        onToggleCompare={handleToggleCompare}
+        onOpenDetails={(d) => setSelectedModalDest(d)}
+      />
+
       {/* DETAIL MODAL */}
       <DestinationModal
         dest={selectedModalDest}
         onClose={() => setSelectedModalDest(null)}
         onAddToItinerary={handleAddToItinerary}
-        onBookNow={setBookingDest}
-        isFavorite={selectedModalDest ? favorites.includes(selectedModalDest.id) : false}
-        onToggleFavorite={handleToggleFavorite}
-      />
-
-      {/* BOOKING MODAL */}
-      <BookingModal
-        dest={bookingDest}
-        onClose={() => setBookingDest(null)}
-        onConfirmBooking={handleConfirmBooking}
-      />
-
-      {/* BOOKINGS DRAWER */}
-      <BookingsDrawer
-        open={isBookingsOpen}
-        onClose={() => setIsBookingsOpen(false)}
-        bookings={bookings}
       />
 
       {/* COMPARE DRAWER */}
@@ -489,7 +509,8 @@ export default function App() {
         />
       )}
 
-      {/* ITINERARY DRAWER */}
+      {/* ITINERARY DRAWER — "My Itinerary": itinerary tab + packing checklist,
+          shared by both the manual selection flow and the AI Companion lock */}
       <ItineraryDrawer
         open={itineraryDrawerOpen}
         onClose={() => setItineraryDrawerOpen(false)}
@@ -497,11 +518,19 @@ export default function App() {
         onToggleTheme={toggleTheme}
         activeDestination={activeDestination}
         activitiesByDay={activitiesByDay}
+        dayCount={dayCount}
         totalBudget={totalBudget}
+        loading={itineraryLoading}
         packingItems={[]}
         onTogglePacking={() => {}}
-        onExportJSON={handleExportJSON}
-        onExportPDF={() => window.print()}
+        onReorderDay={handleReorderDay}
+        onAddDay={handleAddDay}
+        onRemoveDay={handleRemoveDay}
+        onAddActivity={handleAddActivity}
+        onDeleteActivity={handleDeleteActivity}
+        onEditActivityCost={handleEditActivityCost}
+        onMoveActivity={handleMoveActivity}
+        onResetItinerary={handleResetItinerary}
       />
 
     </div>
