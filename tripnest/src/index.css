@@ -1,5 +1,5 @@
-@import "tailwindcss";
 @import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600..800&family=Inter:wght@400;500;600;700;800&display=swap");
+@import "tailwindcss";
 
 /* Fraunces carries the "voice" of the app — place names and the two big
    marketing headlines. Everything else (UI chrome, buttons, labels) stays
