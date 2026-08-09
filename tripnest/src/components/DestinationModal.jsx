@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { 
   X, MapPin, Thermometer, Calendar, Heart, Plus, Sparkles, 
-  CheckCircle2, Clock, Lightbulb, Package, Ticket 
+  CheckCircle2, Clock, Lightbulb, Package, Ticket,
+  Utensils, ChefHat, Store, ChevronDown, ChevronUp
 } from "lucide-react";
 
 export default function DestinationModal({
@@ -15,16 +16,22 @@ export default function DestinationModal({
   // Safe fallback: use dest.images array, or fall back to single dest.image
   const gallery = dest?.images && dest.images.length > 0 ? dest.images : [dest?.image];
   const [selectedImage, setSelectedImage] = useState(gallery[0]);
+  
+  // Toggle state for Local Insights dropdown/expansion
+  const [showLocalInsights, setShowLocalInsights] = useState(false);
 
-  // Update selected image whenever a new destination is opened
+  // Update selected image & reset insights view whenever a new destination is opened
   useEffect(() => {
     if (dest) {
       const initialGallery = dest.images && dest.images.length > 0 ? dest.images : [dest.image];
       setSelectedImage(initialGallery[0]);
+      setShowLocalInsights(false);
     }
   }, [dest]);
 
   if (!dest) return null;
+
+  const hasCuisineData = dest?.cuisine && (dest.cuisine.dishes?.length > 0 || dest.cuisine.popularRestaurants?.length > 0);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fadeIn">
@@ -135,6 +142,93 @@ export default function DestinationModal({
                 </div>
               )}
             </div>
+
+            {/* Local Insights (Cuisine & Dining) Section */}
+            {hasCuisineData && (
+              <div className="pt-4 border-t border-slate-100 dark:border-slate-800">
+                <button
+                  onClick={() => setShowLocalInsights(!showLocalInsights)}
+                  className="w-full p-4 bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-amber-500/5 hover:from-amber-500/20 hover:via-orange-500/20 border border-amber-500/20 dark:border-amber-500/30 rounded-2xl flex items-center justify-between transition-all group shadow-sm"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="p-2.5 bg-amber-500 text-white rounded-xl shadow-md group-hover:scale-105 transition-transform">
+                      <Utensils className="h-4 w-4" />
+                    </div>
+                    <div className="text-left">
+                      <h4 className="text-xs font-bold uppercase tracking-wider text-amber-900 dark:text-amber-300 flex items-center gap-2">
+                        Local Food & Dining Insights
+                        <span className="px-2 py-0.5 text-[10px] bg-amber-500/20 text-amber-800 dark:text-amber-200 rounded-full font-extrabold">
+                          Taste
+                        </span>
+                      </h4>
+                      <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5">
+                        Discover top dishes & legendary local spots
+                      </p>
+                    </div>
+                  </div>
+                  <div className="p-1.5 rounded-lg text-amber-700 dark:text-amber-300 group-hover:bg-amber-500/10 transition-colors">
+                    {showLocalInsights ? (
+                      <ChevronUp className="h-5 w-5" />
+                    ) : (
+                      <ChevronDown className="h-5 w-5" />
+                    )}
+                  </div>
+                </button>
+
+                {/* Collapsible Content */}
+                {showLocalInsights && (
+                  <div className="mt-3 p-4 bg-amber-50/40 dark:bg-slate-800/40 border border-amber-200/50 dark:border-slate-800 rounded-2xl space-y-4 animate-fadeIn">
+                    
+                    {/* Famous Dishes */}
+                    {dest.cuisine.dishes && dest.cuisine.dishes.length > 0 && (
+                      <div>
+                        <div className="flex items-center gap-2 mb-2.5">
+                          <ChefHat className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+                          <h5 className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+                            Must-Try Local Dishes
+                          </h5>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {dest.cuisine.dishes.map((dish, idx) => (
+                            <span
+                              key={idx}
+                              className="px-3 py-1 bg-amber-100/80 dark:bg-amber-950/40 border border-amber-200/80 dark:border-amber-800/40 text-amber-900 dark:text-amber-200 text-xs font-semibold rounded-xl flex items-center gap-1.5 shadow-2xs"
+                            >
+                              <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
+                              {dish}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Popular Restaurants */}
+                    {dest.cuisine.popularRestaurants && dest.cuisine.popularRestaurants.length > 0 && (
+                      <div className="pt-3 border-t border-amber-200/40 dark:border-slate-700/50">
+                        <div className="flex items-center gap-2 mb-2.5">
+                          <Store className="h-4 w-4 text-orange-600 dark:text-orange-400" />
+                          <h5 className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+                            Top Recommended Dining Spots
+                          </h5>
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                          {dest.cuisine.popularRestaurants.map((restaurant, idx) => (
+                            <div
+                              key={idx}
+                              className="p-2.5 bg-white dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800 rounded-xl flex items-center gap-2 text-xs font-medium text-slate-800 dark:text-slate-200"
+                            >
+                              <MapPin className="h-3.5 w-3.5 text-orange-500 shrink-0" />
+                              <span className="truncate">{restaurant}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* Highlights Section */}
             {dest.highlights && dest.highlights.length > 0 && (

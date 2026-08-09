@@ -481,7 +481,7 @@ export default function App() {
           {[
             { icon: Luggage, color: "text-emerald-600 bg-slate-100 dark:bg-slate-800", title: "AI Trip Planner", desc: "Get a personalized itinerary in seconds", action: () => setAiPlannerOpen(true) },
             { icon: Wallet, color: "text-emerald-600 bg-slate-100 dark:bg-slate-800", title: "Smart Budgeting", desc: "Plan your trip within your budget", action: () => setItineraryDrawerOpen(true) },
-            { icon: MapPin, color: "text-emerald-600 bg-slate-100 dark:bg-slate-800", title: "Local Insights", desc: "Discover hidden gems & local favorites", action: () => document.getElementById("explore")?.scrollIntoView({ behavior: "smooth" }) },
+           
             { icon: CloudSun, color: "text-emerald-600 bg-slate-100 dark:bg-slate-800", title: "Real-time Updates", desc: "Live weather, alerts & travel updates", action: () => setIsMapOpen(true) },
           ].map(({ icon: Icon, color, title, desc, action }) => (
             <button

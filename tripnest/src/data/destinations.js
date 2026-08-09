@@ -26,7 +26,11 @@ export const DESTINATIONS = [
     ],
     suggestedDays: 5,
     recommendedPacking: ["Comfortable walking shoes", "Universal adapter", "Light raincoat", "Smart casual evening wear"],
-    insiderTip: "Book Louvre tickets weeks in advance and enter via the Porte de Lille entrance to skip the glass pyramid line."
+    insiderTip: "Book Louvre tickets weeks in advance and enter via the Porte de Lille entrance to skip the glass pyramid line.",
+    cuisine: {
+      dishes: ["Escargots", "Duck Confit", "Croissants", "Steak Frites", "Soufflé"],
+      popularRestaurants: ["Le Procope", "L'Ami Louis", "Bouillon Chartier", "Septime"]
+    }
   },
   {
     id: "tokyo-japan",
@@ -54,7 +58,11 @@ export const DESTINATIONS = [
     ],
     suggestedDays: 6,
     recommendedPacking: ["Easy slip-on shoes", "Suica/Pasmo transit card", "Portable power bank", "Pocket Wi-Fi / eSIM"],
-    insiderTip: "Convenience stores (7-Eleven, Lawson) have gourmet quality meals and low-fee ATMs for international card withdrawals."
+    insiderTip: "Convenience stores (7-Eleven, Lawson) have gourmet quality meals and low-fee ATMs for international card withdrawals.",
+    cuisine: {
+      dishes: ["Edomae Sushi", "Tonkotsu Ramen", "Tempura", "Yakitori", "Wagyu"],
+      popularRestaurants: ["Sukiyabashi Jiro", "Ichiran Ramen", "Ukai Toriyama", "Den"]
+    }
   },
   {
     id: "bali-indonesia",
@@ -82,7 +90,11 @@ export const DESTINATIONS = [
     ],
     suggestedDays: 7,
     recommendedPacking: ["Reef-safe sunscreen", "Lightweight cotton wear", "Temple cover-up sarong", "Insect repellent"],
-    insiderTip: "Rent a scooter or hire a private driver for full-day excursions—local ride-hailing apps can be restricted in traditional villages."
+    insiderTip: "Rent a scooter or hire a private driver for full-day excursions—local ride-hailing apps can be restricted in traditional villages.",
+    cuisine: {
+      dishes: ["Babi Guling", "Bebek Betutu", "Nasi Campur", "Lawar"],
+      popularRestaurants: ["Locavore NXT", "Merah Putih", "Naughty Nuri's", "Warung Ibu Oka"]
+    }
   },
   {
     id: "rome-italy",
@@ -110,7 +122,11 @@ export const DESTINATIONS = [
     ],
     suggestedDays: 4,
     recommendedPacking: ["Refillable water bottle", "Sturdy walking shoes", "Modest clothing for churches", "Sunglasses"],
-    insiderTip: "Drink from the public fountains (nasoni) for crisp, cold running spring water across the entire city."
+    insiderTip: "Drink from the public fountains (nasoni) for crisp, cold running spring water across the entire city.",
+    cuisine: {
+      dishes: ["Cacio e Pepe", "Carbonara", "Saltimbocca", "Supplí", "Roman-style Pizza"],
+      popularRestaurants: ["Da Enzo al 29", "Armando al Pantheon", "Roscioli", "Felice a Testaccio"]
+    }
   },
   {
     id: "swiss-alps",
@@ -138,7 +154,11 @@ export const DESTINATIONS = [
     ],
     suggestedDays: 5,
     recommendedPacking: ["Thermal base layers", "Hiking boots", "Polarized sunglasses", "Windproof jacket"],
-    insiderTip: "Purchase a Swiss Travel Pass—it grants unlimited rides on trains, buses, mountain boats, and discounts on cable cars."
+    insiderTip: "Purchase a Swiss Travel Pass—it grants unlimited rides on trains, buses, mountain boats, and discounts on cable cars.",
+    cuisine: {
+      dishes: ["Fondue Moitié-Moitié", "Raclette", "Rösti", "Zürcher Geschnetzeltes"],
+      popularRestaurants: ["Zeughauskeller", "Le Cheese Bar", "Restaurant Chesery"]
+    }
   },
   {
     id: "dubai-uae",
@@ -166,7 +186,11 @@ export const DESTINATIONS = [
     ],
     suggestedDays: 4,
     recommendedPacking: ["Light breathable linen", "Sunglasses", "Sunscreen", "Smart evening attire"],
-    insiderTip: "Use the clean and cheap Dubai Metro system to easily bypass heavy road traffic between major attractions."
+    insiderTip: "Use the clean and cheap Dubai Metro system to easily bypass heavy road traffic between major attractions.",
+    cuisine: {
+      dishes: ["Al Machboos", "Shawarma", "Camel Meat", "Luqaimat", "Kunafa"],
+      popularRestaurants: ["Al Fanar Seafood", "Zuma Dubai", "Arabian Tea House", "Orfali Bros"]
+    }
   },
   {
     id: "new-york-usa",
@@ -194,7 +218,11 @@ export const DESTINATIONS = [
     ],
     suggestedDays: 5,
     recommendedPacking: ["Comfortable walking sneakers", "Layered outerwear", "MetroCard / Contactless card", "Small crossbody bag"],
-    insiderTip: "Tap to pay directly at subway turnstiles using your contactless bank card or smartphone wallet via OMNY."
+    insiderTip: "Tap to pay directly at subway turnstiles using your contactless bank card or smartphone wallet via OMNY.",
+    cuisine: {
+      dishes: ["NYC Style Pizza", "Bagels with Lox", "Pastrami on Rye", "Cheesecake"],
+      popularRestaurants: ["Katz's Delicatessen", "Joe's Pizza", "Peter Luger", "Russ & Daughters"]
+    }
   },
   {
     id: "singapore",
@@ -222,7 +250,11 @@ export const DESTINATIONS = [
     ],
     suggestedDays: 4,
     recommendedPacking: ["Light cotton shirts", "Compact umbrella", "Refillable water bottle", "Walking sandals"],
-    insiderTip: "Eat at Michelin-recognized hawker stalls like Lau Pa Sat or Chinatown Complex for top-tier local dishes under ₹800."
+    insiderTip: "Eat at Michelin-recognized hawker stalls like Lau Pa Sat or Chinatown Complex for top-tier local dishes under ₹800.",
+    cuisine: {
+      dishes: ["Hainanese Chicken Rice", "Chili Crab", "Laksa", "Kaya Toast"],
+      popularRestaurants: ["Tian Tian Chicken Rice", "Jumbo Seafood", "Lau Pa Sat", "Candlenut"]
+    }
   },
   {
     id: "santorini-greece",
@@ -250,7 +282,11 @@ export const DESTINATIONS = [
     ],
     suggestedDays: 3,
     recommendedPacking: ["Sun hat & sunglasses", "Grip-sole walking shoes for cobbles", "Swimwear", "Light jacket for windy nights"],
-    insiderTip: "Avoid midday cruise crowds in Oia by exploring the narrow alleyways early in the morning before 10 AM."
+    insiderTip: "Avoid midday cruise crowds in Oia by exploring the narrow alleyways early in the morning before 10 AM.",
+    cuisine: {
+      dishes: ["Fava Dip", "Tomato Geftedes", "Fresh Seafood", "Vinsanto"],
+      popularRestaurants: ["Metaxi Mas", "Ammoudi Fish Tavern", "Selene", "Sunset Ammoudi"]
+    }
   },
   {
     id: "cairo-egypt",
@@ -278,7 +314,11 @@ export const DESTINATIONS = [
     ],
     suggestedDays: 4,
     recommendedPacking: ["Modest lightweight clothing", "Wide-brim hat", "Sunscreen", "Cash in local currency"],
-    insiderTip: "Hire an official licensed Egyptologist guide for the Pyramids to ensure smooth entry and avoid aggressive street vendors."
+    insiderTip: "Hire an official licensed Egyptologist guide for the Pyramids to ensure smooth entry and avoid aggressive street vendors.",
+    cuisine: {
+      dishes: ["Koshary", "Ful Medames", "Molokhia", "Ta'ameya"],
+      popularRestaurants: ["Koshary Abou Tarek", "Abou El Sid", "Naguib Mahfouz Café"]
+    }
   },
   {
     id: "sydney-australia",
@@ -306,7 +346,11 @@ export const DESTINATIONS = [
     ],
     suggestedDays: 5,
     recommendedPacking: ["High-SPF broad spectrum sunscreen", "Beachwear", "Comfortable walking shoes", "Sunglasses"],
-    insiderTip: "Take the public Manly Ferry from Circular Quay for harbor views at a fraction of the cost of commercial tour cruises."
+    insiderTip: "Take the public Manly Ferry from Circular Quay for harbor views at a fraction of the cost of commercial tour cruises.",
+    cuisine: {
+      dishes: ["Sydney Rock Oysters", "Meat Pies", "Barramundi", "Pavlova"],
+      popularRestaurants: ["Tetsuya's", "Bennelong", "Quay", "Icebergs Dining Room & Bar"]
+    }
   },
   {
     id: "queenstown-newzealand",
@@ -334,7 +378,11 @@ export const DESTINATIONS = [
     ],
     suggestedDays: 5,
     recommendedPacking: ["Sturdy hiking shoes", "Windproof jacket", "Layered thermal clothing", "Camera"],
-    insiderTip: "Book your Milford Sound excursion well in advance—choosing a small boat tour gets you much closer to the cliff waterfalls."
+    insiderTip: "Book your Milford Sound excursion well in advance—choosing a small boat tour gets you much closer to the cliff waterfalls.",
+    cuisine: {
+      dishes: ["Hāngī", "New Zealand Lamb", "Green-lipped Mussels", "Hokey Pokey Ice Cream"],
+      popularRestaurants: ["Fergburger", "The Crab Shack", "Rata", "The Grove"]
+    }
   },
 
   // --- INDIAN DESTINATIONS ---
@@ -365,7 +413,11 @@ export const DESTINATIONS = [
     ],
     suggestedDays: 7,
     recommendedPacking: ["Heavy thermals", "Hydration pack", "High-SPF sunscreen", "Diamox / Altitude medication"],
-    insiderTip: "Dedicating the first 24 to 48 hours strictly to resting in Leh is essential for safe acclimatization."
+    insiderTip: "Dedicating the first 24 to 48 hours strictly to resting in Leh is essential for safe acclimatization.",
+    cuisine: {
+      dishes: ["Thukpa", "Skyu", "Butter Tea (Gur Gur Chai)", "Chhurpi", "Tingmo"],
+      popularRestaurants: ["The Tibetan Kitchen", "Chopsticks Noodle Bar", "Bon Appetit"]
+    }
   },
   {
     id: "kerala-backwaters",
@@ -394,7 +446,11 @@ export const DESTINATIONS = [
     ],
     suggestedDays: 5,
     recommendedPacking: ["Light cotton clothing", "Mosquito repellent", "Comfortable sandals", "Camera with extra batteries"],
-    insiderTip: "Hire a traditional canoe or shikara through smaller inner canals where large houseboats cannot fit."
+    insiderTip: "Hire a traditional canoe or shikara through smaller inner canals where large houseboats cannot fit.",
+    cuisine: {
+      dishes: ["Karimeen Pollichathu", "Kerala Sadya", "Appam with Stew", "Duck Roast"],
+      popularRestaurants: ["Rapsy Restaurant", "Thaff Restaurant", "Harbor Restaurant"]
+    }
   },
   {
     id: "kaziranga-india",
@@ -422,7 +478,11 @@ export const DESTINATIONS = [
     ],
     suggestedDays: 3,
     recommendedPacking: ["Neutral tone safari clothing", "Binoculars", "Insect repellent", "Telephoto lens camera"],
-    insiderTip: "Book Kohora (Central) and Bagori (Western) ranges for the highest density of rhino sightings."
+    insiderTip: "Book Kohora (Central) and Bagori (Western) ranges for the highest density of rhino sightings.",
+    cuisine: {
+      dishes: ["Assamese Thali", "Maasor Tenga", "Duck Curry with Ash Gourd"],
+      popularRestaurants: ["Maihang Restaurant", "Wild Grass Lodge Restaurant", "Khorikaa"]
+    }
   },
   {
     id: "jim-corbett-india",
@@ -450,7 +510,11 @@ export const DESTINATIONS = [
     ],
     suggestedDays: 3,
     recommendedPacking: ["Sturdy boots", "Warm layers for early mornings", "Sun hat & UV sunglasses", "Safari dust mask"],
-    insiderTip: "Stay overnight inside the Forest Rest House in the Dhikala zone for the rawest jungle experience."
+    insiderTip: "Stay overnight inside the Forest Rest House in the Dhikala zone for the rawest jungle experience.",
+    cuisine: {
+      dishes: ["Kumaoni Thali", "Bhatt Ki Churkani", "Aloo ke Gutke", "Gahat Dal"],
+      popularRestaurants: ["Corbett Grill", "The Heritage Kitchen", "Local Kumaoni Dhabas"]
+    }
   },
   {
     id: "gir-national-park-india",
@@ -478,7 +542,11 @@ export const DESTINATIONS = [
     ],
     suggestedDays: 2,
     recommendedPacking: ["Dust scarf or bandana", "Earthy colored cottons", "High SPF sunscreen", "Reusable water bottle"],
-    insiderTip: "Permits open 90 days prior online—book early as daily vehicle slots are strictly capped."
+    insiderTip: "Permits open 90 days prior online—book early as daily vehicle slots are strictly capped.",
+    cuisine: {
+      dishes: ["Kathiyawadi Thali", "Ringan No Oro", "Sev Tameta", "Chaas"],
+      popularRestaurants: ["Toran Gujarati Thali", "Sukhsagar Gir", "Local Dhaba Dining"]
+    }
   },
   {
     id: "kabini-india",
@@ -506,7 +574,11 @@ export const DESTINATIONS = [
     ],
     suggestedDays: 3,
     recommendedPacking: ["Light jacket for boat trips", "Binoculars", "Neutral tone attire", "Moisturizer & lip balm"],
-    insiderTip: "Take the morning boat safari along the backwaters to see massive elephant herds gathering at the water's edge."
+    insiderTip: "Take the morning boat safari along the backwaters to see massive elephant herds gathering at the water's edge.",
+    cuisine: {
+      dishes: ["Coorg-style Pandi Curry", "Akki Roti", "Bamboo Shoot Curry", "Fish Fry"],
+      popularRestaurants: ["The Kuruba Safari Lodge Dining", "Waterwoods Restaurant"]
+    }
   },
   {
     id: "mahabalipuram-india",
@@ -533,7 +605,11 @@ export const DESTINATIONS = [
     ],
     suggestedDays: 2,
     recommendedPacking: ["Breathable cotton clothes", "Slip-on shoes for temple entry", "Sun hat & sunglasses", "Beachwear"],
-    insiderTip: "Hire an ASI-registered guide at Pancha Rathas to unlock the intricate architectural stories etched into the granite."
+    insiderTip: "Hire an ASI-registered guide at Pancha Rathas to unlock the intricate architectural stories etched into the granite.",
+    cuisine: {
+      dishes: ["Meen Kuzhambu", "Prawn Fry", "Crab Masala", "South Indian Thali"],
+      popularRestaurants: ["Moonraker Restaurant", "Sea Gull Restaurant", "Santana Beach Restaurant"]
+    }
   },
   {
     id: "hampta-pass-india",
@@ -560,7 +636,11 @@ export const DESTINATIONS = [
     ],
     suggestedDays: 5,
     recommendedPacking: ["Trekking poles", "Waterproof hiking boots", "Thermals & down jacket", "Personal medical kit"],
-    insiderTip: "Monsoon months (July-August) bring lush valley blooms, but bring reliable rain cover for your gear."
+    insiderTip: "Monsoon months (July-August) bring lush valley blooms, but bring reliable rain cover for your gear.",
+    cuisine: {
+      dishes: ["Siddu", "Chha Gosht", "Dham (Himalayan Thali)", "Trail Maggi"],
+      popularRestaurants: ["Sher-e-Punjab", "Chopsticks Manali"]
+    }
   },
   {
     id: "sikkim-india",
@@ -587,7 +667,11 @@ export const DESTINATIONS = [
     ],
     suggestedDays: 7,
     recommendedPacking: ["Warm thermals & fleece", "ILP (Inner Line Permit) documents", "Motion sickness medicine", "Comfortable walking shoes"],
-    insiderTip: "Nathula Pass requires a special Protected Area Permit (PAP); arrange this with your agent at least two days in advance."
+    insiderTip: "Nathula Pass requires a special Protected Area Permit (PAP); arrange this with your agent at least two days in advance.",
+    cuisine: {
+      dishes: ["Phagshapa", "Gundruk Soup", "Momos", "Sel Roti", "Chhaang"],
+      popularRestaurants: ["The Square", "Nimtho", "Taste of Sikkim", "Cafe Live & Loud"]
+    }
   },
   {
     id: "puri-india",
@@ -614,7 +698,11 @@ export const DESTINATIONS = [
     ],
     suggestedDays: 3,
     recommendedPacking: ["Modest traditional clothing for temples", "Flip flops", "Sunscreen & hat", "Small cotton pouch for temple offerings"],
-    insiderTip: "Non-Hindus cannot enter the inner sanctum of Jagannath Temple, but can view the complex from the nearby Raghunandan Library roof."
+    insiderTip: "Non-Hindus cannot enter the inner sanctum of Jagannath Temple, but can view the complex from the nearby Raghunandan Library roof.",
+    cuisine: {
+      dishes: ["Mahaprasad (Abhada)", "Chhena Poda", "Chungdi Malai", "Dalma"],
+      popularRestaurants: ["Wild Grass Restaurant", "Chung Wah", "Ocean Cafe at Mayfair"]
+    }
   },
   {
     id: "gujarat-india",
@@ -641,7 +729,11 @@ export const DESTINATIONS = [
     ],
     suggestedDays: 6,
     recommendedPacking: ["Light cotton outfits", "Comfortable walking shoes", "Sun protection", "Extra luggage space for handicrafts"],
-    insiderTip: "Combine Ahmedabad's heritage walking tour with a traditional Gujarati Thali lunch in the old city."
+    insiderTip: "Combine Ahmedabad's heritage walking tour with a traditional Gujarati Thali lunch in the old city.",
+    cuisine: {
+      dishes: ["Undhiyu", "Khichdi-Kadhi","Dhokla", "Ringan No Oro", "Sev Tameta"],
+      popularRestaurants: ["Rajwadu", "Local Dhabas", "Gordhan Thal"]
+    }
   },
   {
     id: "rann-of-kutch-india",
@@ -668,7 +760,11 @@ export const DESTINATIONS = [
     ],
     suggestedDays: 3,
     recommendedPacking: ["Heavy jacket for cold desert nights", "Sunglasses for intense white salt glare", "Moisturizer", "Permit identification copy"],
-    insiderTip: "Plan your trip specifically around the full moon night to watch the salt desert glow under natural moonlight."
+    insiderTip: "Plan your trip specifically around the full moon night to watch the salt desert glow under natural moonlight.",
+    cuisine: {
+      dishes: ["Kutchi Dabeli", "Rotla with White Butter", "Khichdi-Kadhi", "Gulab Pak"],
+      popularRestaurants: ["Toran Resort Restaurant", "Local Bhunga Dhabas", "Royal Resto"]
+    }
   },
   {
     id: "moscow-russia",
@@ -695,7 +791,11 @@ export const DESTINATIONS = [
     ],
     suggestedDays: 4,
     recommendedPacking: ["Warm layers & coat", "Comfortable walking boots", "Power bank", "Translation app on phone"],
-    insiderTip: "Buy a Troika card to easily hop between Moscow's underground metro stations, which double as underground art museums."
+    insiderTip: "Buy a Troika card to easily hop between Moscow's underground metro stations, which double as underground art museums.",
+    cuisine: {
+      dishes: ["Borscht", "Beef Stroganoff", "Pelmeni", "Blini with Caviar"],
+      popularRestaurants: ["White Rabbit", "Cafe Pushkin", "Grand Cafe Dr. Zhivago"]
+    }
   },
   {
     id: "masai-mara-kenya",
@@ -723,7 +823,11 @@ export const DESTINATIONS = [
     ],
     suggestedDays: 4,
     recommendedPacking: ["Neutral canvas layers", "Good binoculars", "Telephoto lens kit", "Insect repellent & sun hat"],
-    insiderTip: "Book a hot air balloon safari early morning for breathtaking sunrise views of game herds moving across the Mara plains."
+    insiderTip: "Book a hot air balloon safari early morning for breathtaking sunrise views of game herds moving across the Mara plains.",
+    cuisine: {
+      dishes: ["Ugali", "Nyama Choma", "Sukuma Wiki", "Chapati"],
+      popularRestaurants: ["Mara Serena Lodge Restaurant", "The Carnivore"]
+    }
   },
   {
     id: "jaipur-india",
@@ -752,7 +856,11 @@ export const DESTINATIONS = [
     ],
     suggestedDays: 3,
     recommendedPacking: ["Sun hat", "Breathable fabrics", "Comfortable walking shoes", "Extra bag for artisan shopping"],
-    insiderTip: "Visit Nahargarh Fort right before sunset for a panoramic view of the entire city lighting up."
+    insiderTip: "Visit Nahargarh Fort right before sunset for a panoramic view of the entire city lighting up.",
+    cuisine: {
+      dishes: ["Dal Baati Churma", "Laal Maas", "Ghevar", "Pyaz Kachori"],
+      popularRestaurants: ["Rawat Mishthan Bhandar", "Chokhi Dhani", "Handi", "1135 AD"]
+    }
   },
   {
     id: "goa-india",
@@ -781,7 +889,11 @@ export const DESTINATIONS = [
     ],
     suggestedDays: 4,
     recommendedPacking: ["Swimwear", "Flip flops", "Waterproof phone pouch", "Sunscreen"],
-    insiderTip: "Head to South Goa (Palolem, Agonda) for serene, quiet beaches, and North Goa for nightlife and water activities."
+    insiderTip: "Head to South Goa (Palolem, Agonda) for serene, quiet beaches, and North Goa for nightlife and water activities.",
+    cuisine: {
+      dishes: ["Goan Fish Curry Rice", "Pork Vindaloo", "Bebinca", "Chicken Xacuti"],
+      popularRestaurants: ["Britto's", "Gunpowder", "Mum's Kitchen", "Fisherman's Wharf"]
+    }
   },
   {
     id: "varanasi-india",
@@ -810,7 +922,11 @@ export const DESTINATIONS = [
     ],
     suggestedDays: 3,
     recommendedPacking: ["Modest clothing", "Slip-on shoes for temple visits", "Hand sanitizer", "Camera"],
-    insiderTip: "Take the sunrise boat ride from Assi Ghat to Manikarnika Ghat for the best photographic light and atmospheric tranquility."
+    insiderTip: "Take the sunrise boat ride from Assi Ghat to Manikarnika Ghat for the best photographic light and atmospheric tranquility.",
+    cuisine: {
+      dishes: ["Malaiyyo", "Kachori Jalebi", "Tamatar Chaat", "Banarasi Paan"],
+      popularRestaurants: ["Deena Chaat Bhandar", "Blue Lassi", "Kashi Chat Bhandar"]
+    }
   },
   {
     id: "taj-mahal-agra",
@@ -839,7 +955,11 @@ export const DESTINATIONS = [
     ],
     suggestedDays: 2,
     recommendedPacking: ["Sun hat", "Comfortable walking shoes", "Valid photo ID", "Water bottle"],
-    insiderTip: "Arrive at the Taj Mahal East Gate 30 minutes before sunrise to be first in line and avoid long queues."
+    insiderTip: "Arrive at the Taj Mahal East Gate 30 minutes before sunrise to be first in line and avoid long queues.",
+    cuisine: {
+      dishes: ["Agra Petha", "Mughlai Biryani", "Bedai-Jalebi", "Pasanda Curry"],
+      popularRestaurants: ["Pinch of Spice", "Dasaprakash", "Shankara Vegis Restaurant"]
+    }
   },
   {
     id: "kashmir-valley",
@@ -868,7 +988,11 @@ export const DESTINATIONS = [
     ],
     suggestedDays: 5,
     recommendedPacking: ["Warm woolens / layers", "Waterproof jacket", "Grip shoes", "Moisturizer"],
-    insiderTip: "Book phase 2 Gulmarg Gondola tickets online well in advance as daily tickets are strictly limited."
+    insiderTip: "Book phase 2 Gulmarg Gondola tickets online well in advance as daily tickets are strictly limited.",
+    cuisine: {
+      dishes: ["Wazwan (Rogan Josh, Rista, Gushtaba)", "Kahwa Tea", "Yakhni"],
+      popularRestaurants: ["Ahdoos", "Mughal Darbar", "Highland Park Restaurant"]
+    }
   },
   {
     id: "andaman-islands",
@@ -897,7 +1021,11 @@ export const DESTINATIONS = [
     ],
     suggestedDays: 6,
     recommendedPacking: ["Reef-safe sunscreen", "Snorkel gear", "Waterproof phone case", "Light cotton clothes"],
-    insiderTip: "Book inter-island private ferry tickets (Makruzz / Nautika) early to guarantee comfortable seating between islands."
+    insiderTip: "Book inter-island private ferry tickets (Makruzz / Nautika) early to guarantee comfortable seating between islands.",
+    cuisine: {
+      dishes: ["Crab Masala", "Lobster Thermidor", "Fish Curry", "Coconut Prawn"],
+      popularRestaurants: ["Full Moon Cafe", "Something Different", "New Lighthouse Restaurant"]
+    }
   },
   {
     id: "meghalaya-shillong",
@@ -926,7 +1054,11 @@ export const DESTINATIONS = [
     ],
     suggestedDays: 5,
     recommendedPacking: ["Trekking shoes with good grip", "Rainwear / poncho", "Quick-dry clothing", "Bug spray"],
-    insiderTip: "Start the Nongriat living root bridge trek early in the morning to beat the heat on the 3,000-step return climb."
+    insiderTip: "Start the Nongriat living root bridge trek early in the morning to beat the heat on the 3,000-step return climb.",
+    cuisine: {
+      dishes: ["Jadoh", "Dohneiiong", "Tungrymbai", "Khasi Chowmein"],
+      popularRestaurants: ["Jadoh Stall", "Trattoria", "Dylan's Café"]
+    }
   },
   {
     id: "hampi-karnataka",
@@ -955,7 +1087,11 @@ export const DESTINATIONS = [
     ],
     suggestedDays: 3,
     recommendedPacking: ["Sun hat & shades", "Light cotton wear", "Sturdy walking sandals", "Hydration bottle"],
-    insiderTip: "Renting a bicycle or moped is the best way to comfortably explore the vast scattered ruins at your own pace."
+    insiderTip: "Renting a bicycle or moped is the best way to comfortably explore the vast scattered ruins at your own pace.",
+    cuisine: {
+      dishes: ["North Karnataka Thali", "Jolada Roti", "Bisi Bele Bath", "South Thali"],
+      popularRestaurants: ["Mango Tree Restaurant", "Gopi Guesthouse Restaurant", "Laughing Buddha"]
+    }
   },
   {
     id: "darjeeling-westbengal",
@@ -984,7 +1120,11 @@ export const DESTINATIONS = [
     ],
     suggestedDays: 3,
     recommendedPacking: ["Warm woolens", "Comfortable walking shoes", "Camera", "Thermos bottle"],
-    insiderTip: "Book the Steam Engine joyride between Darjeeling and Ghoom in advance for the authentic heritage Toy Train experience."
+    insiderTip: "Book the Steam Engine joyride between Darjeeling and Ghoom in advance for the authentic heritage Toy Train experience.",
+    cuisine: {
+      dishes: ["Darjeeling Tea", "Churpee", "Shaphaley", "Traditional Momos", "Thukpa"],
+      popularRestaurants: ["Keventer's", "Glenary's Bakery & Restaurant", "Hot Stimulating Cafe"]
+    }
   },
   {
     id: "rishikesh-uttarakhand",
@@ -1013,6 +1153,10 @@ export const DESTINATIONS = [
     ],
     suggestedDays: 3,
     recommendedPacking: ["Quick-dry shorts/t-shirts", "Waterproof shoes/sandals", "Yoga clothes", "Modest wear for ashrams"],
-    insiderTip: "Visit the Beatles Ashram (Chaurasi Kutia) in the late afternoon for quiet forest walks and colorful graffiti art."
+    insiderTip: "Visit the Beatles Ashram (Chaurasi Kutia) in the late afternoon for quiet forest walks and colorful graffiti art.",
+    cuisine: {
+      dishes: ["Chole Bhature", "Aloo Puri", "Kachori", "Rabri", "Sattvik Thali"],
+      popularRestaurants: ["Chotiwala", "Mohan Ji Puri Wale", "The Sitting Elephant"]
+    }
   }
 ];
