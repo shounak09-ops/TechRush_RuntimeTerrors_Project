@@ -4,6 +4,21 @@ import "leaflet/dist/leaflet.css";
 import "./MapView.css";
 import L from "leaflet";
 
+// Weather comes from Open-Meteo (api.open-meteo.com) — free for non-commercial
+// use, no API key, no signup. We only need lat/lon, so it's a natural fit
+// alongside the OSM tiles and OSRM routing this map already uses for free.
+function describeWeatherCode(code) {
+  if (code === 0) return { label: "Clear", emoji: "☀️" };
+  if (code >= 1 && code <= 3) return { label: "Partly cloudy", emoji: "⛅" };
+  if (code === 45 || code === 48) return { label: "Foggy", emoji: "🌫️" };
+  if (code >= 51 && code <= 57) return { label: "Drizzle", emoji: "🌦️" };
+  if (code >= 61 && code <= 67) return { label: "Rain", emoji: "🌧️" };
+  if (code >= 71 && code <= 77) return { label: "Snow", emoji: "🌨️" };
+  if (code >= 80 && code <= 82) return { label: "Showers", emoji: "🌦️" };
+  if (code >= 95) return { label: "Storm", emoji: "⛈️" };
+  return { label: "Weather", emoji: "🌡️" };
+}
+
 // A global bridge so raw Leaflet popup HTML (strings) can call back into React.
 // Leaflet popups aren't React-rendered, so we can't attach onClick handlers
 // directly — instead the popup buttons call these window-level functions,
@@ -35,6 +50,7 @@ export default function MapView({ open, onClose, destinations, onViewDetails }) 
   const searchResultsRef = useRef(null);
   const clearRouteBtnRef = useRef(null);
   const routeInfoRef = useRef(null);
+  const weatherCacheRef = useRef({});
 
   useMapBridge({ onViewDetails });
 
@@ -69,6 +85,41 @@ export default function MapView({ open, onClose, destinations, onViewDetails }) 
     });
     mapRef.current.__startIcon = startIcon;
 
+    // Fetches live weather for one destination and writes it into that
+    // popup's weather slot. Lazy (only runs when a popup opens) and cached
+    // per destination id, so re-opening a popup never refetches.
+    async function loadWeatherForPopup(dest) {
+      const cache = weatherCacheRef.current;
+      const el = document.getElementById(`weather-${dest.id}`);
+      if (!el) return;
+
+      if (cache[dest.id]) {
+        el.innerHTML = cache[dest.id];
+        return;
+      }
+
+      try {
+        const url = `https://api.open-meteo.com/v1/forecast?latitude=${dest.lat}&longitude=${dest.lon}&current=temperature_2m,weather_code&timezone=auto`;
+        const res = await fetch(url);
+        const data = await res.json();
+        const temp = data?.current?.temperature_2m;
+        const code = data?.current?.weather_code;
+        if (temp == null) throw new Error("No current weather in response");
+
+        const { label, emoji } = describeWeatherCode(code);
+        const html = `<span class="popup-weather-emoji">${emoji}</span> ${Math.round(temp)}°C · ${label}`;
+        cache[dest.id] = html;
+
+        // The popup may have been closed while the request was in flight —
+        // re-check the element still exists before touching it.
+        const freshEl = document.getElementById(`weather-${dest.id}`);
+        if (freshEl) freshEl.innerHTML = html;
+      } catch (err) {
+        const freshEl = document.getElementById(`weather-${dest.id}`);
+        if (freshEl) freshEl.innerHTML = `<span class="popup-weather-error">Weather unavailable</span>`;
+      }
+    }
+
     const markerIndex = {};
     destinations.forEach((dest) => {
       if (dest.lat == null || dest.lon == null) return;
@@ -80,11 +131,15 @@ export default function MapView({ open, onClose, destinations, onViewDetails }) 
           <img src="${dest.image}" alt="${dest.name}">
           <h3>${dest.name}</h3>
           <p>${dest.description ? dest.description.slice(0, 70) : ""}</p>
+          <div class="popup-weather" id="weather-${dest.id}">
+            <span class="popup-weather-loading">Fetching weather…</span>
+          </div>
           <button onclick='window.__tripnestMapBridge?.viewDetails(${JSON.stringify(String(dest.id))})'>View Details</button>
           <button class="secondary" id="dir-${dest.id}" onclick="window.__tripnestMapDirections?.(${dest.lat}, ${dest.lon}, this)">Get Directions</button>
         </div>
       `;
       marker.bindPopup(popupHtml);
+      marker.on("popupopen", () => loadWeatherForPopup(dest));
     });
     markerIndexRef.current = markerIndex;
 

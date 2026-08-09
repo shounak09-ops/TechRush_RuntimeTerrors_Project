@@ -10,8 +10,7 @@ import { planItineraryForDestination } from "./services/aiService";
 import { 
   MapPin, Search, Moon, Sun, 
   Filter, Globe, Heart, Luggage, Loader2, Menu, X as CloseIcon,
-  Sparkles, Wallet, CloudSun, ArrowRight, Star,
-  ShieldCheck, Lock, Headphones, IndianRupee
+  Sparkles, Wallet, CloudSun, ArrowRight, Plane
 } from "lucide-react";
 
 const TRENDING_SEARCHES = ["Bali", "Switzerland", "Paris", "Goa", "Japan"];
@@ -260,9 +259,9 @@ export default function App() {
   return (
     <div className={`min-h-screen ${theme === 'dark' ? 'bg-slate-950 text-white' : 'bg-slate-50 text-slate-900'} transition-colors duration-300 font-sans`}>
       
-      {/* HEADER */}
-      <header className="sticky top-0 z-40 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-sm">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between gap-2">
+      {/* HEADER — logo left, quiet text links, one obvious CTA on the right */}
+      <header className="sticky top-0 z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200/70 dark:border-slate-800/70">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-5 flex items-center justify-between gap-4">
           <a href="#" className="flex items-center gap-2.5 shrink-0">
             <span className="p-2.5 bg-gradient-to-tr from-emerald-500 to-emerald-400 text-white rounded-xl shadow-md">
               <MapPin className="h-5 w-5" />
@@ -272,73 +271,72 @@ export default function App() {
             </span>
           </a>
 
-          <nav className="hidden md:flex items-center gap-8 font-semibold text-sm text-slate-600 dark:text-slate-300">
-            <a href="#explore" className="hover:text-emerald-500 transition-colors">Destinations</a>
-            <a href="#highlights" className="hover:text-emerald-500 transition-colors">Experiences</a>
-            <button
-              onClick={() => setIsMapOpen(true)}
-              className="hover:text-emerald-500 transition-colors"
-            >
+          {/* Key links — plain text, underline-on-hover, never boxed like buttons */}
+          <nav className="hidden md:flex items-center gap-9 font-semibold text-sm text-slate-600 dark:text-slate-300">
+            <a href="#explore" className="group relative py-1">
+              Destinations
+              <span className="absolute inset-x-0 -bottom-0.5 h-0.5 bg-emerald-500 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300" />
+            </a>
+            <a href="#highlights" className="group relative py-1">
+              Experiences
+              <span className="absolute inset-x-0 -bottom-0.5 h-0.5 bg-emerald-500 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300" />
+            </a>
+            <button onClick={() => setIsMapOpen(true)} className="group relative py-1">
               Live Map
+              <span className="absolute inset-x-0 -bottom-0.5 h-0.5 bg-emerald-500 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300" />
             </button>
-            <a href="#deals" className="hover:text-emerald-500 transition-colors">Deals</a>
           </nav>
 
-          <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
-            {/* Mobile nav toggle — reveals Destinations / Live Map, which the
-                nav above hides below the md breakpoint */}
+          <div className="flex items-center gap-1 shrink-0">
+            {/* Mobile nav toggle */}
             <button
               onClick={() => setMobileNavOpen((v) => !v)}
-              className="md:hidden p-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:scale-105 transition-transform"
+              className="md:hidden p-2 rounded-full text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
               aria-label="Toggle navigation menu"
             >
               {mobileNavOpen ? <CloseIcon className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
 
-            <button
-              onClick={toggleTheme}
-              className="p-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-amber-400 hover:scale-105 transition-transform"
-            >
-              {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-            </button>
-
-            <button
-              onClick={() => setAiPlannerOpen(true)}
-              className="p-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-gradient-to-r from-emerald-500 to-teal-500 text-white hover:scale-105 transition-transform flex items-center gap-2 px-4"
-            >
-              <Sparkles className="h-4 w-4" />
-              <span className="hidden sm:inline font-semibold text-black">AI Companion</span>
-            </button>
-
-            {/* My Itinerary — standalone button, independent of the AI Companion.
-                Opens the shared ItineraryDrawer (itinerary + packing checklist),
-                whether the active destination came from a manual pick or the AI. */}
+            {/* My Itinerary — quiet icon, not a competing button. A small dot
+                signals an active trip instead of a heavy pill/label. */}
             <button
               onClick={() => setItineraryDrawerOpen(true)}
-              className="p-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:scale-105 transition-transform flex items-center gap-2 px-4"
+              className="hidden sm:flex relative p-2.5 rounded-full text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              aria-label="My itinerary"
+              title="My Itinerary"
             >
               {itineraryLoading ? (
                 <Loader2 className="h-5 w-5 animate-spin" />
               ) : (
                 <Luggage className="h-5 w-5" />
               )}
-              <span className="hidden sm:inline font-semibold">My Itinerary</span>
               {activeDestination && (
-                <span
-                  title={activeDestination.name}
-                  className="bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 text-[10px] px-2 py-0.5 rounded-full font-bold max-w-[70px] truncate"
-                >
-                  {activeDestination.name}
-                </span>
+                <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-slate-900" />
               )}
+            </button>
+
+            <button
+              onClick={toggleTheme}
+              className="p-2.5 rounded-full text-slate-600 dark:text-amber-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              aria-label="Toggle theme"
+            >
+              {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            </button>
+
+            {/* The one obvious CTA */}
+            <button
+              onClick={() => setAiPlannerOpen(true)}
+              className="ml-1 flex items-center gap-2 pl-4 pr-5 py-2.5 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-semibold text-sm shadow-md shadow-emerald-500/25 hover:shadow-lg hover:shadow-emerald-500/35 hover:scale-[1.03] transition-all"
+            >
+              <Plane className="h-4 w-4 -rotate-45" />
+              <span className="hidden sm:inline">Plan with AI</span>
             </button>
           </div>
         </div>
 
-        {/* Mobile nav panel — Destinations / Live Map, only reachable via the
-            hamburger toggle below the md breakpoint */}
+        {/* Mobile nav panel */}
         {mobileNavOpen && (
-          <nav className="md:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 flex flex-col gap-1 font-semibold text-sm text-slate-600 dark:text-slate-300">
+          <nav className="md:hidden border-t border-slate-200/70 dark:border-slate-800/70 bg-white dark:bg-slate-900 px-4 py-3 flex flex-col gap-1 font-semibold text-sm text-slate-600 dark:text-slate-300">
             <a
               href="#explore"
               onClick={() => setMobileNavOpen(false)}
@@ -362,13 +360,15 @@ export default function App() {
             >
               Live Map
             </button>
-            <a
-              href="#deals"
-              onClick={() => setMobileNavOpen(false)}
-              className="px-3 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-emerald-500 transition-colors"
+            <button
+              onClick={() => {
+                setItineraryDrawerOpen(true);
+                setMobileNavOpen(false);
+              }}
+              className="text-left px-3 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-emerald-500 transition-colors flex items-center gap-2"
             >
-              Deals
-            </a>
+              <Luggage className="h-4 w-4" /> My Itinerary
+            </button>
           </nav>
         )}
       </header>
@@ -428,7 +428,7 @@ export default function App() {
               </form>
             </div>
 
-            {/* Trending Searches */}
+            {/* Trending destination chips — each pinned like a spot on a map */}
             <div className="flex flex-wrap items-center gap-2 pt-1">
               <span className="text-xs font-bold text-slate-500 dark:text-slate-400">Trending Searches:</span>
               {TRENDING_SEARCHES.map((term) => (
@@ -438,8 +438,9 @@ export default function App() {
                     setSearchQuery(term);
                     document.getElementById("explore")?.scrollIntoView({ behavior: "smooth" });
                   }}
-                  className="px-3.5 py-1.5 rounded-full bg-white/80 dark:bg-slate-900/70 backdrop-blur-sm border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:border-emerald-400 hover:text-emerald-600 transition-colors"
+                  className="flex items-center gap-1 px-3.5 py-1.5 rounded-full bg-white/80 dark:bg-slate-900/70 backdrop-blur-sm border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:border-emerald-400 hover:text-emerald-600 transition-colors"
                 >
+                  <MapPin className="h-3 w-3 text-emerald-500" />
                   {term}
                 </button>
               ))}
@@ -452,25 +453,23 @@ export default function App() {
             </div>
           </div>
 
-          {/* Trusted-by floating card */}
-          <div className="hidden lg:block absolute bottom-10 right-10 bg-white dark:bg-slate-900 rounded-2xl shadow-xl px-6 py-5 max-w-[220px]">
-            <p className="text-xs font-semibold text-slate-500 dark:text-slate-400">Trusted by</p>
-            <p className="text-sm font-bold text-slate-900 dark:text-white mb-2">50K+ Travelers</p>
-            <div className="flex items-center -space-x-2 mb-2">
-              {[1, 2, 3, 4].map((n) => (
-                <img
-                  key={n}
-                  src={`https://i.pravatar.cc/40?img=${n * 11}`}
-                  alt=""
-                  className="h-7 w-7 rounded-full border-2 border-white dark:border-slate-900 object-cover"
+          {/* Signature travel motif — a dotted flight route between two pins,
+              standing in for the old promo card without turning the hero
+              into another box. */}
+          <div className="hidden lg:flex flex-col items-end absolute bottom-12 right-10 pointer-events-none">
+            <div className="relative w-52 h-28">
+              <svg viewBox="0 0 200 110" className="w-52 h-28 text-emerald-500/80 dark:text-emerald-400/70" fill="none">
+                <path
+                  d="M6 100 Q 100 6 194 24"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeDasharray="3 7"
+                  strokeLinecap="round"
                 />
-              ))}
-            </div>
-            <div className="flex items-center gap-1">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <Star key={i} className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
-              ))}
-              <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 ml-1">4.8 (12K reviews)</span>
+                <circle cx="6" cy="100" r="4" fill="currentColor" />
+                <circle cx="194" cy="24" r="4" fill="currentColor" />
+              </svg>
+              <Plane className="absolute h-5 w-5 text-emerald-500 dark:text-emerald-400 rotate-[35deg]" style={{ top: "34%", left: "46%" }} />
             </div>
           </div>
         </div>
@@ -640,47 +639,6 @@ export default function App() {
               />
             ))}
           </div>
-        </section>
-
-        {/* AI TRAVEL COMPANION PROMO BANNER */}
-        <section id="deals" className="scroll-mt-24">
-          <div className="bg-slate-50 dark:bg-slate-800/40 rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row items-center gap-6">
-            <div className="text-5xl sm:text-6xl shrink-0" aria-hidden="true">🧳</div>
-            <div className="flex-1 text-center sm:text-left">
-              <h3 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white flex items-center justify-center sm:justify-start gap-2">
-                Your AI Travel Companion <Sparkles className="h-5 w-5 text-emerald-500" />
-              </h3>
-              <p className="text-sm text-slate-600 dark:text-slate-300 mt-1">
-                Get personalized recommendations, day plans, budget estimates and more — all in one place!
-              </p>
-            </div>
-            <button
-              onClick={() => setAiPlannerOpen(true)}
-              className="shrink-0 px-6 py-3 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-bold text-sm flex items-center gap-2 shadow-lg shadow-emerald-500/25 hover:scale-105 transition-transform"
-            >
-              Chat with AI Companion <ArrowRight className="h-4 w-4" />
-            </button>
-          </div>
-        </section>
-
-        {/* TRUST BADGES */}
-        <section className="grid grid-cols-2 lg:grid-cols-4 gap-6 pt-2 border-t border-slate-200 dark:border-slate-800">
-          {[
-            { icon: ShieldCheck, color: "text-emerald-600 bg-slate-100 dark:bg-slate-800", title: "Best Price Guarantee", desc: "Find the best deals for your trip" },
-            { icon: Lock, color: "text-emerald-600 bg-slate-100 dark:bg-slate-800", title: "Secure Booking", desc: "Book with confidence and peace of mind" },
-            { icon: Headphones, color: "text-emerald-600 bg-slate-100 dark:bg-slate-800", title: "24/7 Support", desc: "We're here for you anytime, anywhere" },
-            { icon: IndianRupee, color: "text-emerald-600 bg-slate-100 dark:bg-slate-800", title: "No Hidden Fees", desc: "Transparent pricing you can trust" },
-          ].map(({ icon: Icon, color, title, desc }) => (
-            <div key={title} className="flex items-start gap-3 pt-4">
-              <span className={`p-2.5 rounded-xl shrink-0 ${color}`}>
-                <Icon className="h-5 w-5" />
-              </span>
-              <div>
-                <p className="font-bold text-sm text-slate-900 dark:text-white">{title}</p>
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{desc}</p>
-              </div>
-            </div>
-          ))}
         </section>
 
       </main>

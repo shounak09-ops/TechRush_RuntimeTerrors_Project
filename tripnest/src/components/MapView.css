@@ -43,6 +43,27 @@
   margin-bottom: 10px;
   line-height: 1.4;
 }
+.popup-weather {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #0f172a;
+  background: #f1f5f9;
+  border-radius: 999px;
+  padding: 5px 12px;
+  margin: 0 0 10px;
+}
+.popup-weather-emoji {
+  font-size: 13px;
+  line-height: 1;
+}
+.popup-weather-loading,
+.popup-weather-error {
+  color: #94a3b8;
+  font-weight: 600;
+}
 .popup-card button {
   background: linear-gradient(to right, #0ea5e9, #10b981);
   color: #fff;
