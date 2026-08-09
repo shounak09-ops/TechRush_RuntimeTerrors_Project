@@ -10,7 +10,7 @@ import { planItineraryForDestination } from "./services/aiService";
 import { 
   MapPin, Search, Moon, Sun, 
   Filter, Globe, Heart, Luggage, Loader2, Menu, X as CloseIcon,
-  Sparkles, Wallet, CloudSun, ArrowRight, Plane
+  Sparkles, Wallet, CloudSun, ArrowRight, Plane, Compass
 } from "lucide-react";
 
 const TRENDING_SEARCHES = ["Bali", "Switzerland", "Paris", "Goa", "Japan"];
@@ -72,6 +72,14 @@ export default function App() {
   }, [dayCount]);
 
   const toggleTheme = () => setTheme(prev => prev === "light" ? "dark" : "light");
+
+  const resetFilters = () => {
+    setScope("All");
+    setActiveCategory("All");
+    setSelectedRegion("All");
+    setSelectedContinent("All");
+    setShowOnlyFavorites(false);
+  };
 
   const handleToggleFavorite = (id) => {
     setFavorites(prev => 
@@ -261,7 +269,7 @@ export default function App() {
       
       {/* HEADER — logo left, quiet text links, one obvious CTA on the right */}
       <header className="sticky top-0 z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200/70 dark:border-slate-800/70">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-5 flex items-center justify-between gap-4">
+        <div className="max-w-6xl mx-auto px-6 sm:px-8 py-5 flex items-center justify-between gap-4">
           <a href="#" className="flex items-center gap-2.5 shrink-0">
             <span className="p-2.5 bg-gradient-to-tr from-emerald-500 to-emerald-400 text-white rounded-xl shadow-md">
               <MapPin className="h-5 w-5" />
@@ -386,22 +394,31 @@ export default function App() {
 
         <div className="relative max-w-6xl mx-auto px-6 sm:px-8 pt-16 pb-24 lg:pt-24 lg:pb-32">
           <div className="max-w-xl space-y-6">
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/80 dark:bg-slate-900/70 backdrop-blur-sm text-emerald-600 dark:text-emerald-400 font-bold text-xs tracking-wider uppercase shadow-sm">
+            <span
+              className="tn-animate-in inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/80 dark:bg-slate-900/70 backdrop-blur-sm text-emerald-600 dark:text-emerald-400 font-bold text-xs tracking-wider uppercase shadow-sm"
+              style={{ animationDelay: "0ms" }}
+            >
               <Sparkles className="h-4 w-4" /> Smart Travel Planner
             </span>
 
-            <h1 className="text-5xl sm:text-6xl font-bold tracking-tight leading-[1.05] text-slate-900 dark:text-white">
+            <h1
+              className="tn-animate-in font-display text-5xl sm:text-6xl font-semibold tracking-tight leading-[1.05] text-slate-900 dark:text-white"
+              style={{ animationDelay: "90ms" }}
+            >
               Explore India <br className="hidden sm:inline"/>
               &amp; <span className="text-emerald-500">The World</span>
             </h1>
 
-            <p className="text-slate-600 dark:text-slate-300 text-base leading-relaxed max-w-md">
+            <p
+              className="tn-animate-in text-slate-600 dark:text-slate-300 text-base leading-relaxed max-w-md"
+              style={{ animationDelay: "180ms" }}
+            >
               Plan smarter, travel better, and create unforgettable memories with{" "}
               <span className="font-bold text-slate-900 dark:text-white">TripNest</span>.
             </p>
 
             {/* Search Bar */}
-            <div className="pt-2 max-w-lg">
+            <div className="tn-animate-in pt-2 max-w-lg" style={{ animationDelay: "270ms" }}>
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
@@ -429,7 +446,7 @@ export default function App() {
             </div>
 
             {/* Trending destination chips — each pinned like a spot on a map */}
-            <div className="flex flex-wrap items-center gap-2 pt-1">
+            <div className="tn-animate-in flex flex-wrap items-center gap-2 pt-1" style={{ animationDelay: "360ms" }}>
               <span className="text-xs font-bold text-slate-500 dark:text-slate-400">Trending Searches:</span>
               {TRENDING_SEARCHES.map((term) => (
                 <button
@@ -456,7 +473,10 @@ export default function App() {
           {/* Signature travel motif — a dotted flight route between two pins,
               standing in for the old promo card without turning the hero
               into another box. */}
-          <div className="hidden lg:flex flex-col items-end absolute bottom-12 right-10 pointer-events-none">
+          <div
+            className="tn-animate-in hidden lg:flex flex-col items-end absolute bottom-12 right-10 pointer-events-none"
+            style={{ animationDelay: "450ms" }}
+          >
             <div className="relative w-52 h-28">
               <svg viewBox="0 0 200 110" className="w-52 h-28 text-emerald-500/80 dark:text-emerald-400/70" fill="none">
                 <path
@@ -511,17 +531,11 @@ export default function App() {
         <section id="explore" className="space-y-8 scroll-mt-24">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white">Explore by Scope</h2>
+              <h2 className="font-display text-3xl sm:text-4xl font-semibold text-slate-900 dark:text-white">Explore by Scope</h2>
               <span className="block w-10 h-1 rounded-full bg-emerald-400 mt-1.5" />
             </div>
             <button
-              onClick={() => {
-                setScope("All");
-                setActiveCategory("All");
-                setSelectedRegion("All");
-                setSelectedContinent("All");
-                setShowOnlyFavorites(false);
-              }}
+              onClick={resetFilters}
               className="flex items-center gap-1 text-sm font-bold text-emerald-600 dark:text-emerald-400 hover:gap-1.5 transition-all"
             >
               View All <ArrowRight className="h-4 w-4" />
@@ -624,21 +638,41 @@ export default function App() {
 
           </div>
 
-          {/* Cards Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredDestinations.map((dest) => (
-              <DestinationCard
-                key={dest.id}
-                dest={dest}
-                onAddToItinerary={handleAddToItinerary}
-                isFavorite={favorites.includes(dest.id)}
-                onToggleFavorite={handleToggleFavorite}
-                isCompared={compared.includes(dest.id)}
-                onToggleCompare={handleToggleCompare}
-                onOpenDetails={(d) => setSelectedModalDest(d)}
-              />
-            ))}
-          </div>
+          {/* Cards Grid — or an empty state when the current filters match nothing */}
+          {filteredDestinations.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {filteredDestinations.map((dest) => (
+                <DestinationCard
+                  key={dest.id}
+                  dest={dest}
+                  onAddToItinerary={handleAddToItinerary}
+                  isFavorite={favorites.includes(dest.id)}
+                  onToggleFavorite={handleToggleFavorite}
+                  isCompared={compared.includes(dest.id)}
+                  onToggleCompare={handleToggleCompare}
+                  onOpenDetails={(d) => setSelectedModalDest(d)}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="flex flex-col items-center text-center gap-4 py-20 px-6 rounded-3xl border border-dashed border-slate-200 dark:border-slate-800">
+              <span className="p-4 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500">
+                <Compass className="h-7 w-7" />
+              </span>
+              <div className="space-y-1.5">
+                <p className="font-display text-xl font-semibold text-slate-900 dark:text-white">No destinations match these filters</p>
+                <p className="text-sm text-slate-500 dark:text-slate-400 max-w-sm">
+                  Try a different category, region, or clear everything to see all {DESTINATIONS.length} destinations again.
+                </p>
+              </div>
+              <button
+                onClick={resetFilters}
+                className="mt-1 px-5 py-2.5 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-sm shadow-sm transition-colors"
+              >
+                Clear filters
+              </button>
+            </div>
+          )}
         </section>
 
       </main>

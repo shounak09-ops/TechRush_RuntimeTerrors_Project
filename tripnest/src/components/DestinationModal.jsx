@@ -56,7 +56,7 @@ export default function DestinationModal({
               <span className="px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs font-semibold">
                 {dest.category}
               </span>
-              <h2 className="text-2xl sm:text-3xl font-black mt-2">{dest.name}</h2>
+              <h2 className="font-display text-2xl sm:text-3xl font-semibold mt-2">{dest.name}</h2>
               <div className="flex items-center gap-1.5 text-xs text-sky-300 font-medium mt-1">
                 <MapPin className="h-4 w-4" />
                 <span>

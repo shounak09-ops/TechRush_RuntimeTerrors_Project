@@ -350,7 +350,7 @@ function ResultView({
               <TrendingUp className="h-3 w-3" /> {trip.matchScore}% match
             </span>
           </div>
-          <h3 className="text-2xl sm:text-3xl font-black">{dest.name}</h3>
+          <h3 className="font-display text-2xl sm:text-3xl font-semibold">{dest.name}</h3>
           <div className="flex items-center gap-1.5 text-xs text-sky-300 font-medium mt-1">
             <MapPin className="h-3.5 w-3.5" />
             <span>{dest.country}</span>

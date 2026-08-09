@@ -189,7 +189,7 @@ export default function DestinationCard({
               {dest?.region ? ` • ${dest.region} India` : dest?.continent ? ` • ${dest.continent}` : ''}
             </span>
           </div>
-          <h3 className="text-xl font-bold tracking-tight leading-snug truncate">
+          <h3 className="font-display text-xl font-semibold tracking-tight leading-snug truncate">
             {dest?.name}
           </h3>
         </div>
