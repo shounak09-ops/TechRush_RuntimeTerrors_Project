@@ -69,8 +69,8 @@ export default function BookingModal({ dest, onClose, onConfirmBooking }) {
   )}`;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-      <div className="bg-white dark:bg-slate-900 w-full max-w-md rounded-3xl shadow-2xl p-6 relative">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-fadeIn">
+      <div className="tn-modal-in bg-white dark:bg-slate-900 w-full max-w-md rounded-3xl shadow-2xl p-6 relative">
         <button
           onClick={handleClose}
           className="absolute top-4 right-4 p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800"
@@ -152,7 +152,7 @@ export default function BookingModal({ dest, onClose, onConfirmBooking }) {
 
         {step === "confirmed" && (
           <div className="text-center py-2">
-            <CheckCircle2 className="h-12 w-12 text-emerald-500 mx-auto mb-3" />
+            <CheckCircle2 className="tn-pop-in h-12 w-12 text-emerald-500 mx-auto mb-3" />
             <h2 className="text-xl font-bold mb-1 text-slate-900 dark:text-white">
               Booking Confirmed
             </h2>

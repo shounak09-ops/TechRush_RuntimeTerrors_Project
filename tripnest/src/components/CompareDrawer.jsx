@@ -11,8 +11,8 @@ export default function CompareDrawer({ comparedItems, onRemoveCompare, onClearA
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-900/90 backdrop-blur-md">
-      <div className="h-full flex flex-col p-6 overflow-y-auto">
+    <div className="fixed inset-0 z-50 bg-slate-900/90 backdrop-blur-md animate-fadeIn">
+      <div className="tn-modal-in h-full flex flex-col p-6 overflow-y-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">

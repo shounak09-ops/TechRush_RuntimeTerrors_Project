@@ -98,7 +98,7 @@ export default function DestinationCard({
     : "bg-slate-700 text-white";
 
   return (
-    <div className="group relative bg-white dark:bg-slate-900 border border-slate-900/8 dark:border-white/10 rounded-2xl overflow-hidden shadow-[0_1px_3px_rgba(15,23,42,0.06),0_1px_2px_rgba(15,23,42,0.04)] hover:shadow-[0_8px_24px_rgba(15,23,42,0.10)] transition-shadow duration-300 flex flex-col justify-between">
+    <div className="group relative bg-white dark:bg-slate-900 border border-slate-900/8 dark:border-white/10 rounded-2xl overflow-hidden shadow-[0_1px_3px_rgba(15,23,42,0.06),0_1px_2px_rgba(15,23,42,0.04)] hover:shadow-[0_8px_24px_rgba(15,23,42,0.10)] hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
       
       {/* Card Header & Image Carousel */}
       <div className="relative overflow-hidden aspect-[4/3] bg-slate-950">
@@ -222,7 +222,7 @@ export default function DestinationCard({
           <button
             onClick={() => onToggleCompare(dest?.id)}
             aria-pressed={isCompared}
-            className={`flex items-center gap-1.5 text-[11px] font-bold transition-colors cursor-pointer ${
+            className={`flex items-center gap-1.5 text-[11px] font-bold transition-all active:scale-95 cursor-pointer ${
               isCompared ? "text-emerald-500" : "text-slate-500 hover:text-slate-900 dark:hover:text-slate-200"
             }`}
           >
@@ -233,7 +233,7 @@ export default function DestinationCard({
           <div className="flex items-center gap-2">
             <button
               onClick={() => onOpenDetails(dest)}
-              className="px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-bold transition-colors flex items-center gap-1 cursor-pointer"
+              className="px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-bold transition-all active:scale-95 flex items-center gap-1 cursor-pointer"
             >
               <FileText className="h-3.5 w-3.5" />
               Details
@@ -241,7 +241,7 @@ export default function DestinationCard({
 
             <button
               onClick={() => onAddToItinerary(dest)}
-              className="px-3.5 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold transition-colors flex items-center gap-1 shadow-sm cursor-pointer"
+              className="px-3.5 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold transition-all active:scale-95 flex items-center gap-1 shadow-sm cursor-pointer"
             >
               <Plus className="h-3.5 w-3.5" />
               Add

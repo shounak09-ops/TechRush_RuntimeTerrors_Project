@@ -5,8 +5,8 @@ export default function BookingsDrawer({ open, onClose, bookings }) {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end bg-black/40 backdrop-blur-sm">
-      <div className="w-full max-w-md h-full bg-white dark:bg-slate-900 shadow-2xl p-6 overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex justify-end bg-black/40 backdrop-blur-sm animate-fadeIn">
+      <div className="tn-drawer-in-right w-full max-w-md h-full bg-white dark:bg-slate-900 shadow-2xl p-6 overflow-y-auto">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold flex items-center gap-2 text-slate-900 dark:text-white">
             <Ticket className="h-5 w-5 text-sky-500" /> My Bookings
@@ -24,7 +24,7 @@ export default function BookingsDrawer({ open, onClose, bookings }) {
           <p className="text-sm text-slate-400">No bookings yet.</p>
         )}
 
-        <div className="space-y-4">
+        <div className="tn-stagger-grid space-y-4">
           {bookings.slice().reverse().map((b) => {
             const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=${encodeURIComponent(
               JSON.stringify({ code: b.code, destination: b.destinationName, date: b.travelDate })
