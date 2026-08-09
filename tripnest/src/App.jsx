@@ -264,24 +264,24 @@ export default function App() {
       <header className="sticky top-0 z-40 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-sm">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between gap-2">
           <a href="#" className="flex items-center gap-2.5 shrink-0">
-            <span className="p-2.5 bg-gradient-to-tr from-sky-500 to-emerald-400 text-white rounded-xl shadow-md">
+            <span className="p-2.5 bg-gradient-to-tr from-emerald-500 to-emerald-400 text-white rounded-xl shadow-md">
               <MapPin className="h-5 w-5" />
             </span>
-            <span className="text-xl sm:text-2xl font-black tracking-tight">
-              <span className="text-emerald-500">Trip</span><span className="text-sky-500">Nest</span>
+            <span className="text-xl sm:text-2xl font-bold tracking-tight">
+              <span className="text-slate-900 dark:text-white">Trip</span><span className="text-emerald-500">Nest</span>
             </span>
           </a>
 
           <nav className="hidden md:flex items-center gap-8 font-semibold text-sm text-slate-600 dark:text-slate-300">
-            <a href="#explore" className="hover:text-sky-500 transition-colors">Destinations</a>
-            <a href="#highlights" className="hover:text-sky-500 transition-colors">Experiences</a>
+            <a href="#explore" className="hover:text-emerald-500 transition-colors">Destinations</a>
+            <a href="#highlights" className="hover:text-emerald-500 transition-colors">Experiences</a>
             <button
               onClick={() => setIsMapOpen(true)}
-              className="hover:text-sky-500 transition-colors"
+              className="hover:text-emerald-500 transition-colors"
             >
               Live Map
             </button>
-            <a href="#deals" className="hover:text-sky-500 transition-colors">Deals</a>
+            <a href="#deals" className="hover:text-emerald-500 transition-colors">Deals</a>
           </nav>
 
           <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
@@ -326,7 +326,7 @@ export default function App() {
               {activeDestination && (
                 <span
                   title={activeDestination.name}
-                  className="bg-sky-500/15 text-sky-600 dark:text-sky-400 text-[10px] px-2 py-0.5 rounded-full font-bold max-w-[70px] truncate"
+                  className="bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 text-[10px] px-2 py-0.5 rounded-full font-bold max-w-[70px] truncate"
                 >
                   {activeDestination.name}
                 </span>
@@ -342,14 +342,14 @@ export default function App() {
             <a
               href="#explore"
               onClick={() => setMobileNavOpen(false)}
-              className="px-3 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-sky-500 transition-colors"
+              className="px-3 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-emerald-500 transition-colors"
             >
               Destinations
             </a>
             <a
               href="#highlights"
               onClick={() => setMobileNavOpen(false)}
-              className="px-3 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-sky-500 transition-colors"
+              className="px-3 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-emerald-500 transition-colors"
             >
               Experiences
             </a>
@@ -358,14 +358,14 @@ export default function App() {
                 setIsMapOpen(true);
                 setMobileNavOpen(false);
               }}
-              className="text-left px-3 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-sky-500 transition-colors"
+              className="text-left px-3 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-emerald-500 transition-colors"
             >
               Live Map
             </button>
             <a
               href="#deals"
               onClick={() => setMobileNavOpen(false)}
-              className="px-3 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-sky-500 transition-colors"
+              className="px-3 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-emerald-500 transition-colors"
             >
               Deals
             </a>
@@ -381,24 +381,22 @@ export default function App() {
             alt=""
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-white via-white/85 to-white/20 dark:from-slate-950 dark:via-slate-950/85 dark:to-slate-950/20" />
+          <div className="absolute inset-0 bg-gradient-to-r from-white via-white/90 via-40% to-white/0 dark:from-slate-950 dark:via-slate-950/90 dark:via-40% dark:to-slate-950/0" />
         </div>
 
-        <div className="relative max-w-6xl mx-auto px-6 pt-14 pb-24 lg:pt-20 lg:pb-32">
+        <div className="relative max-w-6xl mx-auto px-6 sm:px-8 pt-16 pb-24 lg:pt-24 lg:pb-32">
           <div className="max-w-xl space-y-6">
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/80 dark:bg-slate-900/70 backdrop-blur-sm text-sky-600 dark:text-sky-400 font-bold text-xs tracking-wider uppercase shadow-sm">
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/80 dark:bg-slate-900/70 backdrop-blur-sm text-emerald-600 dark:text-emerald-400 font-bold text-xs tracking-wider uppercase shadow-sm">
               <Sparkles className="h-4 w-4" /> Smart Travel Planner
             </span>
 
-            <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight leading-[1.05]">
-              Explore India &amp; The World <br className="hidden sm:inline"/>
-              <span className="bg-gradient-to-r from-sky-600 via-teal-500 to-emerald-600 bg-clip-text text-transparent drop-shadow-[0_1px_2px_rgba(0,0,0,0.15)] font-bold">
-               With Rich Insights
-              </span>
+            <h1 className="text-5xl sm:text-6xl font-bold tracking-tight leading-[1.05] text-slate-900 dark:text-white">
+              Explore India <br className="hidden sm:inline"/>
+              &amp; <span className="text-emerald-500">The World</span>
             </h1>
 
-            <p className="text-slate-600 dark:text-slate-300 text-base sm:text-lg leading-relaxed">
-              Plan smarter, travel better and create unforgettable memories with{" "}
+            <p className="text-slate-600 dark:text-slate-300 text-base leading-relaxed max-w-md">
+              Plan smarter, travel better, and create unforgettable memories with{" "}
               <span className="font-bold text-slate-900 dark:text-white">TripNest</span>.
             </p>
 
@@ -422,9 +420,10 @@ export default function App() {
                 <button
                   type="submit"
                   aria-label="Search"
-                  className="p-2.5 rounded-full bg-gradient-to-tr from-sky-500 to-emerald-400 text-white shrink-0 hover:scale-105 transition-transform"
+                  className="px-6 py-3 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-sm shrink-0 shadow-md shadow-emerald-500/30 hover:shadow-lg hover:shadow-emerald-500/40 transition-all flex items-center gap-2"
                 >
                   <Search className="h-4 w-4" />
+                  <span className="hidden sm:inline">Search</span>
                 </button>
               </form>
             </div>
@@ -439,14 +438,14 @@ export default function App() {
                     setSearchQuery(term);
                     document.getElementById("explore")?.scrollIntoView({ behavior: "smooth" });
                   }}
-                  className="px-3.5 py-1.5 rounded-full bg-white/80 dark:bg-slate-900/70 backdrop-blur-sm border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:border-sky-400 hover:text-sky-600 transition-colors shadow-sm"
+                  className="px-3.5 py-1.5 rounded-full bg-white/80 dark:bg-slate-900/70 backdrop-blur-sm border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:border-emerald-400 hover:text-emerald-600 transition-colors"
                 >
                   {term}
                 </button>
               ))}
               <a
                 href="#explore"
-                className="flex items-center gap-1 px-3.5 py-1.5 text-xs font-bold text-sky-600 dark:text-sky-400 hover:gap-1.5 transition-all"
+                className="flex items-center gap-1 px-3.5 py-1.5 text-xs font-bold text-emerald-600 dark:text-emerald-400 hover:gap-1.5 transition-all"
               >
                 More <ArrowRight className="h-3.5 w-3.5" />
               </a>
@@ -454,9 +453,9 @@ export default function App() {
           </div>
 
           {/* Trusted-by floating card */}
-          <div className="hidden lg:block absolute bottom-10 right-10 bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-800 px-5 py-4 max-w-[220px]">
+          <div className="hidden lg:block absolute bottom-10 right-10 bg-white dark:bg-slate-900 rounded-2xl shadow-xl px-6 py-5 max-w-[220px]">
             <p className="text-xs font-semibold text-slate-500 dark:text-slate-400">Trusted by</p>
-            <p className="text-sm font-extrabold text-slate-900 dark:text-white mb-2">50K+ Travelers</p>
+            <p className="text-sm font-bold text-slate-900 dark:text-white mb-2">50K+ Travelers</p>
             <div className="flex items-center -space-x-2 mb-2">
               {[1, 2, 3, 4].map((n) => (
                 <img
@@ -478,13 +477,13 @@ export default function App() {
       </section>
 
       {/* FEATURE HIGHLIGHTS BAR — overlaps the hero's bottom edge */}
-      <div id="highlights" className="max-w-6xl mx-auto px-6 -mt-14 relative z-10 scroll-mt-24">
-        <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-3xl shadow-xl p-4 sm:p-6 grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div id="highlights" className="max-w-6xl mx-auto px-6 sm:px-8 -mt-14 relative z-10 scroll-mt-24">
+        <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-xl p-6 sm:p-8 grid grid-cols-2 lg:grid-cols-4 gap-6">
           {[
-            { icon: Luggage, color: "text-purple-500 bg-purple-50 dark:bg-purple-500/10", title: "AI Trip Planner", desc: "Get a personalized itinerary in seconds", action: () => setAiPlannerOpen(true) },
-            { icon: Wallet, color: "text-emerald-500 bg-emerald-50 dark:bg-emerald-500/10", title: "Smart Budgeting", desc: "Plan your trip within your budget", action: () => setItineraryDrawerOpen(true) },
-            { icon: MapPin, color: "text-orange-500 bg-orange-50 dark:bg-orange-500/10", title: "Local Insights", desc: "Discover hidden gems & local favorites", action: () => document.getElementById("explore")?.scrollIntoView({ behavior: "smooth" }) },
-            { icon: CloudSun, color: "text-sky-500 bg-sky-50 dark:bg-sky-500/10", title: "Real-time Updates", desc: "Live weather, alerts & travel updates", action: () => setIsMapOpen(true) },
+            { icon: Luggage, color: "text-emerald-600 bg-slate-100 dark:bg-slate-800", title: "AI Trip Planner", desc: "Get a personalized itinerary in seconds", action: () => setAiPlannerOpen(true) },
+            { icon: Wallet, color: "text-emerald-600 bg-slate-100 dark:bg-slate-800", title: "Smart Budgeting", desc: "Plan your trip within your budget", action: () => setItineraryDrawerOpen(true) },
+            { icon: MapPin, color: "text-emerald-600 bg-slate-100 dark:bg-slate-800", title: "Local Insights", desc: "Discover hidden gems & local favorites", action: () => document.getElementById("explore")?.scrollIntoView({ behavior: "smooth" }) },
+            { icon: CloudSun, color: "text-emerald-600 bg-slate-100 dark:bg-slate-800", title: "Real-time Updates", desc: "Live weather, alerts & travel updates", action: () => setIsMapOpen(true) },
           ].map(({ icon: Icon, color, title, desc, action }) => (
             <button
               key={title}
@@ -497,7 +496,7 @@ export default function App() {
               <span className="flex-1 min-w-0">
                 <span className="flex items-center justify-between gap-1">
                   <span className="font-bold text-sm text-slate-900 dark:text-white">{title}</span>
-                  <ArrowRight className="h-3.5 w-3.5 text-slate-300 dark:text-slate-600 group-hover:text-sky-500 group-hover:translate-x-0.5 transition-all shrink-0" />
+                  <ArrowRight className="h-3.5 w-3.5 text-slate-300 dark:text-slate-600 group-hover:text-emerald-500 group-hover:translate-x-0.5 transition-all shrink-0" />
                 </span>
                 <span className="block text-xs text-slate-500 dark:text-slate-400 mt-0.5">{desc}</span>
               </span>
@@ -507,13 +506,13 @@ export default function App() {
       </div>
 
       {/* MAIN CONTAINER */}
-      <main className="max-w-6xl mx-auto px-6 pt-16 pb-24 space-y-16">
+      <main className="max-w-6xl mx-auto px-6 sm:px-8 pt-16 pb-24 space-y-16">
 
         {/* FILTER BAR */}
         <section id="explore" className="space-y-8 scroll-mt-24">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white">Explore by Scope</h2>
+              <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white">Explore by Scope</h2>
               <span className="block w-10 h-1 rounded-full bg-emerald-400 mt-1.5" />
             </div>
             <button
@@ -524,18 +523,18 @@ export default function App() {
                 setSelectedContinent("All");
                 setShowOnlyFavorites(false);
               }}
-              className="flex items-center gap-1 text-sm font-bold text-sky-600 dark:text-sky-400 hover:gap-1.5 transition-all"
+              className="flex items-center gap-1 text-sm font-bold text-emerald-600 dark:text-emerald-400 hover:gap-1.5 transition-all"
             >
               View All <ArrowRight className="h-4 w-4" />
             </button>
           </div>
 
-          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm space-y-6">
+          <div className="bg-slate-50 dark:bg-slate-900/60 rounded-3xl p-8 space-y-8">
             
             {/* Scope Row */}
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-5">
               <div className="flex items-center gap-2 text-slate-900 dark:text-white font-bold text-lg">
-                <Globe className="h-5 w-5 text-sky-500" />
+                <Globe className="h-5 w-5 text-emerald-500" />
                 <span>Scope</span>
               </div>
 
@@ -550,7 +549,7 @@ export default function App() {
                     }}
                     className={`flex-1 sm:flex-none px-5 py-2 rounded-xl text-xs font-bold transition-all ${
                       scope === item
-                        ? "bg-white dark:bg-slate-900 text-sky-500 shadow-sm"
+                        ? "bg-white dark:bg-slate-900 text-emerald-500 shadow-sm"
                         : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
                     }`}
                   >
@@ -569,7 +568,7 @@ export default function App() {
                     onClick={() => setActiveCategory(cat)}
                     className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
                       activeCategory === cat
-                        ? "bg-sky-500 text-white shadow-md shadow-sky-500/30"
+                        ? "bg-emerald-500 text-white shadow-md shadow-emerald-500/30"
                         : "bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 text-slate-600 dark:text-slate-300"
                     }`}
                   >
@@ -645,10 +644,10 @@ export default function App() {
 
         {/* AI TRAVEL COMPANION PROMO BANNER */}
         <section id="deals" className="scroll-mt-24">
-          <div className="bg-gradient-to-r from-emerald-50 to-sky-50 dark:from-emerald-500/10 dark:to-sky-500/10 border border-emerald-100 dark:border-emerald-500/20 rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row items-center gap-6">
+          <div className="bg-slate-50 dark:bg-slate-800/40 rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row items-center gap-6">
             <div className="text-5xl sm:text-6xl shrink-0" aria-hidden="true">🧳</div>
             <div className="flex-1 text-center sm:text-left">
-              <h3 className="text-lg sm:text-xl font-extrabold text-slate-900 dark:text-white flex items-center justify-center sm:justify-start gap-2">
+              <h3 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white flex items-center justify-center sm:justify-start gap-2">
                 Your AI Travel Companion <Sparkles className="h-5 w-5 text-emerald-500" />
               </h3>
               <p className="text-sm text-slate-600 dark:text-slate-300 mt-1">
@@ -667,10 +666,10 @@ export default function App() {
         {/* TRUST BADGES */}
         <section className="grid grid-cols-2 lg:grid-cols-4 gap-6 pt-2 border-t border-slate-200 dark:border-slate-800">
           {[
-            { icon: ShieldCheck, color: "text-emerald-600 bg-emerald-50 dark:bg-emerald-500/10", title: "Best Price Guarantee", desc: "Find the best deals for your trip" },
-            { icon: Lock, color: "text-rose-500 bg-rose-50 dark:bg-rose-500/10", title: "Secure Booking", desc: "Book with confidence and peace of mind" },
-            { icon: Headphones, color: "text-sky-500 bg-sky-50 dark:bg-sky-500/10", title: "24/7 Support", desc: "We're here for you anytime, anywhere" },
-            { icon: IndianRupee, color: "text-amber-500 bg-amber-50 dark:bg-amber-500/10", title: "No Hidden Fees", desc: "Transparent pricing you can trust" },
+            { icon: ShieldCheck, color: "text-emerald-600 bg-slate-100 dark:bg-slate-800", title: "Best Price Guarantee", desc: "Find the best deals for your trip" },
+            { icon: Lock, color: "text-emerald-600 bg-slate-100 dark:bg-slate-800", title: "Secure Booking", desc: "Book with confidence and peace of mind" },
+            { icon: Headphones, color: "text-emerald-600 bg-slate-100 dark:bg-slate-800", title: "24/7 Support", desc: "We're here for you anytime, anywhere" },
+            { icon: IndianRupee, color: "text-emerald-600 bg-slate-100 dark:bg-slate-800", title: "No Hidden Fees", desc: "Transparent pricing you can trust" },
           ].map(({ icon: Icon, color, title, desc }) => (
             <div key={title} className="flex items-start gap-3 pt-4">
               <span className={`p-2.5 rounded-xl shrink-0 ${color}`}>

@@ -98,7 +98,7 @@ export default function DestinationCard({
     : "bg-slate-700 text-white";
 
   return (
-    <div className="group relative bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+    <div className="group relative bg-white dark:bg-slate-900 border border-slate-900/8 dark:border-white/10 rounded-2xl overflow-hidden shadow-[0_1px_3px_rgba(15,23,42,0.06),0_1px_2px_rgba(15,23,42,0.04)] hover:shadow-[0_8px_24px_rgba(15,23,42,0.10)] transition-shadow duration-300 flex flex-col justify-between">
       
       {/* Card Header & Image Carousel */}
       <div className="relative overflow-hidden aspect-[4/3] bg-slate-950">
@@ -173,7 +173,7 @@ export default function DestinationCard({
               <span
                 key={idx}
                 className={`h-1.5 rounded-full transition-all ${
-                  idx === safeImgIndex ? "w-4 bg-sky-400" : "w-1.5 bg-white/50"
+                  idx === safeImgIndex ? "w-4 bg-emerald-400" : "w-1.5 bg-white/50"
                 }`}
               />
             ))}
@@ -182,36 +182,36 @@ export default function DestinationCard({
 
         {/* Title & Location Over Image */}
         <div className="absolute bottom-3 left-4 right-4 text-white z-10 pointer-events-none">
-          <div className="flex items-center gap-1.5 text-xs text-sky-300 font-medium mb-0.5">
+          <div className="flex items-center gap-1.5 text-sm text-white/75 font-medium mb-1">
             <MapPin className="h-3.5 w-3.5 shrink-0" />
             <span className="truncate">
               {dest?.country}
               {dest?.region ? ` • ${dest.region} India` : dest?.continent ? ` • ${dest.continent}` : ''}
             </span>
           </div>
-          <h3 className="text-xl font-extrabold tracking-tight leading-snug truncate">
+          <h3 className="text-xl font-bold tracking-tight leading-snug truncate">
             {dest?.name}
           </h3>
         </div>
       </div>
 
       {/* Card Body */}
-      <div className="p-5 space-y-4 flex-1 flex flex-col justify-between">
-        <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-2 leading-relaxed">
+      <div className="p-6 space-y-4 flex-1 flex flex-col justify-between">
+        <p className="text-sm text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">
           {dest?.description}
         </p>
 
-        {/* Budget & Duration */}
-        <div className="flex items-center justify-between text-xs font-semibold text-slate-700 dark:text-slate-300 bg-slate-50 dark:bg-slate-800/50 p-2.5 rounded-xl border border-slate-100 dark:border-slate-800">
+        {/* Budget & Duration — plain metadata, no box-in-box container */}
+        <div className="flex items-center gap-4 text-sm text-slate-500 dark:text-slate-400">
           {dest?.totalBudget && (
             <div className="flex items-center gap-1">
               <IndianRupee className="h-3.5 w-3.5 text-emerald-500" />
-              <span>₹{dest.totalBudget}</span>
+              <span className="font-medium text-slate-700 dark:text-slate-300">₹{dest.totalBudget}</span>
             </div>
           )}
           {dest?.suggestedDays && (
-            <div className="flex items-center gap-1 text-slate-500 dark:text-slate-400">
-              <Clock className="h-3.5 w-3.5 text-sky-500" />
+            <div className="flex items-center gap-1">
+              <Clock className="h-3.5 w-3.5" />
               <span>{dest.suggestedDays} Days</span>
             </div>
           )}
@@ -223,7 +223,7 @@ export default function DestinationCard({
             onClick={() => onToggleCompare(dest?.id)}
             aria-pressed={isCompared}
             className={`flex items-center gap-1.5 text-[11px] font-bold transition-colors cursor-pointer ${
-              isCompared ? "text-sky-500" : "text-slate-500 hover:text-slate-900 dark:hover:text-slate-200"
+              isCompared ? "text-emerald-500" : "text-slate-500 hover:text-slate-900 dark:hover:text-slate-200"
             }`}
           >
             <Columns2 className="h-3.5 w-3.5" />
