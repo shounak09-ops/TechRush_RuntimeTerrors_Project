@@ -160,8 +160,8 @@ export default function AITripPlanner({
   const bodyText = theme === "dark" ? "text-slate-100" : "text-slate-900"
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-      <div className={`relative w-full max-w-4xl border rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh] ${panelClasses}`}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fadeIn">
+      <div className={`tn-modal-in relative w-full max-w-4xl border rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh] ${panelClasses}`}>
         {/* Header */}
         <div className="flex items-center gap-3 p-5 border-b border-slate-200 dark:border-slate-800 bg-gradient-to-r from-emerald-500/10 to-teal-500/10">
           <span className="p-2.5 bg-gradient-to-tr from-emerald-500 to-teal-500 text-white rounded-xl shadow-md">
@@ -249,7 +249,7 @@ export default function AITripPlanner({
               <button
                 type="button"
                 onClick={handleGenerate}
-                className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/25 hover:from-emerald-600 hover:to-teal-600 transition-all"
+                className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/25 hover:from-emerald-600 hover:to-teal-600 active:scale-[0.98] transition-all"
               >
                 <Sparkles className="h-4 w-4" />
                 Generate My Trip
@@ -350,7 +350,7 @@ function ResultView({
               <TrendingUp className="h-3 w-3" /> {trip.matchScore}% match
             </span>
           </div>
-          <h3 className="text-2xl sm:text-3xl font-black">{dest.name}</h3>
+          <h3 className="font-display text-2xl sm:text-3xl font-semibold">{dest.name}</h3>
           <div className="flex items-center gap-1.5 text-xs text-sky-300 font-medium mt-1">
             <MapPin className="h-3.5 w-3.5" />
             <span>{dest.country}</span>

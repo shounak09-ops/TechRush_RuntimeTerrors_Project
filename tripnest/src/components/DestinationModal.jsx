@@ -35,7 +35,7 @@ export default function DestinationModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fadeIn">
-      <div className="relative w-full max-w-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
+      <div className="tn-modal-in relative w-full max-w-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
         
         {/* Close Button */}
         <button
@@ -63,7 +63,7 @@ export default function DestinationModal({
               <span className="px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs font-semibold">
                 {dest.category}
               </span>
-              <h2 className="text-2xl sm:text-3xl font-black mt-2">{dest.name}</h2>
+              <h2 className="font-display text-2xl sm:text-3xl font-semibold mt-2">{dest.name}</h2>
               <div className="flex items-center gap-1.5 text-xs text-sky-300 font-medium mt-1">
                 <MapPin className="h-4 w-4" />
                 <span>

@@ -1,1 +1,165 @@
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600..800&family=Inter:wght@400;500;600;700;800&display=swap");
 @import "tailwindcss";
+
+/* Fraunces carries the "voice" of the app — place names and the two big
+   marketing headlines. Everything else (UI chrome, buttons, labels) stays
+   on the default sans stack so functional text reads cleanly. */
+@theme {
+  --font-display: "Fraunces", ui-serif, Georgia, serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Visible keyboard focus everywhere, without adding a ring to every mouse
+   click — :focus-visible only fires for keyboard/assistive-tech focus. */
+:focus-visible {
+  outline: 2px solid #10b981;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Hero entrance — a short, orchestrated reveal rather than scattered hovers.
+   Respects prefers-reduced-motion. */
+@keyframes tn-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.tn-animate-in {
+  animation: tn-fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* ---------------------------------------------------------------------
+   Shared animation toolkit — overlays, drawers, grids, and small
+   interactive pops used across the app (modals, cards, nav, buttons).
+   Kept centralized here so every surface animates consistently and
+   respects prefers-reduced-motion in one place.
+------------------------------------------------------------------------ */
+
+@keyframes tn-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes tn-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes tn-slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes tn-slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes tn-pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.6) rotate(-20deg);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+/* Backdrop fade — also matches the `animate-fadeIn` / `animate-fade-in`
+   classes already referenced on a couple of overlay components. */
+.animate-fadeIn,
+.animate-fade-in,
+.tn-fade-in {
+  animation: tn-fade-in 0.25s ease-out both;
+}
+
+/* Centered dialog/modal panels */
+.tn-modal-in {
+  animation: tn-scale-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Right-aligned panels/drawers that aren't already handled by a
+   transform + transition on `open` state */
+.tn-drawer-in-right {
+  animation: tn-slide-in-right 0.32s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Mobile nav dropdown */
+.tn-nav-in {
+  animation: tn-slide-down 0.22s ease-out both;
+}
+
+/* Small icon swap (e.g. sun/moon theme toggle) */
+.tn-pop-in {
+  display: inline-flex;
+  animation: tn-pop-in 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* Staggered entrance for card grids — no JS required. Each direct child
+   fades/rises in with an incrementally later delay, capped so long grids
+   don't keep animating forever. */
+.tn-stagger-grid > * {
+  opacity: 0;
+  animation: tn-fade-up 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.tn-stagger-grid > *:nth-child(1) { animation-delay: 0.02s; }
+.tn-stagger-grid > *:nth-child(2) { animation-delay: 0.06s; }
+.tn-stagger-grid > *:nth-child(3) { animation-delay: 0.1s; }
+.tn-stagger-grid > *:nth-child(4) { animation-delay: 0.14s; }
+.tn-stagger-grid > *:nth-child(5) { animation-delay: 0.18s; }
+.tn-stagger-grid > *:nth-child(6) { animation-delay: 0.22s; }
+.tn-stagger-grid > *:nth-child(7) { animation-delay: 0.26s; }
+.tn-stagger-grid > *:nth-child(8) { animation-delay: 0.3s; }
+.tn-stagger-grid > *:nth-child(9) { animation-delay: 0.34s; }
+.tn-stagger-grid > *:nth-child(n+10) { animation-delay: 0.38s; }
+
+/* Gentle continuous float for empty-state / hero accent icons */
+@keyframes tn-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+.tn-float {
+  animation: tn-float 3.2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tn-animate-in,
+  .animate-fadeIn,
+  .animate-fade-in,
+  .tn-fade-in,
+  .tn-modal-in,
+  .tn-drawer-in-right,
+  .tn-nav-in,
+  .tn-pop-in,
+  .tn-stagger-grid > *,
+  .tn-float {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
