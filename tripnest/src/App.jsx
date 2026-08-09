@@ -8,12 +8,17 @@ import AITripPlanner from "./components/AITripPlanner";
 import { DESTINATIONS } from "./data/destinations";
 import { planItineraryForDestination } from "./services/aiService";
 import { 
-  MapPin, Search, Moon, Sun, Compass, 
-  Filter, Globe, Heart, Bot, Luggage, Loader2
+  MapPin, Search, Moon, Sun, 
+  Filter, Globe, Heart, Luggage, Loader2, Menu, X as CloseIcon,
+  Sparkles, Wallet, CloudSun, ArrowRight, Star,
+  ShieldCheck, Lock, Headphones, IndianRupee
 } from "lucide-react";
+
+const TRENDING_SEARCHES = ["Bali", "Switzerland", "Paris", "Goa", "Japan"];
 
 export default function App() {
   const [theme, setTheme] = useState("light");
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
   
   // Filter States
   const [scope, setScope] = useState("All"); 
@@ -257,99 +262,274 @@ export default function App() {
       
       {/* HEADER */}
       <header className="sticky top-0 z-40 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-sm">
-        <div className="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
-          <a href="#" className="flex items-center gap-2.5">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between gap-2">
+          <a href="#" className="flex items-center gap-2.5 shrink-0">
             <span className="p-2.5 bg-gradient-to-tr from-sky-500 to-emerald-400 text-white rounded-xl shadow-md">
               <MapPin className="h-5 w-5" />
             </span>
-            <span className="text-2xl font-black tracking-tight">
+            <span className="text-xl sm:text-2xl font-black tracking-tight">
               <span className="text-emerald-500">Trip</span><span className="text-sky-500">Nest</span>
             </span>
           </a>
 
           <nav className="hidden md:flex items-center gap-8 font-semibold text-sm text-slate-600 dark:text-slate-300">
             <a href="#explore" className="hover:text-sky-500 transition-colors">Destinations</a>
+            <a href="#highlights" className="hover:text-sky-500 transition-colors">Experiences</a>
             <button
               onClick={() => setIsMapOpen(true)}
               className="hover:text-sky-500 transition-colors"
             >
               Live Map
             </button>
+            <a href="#deals" className="hover:text-sky-500 transition-colors">Deals</a>
           </nav>
 
-          <button
-            onClick={toggleTheme}
-            className="p-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-amber-400 hover:scale-105 transition-transform"
-          >
-            {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-          </button>
+          <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
+            {/* Mobile nav toggle — reveals Destinations / Live Map, which the
+                nav above hides below the md breakpoint */}
+            <button
+              onClick={() => setMobileNavOpen((v) => !v)}
+              className="md:hidden p-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:scale-105 transition-transform"
+              aria-label="Toggle navigation menu"
+            >
+              {mobileNavOpen ? <CloseIcon className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
 
-          <button
-            onClick={() => setAiPlannerOpen(true)}
-            className="p-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-gradient-to-r from-emerald-500 to-teal-500 text-white hover:scale-105 transition-transform flex items-center gap-2 px-4"
-          >
-            <Bot className="h-5 w-5" />
-            <span className="hidden sm:inline font-semibold text-black">Companion</span>
-          </button>
+            <button
+              onClick={toggleTheme}
+              className="p-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-amber-400 hover:scale-105 transition-transform"
+            >
+              {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            </button>
 
-          {/* My Itinerary — standalone button, independent of the AI Companion.
-              Opens the shared ItineraryDrawer (itinerary + packing checklist),
-              whether the active destination came from a manual pick or the AI. */}
-          <button
-            onClick={() => setItineraryDrawerOpen(true)}
-            className="p-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:scale-105 transition-transform flex items-center gap-2 px-4"
-          >
-            {itineraryLoading ? (
-              <Loader2 className="h-5 w-5 animate-spin" />
-            ) : (
-              <Luggage className="h-5 w-5" />
-            )}
-            <span className="hidden sm:inline font-semibold">My Itinerary</span>
-            {activeDestination && (
-              <span
-                title={activeDestination.name}
-                className="bg-sky-500/15 text-sky-600 dark:text-sky-400 text-[10px] px-2 py-0.5 rounded-full font-bold max-w-[70px] truncate"
-              >
-                {activeDestination.name}
-              </span>
-            )}
-          </button>
+            <button
+              onClick={() => setAiPlannerOpen(true)}
+              className="p-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-gradient-to-r from-emerald-500 to-teal-500 text-white hover:scale-105 transition-transform flex items-center gap-2 px-4"
+            >
+              <Sparkles className="h-4 w-4" />
+              <span className="hidden sm:inline font-semibold text-black">AI Companion</span>
+            </button>
+
+            {/* My Itinerary — standalone button, independent of the AI Companion.
+                Opens the shared ItineraryDrawer (itinerary + packing checklist),
+                whether the active destination came from a manual pick or the AI. */}
+            <button
+              onClick={() => setItineraryDrawerOpen(true)}
+              className="p-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:scale-105 transition-transform flex items-center gap-2 px-4"
+            >
+              {itineraryLoading ? (
+                <Loader2 className="h-5 w-5 animate-spin" />
+              ) : (
+                <Luggage className="h-5 w-5" />
+              )}
+              <span className="hidden sm:inline font-semibold">My Itinerary</span>
+              {activeDestination && (
+                <span
+                  title={activeDestination.name}
+                  className="bg-sky-500/15 text-sky-600 dark:text-sky-400 text-[10px] px-2 py-0.5 rounded-full font-bold max-w-[70px] truncate"
+                >
+                  {activeDestination.name}
+                </span>
+              )}
+            </button>
+          </div>
         </div>
+
+        {/* Mobile nav panel — Destinations / Live Map, only reachable via the
+            hamburger toggle below the md breakpoint */}
+        {mobileNavOpen && (
+          <nav className="md:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 flex flex-col gap-1 font-semibold text-sm text-slate-600 dark:text-slate-300">
+            <a
+              href="#explore"
+              onClick={() => setMobileNavOpen(false)}
+              className="px-3 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-sky-500 transition-colors"
+            >
+              Destinations
+            </a>
+            <a
+              href="#highlights"
+              onClick={() => setMobileNavOpen(false)}
+              className="px-3 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-sky-500 transition-colors"
+            >
+              Experiences
+            </a>
+            <button
+              onClick={() => {
+                setIsMapOpen(true);
+                setMobileNavOpen(false);
+              }}
+              className="text-left px-3 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-sky-500 transition-colors"
+            >
+              Live Map
+            </button>
+            <a
+              href="#deals"
+              onClick={() => setMobileNavOpen(false)}
+              className="px-3 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-sky-500 transition-colors"
+            >
+              Deals
+            </a>
+          </nav>
+        )}
       </header>
 
       {/* HERO SECTION */}
-      <section className="py-16 px-6 text-center max-w-4xl mx-auto space-y-6">
-        <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-sky-500/10 text-sky-600 dark:text-sky-400 font-bold text-xs tracking-wider uppercase">
-          <Compass className="h-4 w-4" /> Smart Travel Planner
-        </span>
+      <section className="relative overflow-hidden">
+        <div className="absolute inset-0">
+          <img
+            src="https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?auto=format&fit=crop&w=1600&q=80"
+            alt=""
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-white via-white/85 to-white/20 dark:from-slate-950 dark:via-slate-950/85 dark:to-slate-950/20" />
+        </div>
 
-        <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight leading-tight">
-          Explore India & The World <br className="hidden sm:inline"/>
-          <span className="bg-gradient-to-r from-sky-600 via-teal-500 to-emerald-600 bg-clip-text text-transparent drop-shadow-[0_1px_2px_rgba(0,0,0,0.15)] font-bold">
-           With Rich Insights
-          </span>
-        </h1>
+        <div className="relative max-w-6xl mx-auto px-6 pt-14 pb-24 lg:pt-20 lg:pb-32">
+          <div className="max-w-xl space-y-6">
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/80 dark:bg-slate-900/70 backdrop-blur-sm text-sky-600 dark:text-sky-400 font-bold text-xs tracking-wider uppercase shadow-sm">
+              <Sparkles className="h-4 w-4" /> Smart Travel Planner
+            </span>
 
-        {/* Search Bar */}
-        <div className="pt-2 max-w-xl mx-auto">
-          <div className="flex items-center bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-full shadow-lg p-2">
-            <Search className="h-5 w-5 text-slate-400 ml-3 shrink-0" />
-            <input
-              type="text"
-              placeholder="Search by city, country, region, or continent..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full px-3 py-2 bg-transparent outline-none text-sm text-slate-900 dark:text-white placeholder:text-slate-400"
-            />
+            <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight leading-[1.05]">
+              Explore India &amp; The World <br className="hidden sm:inline"/>
+              <span className="bg-gradient-to-r from-sky-600 via-teal-500 to-emerald-600 bg-clip-text text-transparent drop-shadow-[0_1px_2px_rgba(0,0,0,0.15)] font-bold">
+               With Rich Insights
+              </span>
+            </h1>
+
+            <p className="text-slate-600 dark:text-slate-300 text-base sm:text-lg leading-relaxed">
+              Plan smarter, travel better and create unforgettable memories with{" "}
+              <span className="font-bold text-slate-900 dark:text-white">TripNest</span>.
+            </p>
+
+            {/* Search Bar */}
+            <div className="pt-2 max-w-lg">
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  document.getElementById("explore")?.scrollIntoView({ behavior: "smooth" });
+                }}
+                className="flex items-center bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-full shadow-md p-2"
+              >
+                <Search className="h-5 w-5 text-slate-400 ml-3 shrink-0" />
+                <input
+                  type="text"
+                  placeholder="Search by city, country, region or continent..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full px-3 py-2 bg-transparent outline-none text-sm text-slate-900 dark:text-white placeholder:text-slate-400"
+                />
+                <button
+                  type="submit"
+                  aria-label="Search"
+                  className="p-2.5 rounded-full bg-gradient-to-tr from-sky-500 to-emerald-400 text-white shrink-0 hover:scale-105 transition-transform"
+                >
+                  <Search className="h-4 w-4" />
+                </button>
+              </form>
+            </div>
+
+            {/* Trending Searches */}
+            <div className="flex flex-wrap items-center gap-2 pt-1">
+              <span className="text-xs font-bold text-slate-500 dark:text-slate-400">Trending Searches:</span>
+              {TRENDING_SEARCHES.map((term) => (
+                <button
+                  key={term}
+                  onClick={() => {
+                    setSearchQuery(term);
+                    document.getElementById("explore")?.scrollIntoView({ behavior: "smooth" });
+                  }}
+                  className="px-3.5 py-1.5 rounded-full bg-white/80 dark:bg-slate-900/70 backdrop-blur-sm border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:border-sky-400 hover:text-sky-600 transition-colors shadow-sm"
+                >
+                  {term}
+                </button>
+              ))}
+              <a
+                href="#explore"
+                className="flex items-center gap-1 px-3.5 py-1.5 text-xs font-bold text-sky-600 dark:text-sky-400 hover:gap-1.5 transition-all"
+              >
+                More <ArrowRight className="h-3.5 w-3.5" />
+              </a>
+            </div>
+          </div>
+
+          {/* Trusted-by floating card */}
+          <div className="hidden lg:block absolute bottom-10 right-10 bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-800 px-5 py-4 max-w-[220px]">
+            <p className="text-xs font-semibold text-slate-500 dark:text-slate-400">Trusted by</p>
+            <p className="text-sm font-extrabold text-slate-900 dark:text-white mb-2">50K+ Travelers</p>
+            <div className="flex items-center -space-x-2 mb-2">
+              {[1, 2, 3, 4].map((n) => (
+                <img
+                  key={n}
+                  src={`https://i.pravatar.cc/40?img=${n * 11}`}
+                  alt=""
+                  className="h-7 w-7 rounded-full border-2 border-white dark:border-slate-900 object-cover"
+                />
+              ))}
+            </div>
+            <div className="flex items-center gap-1">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <Star key={i} className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+              ))}
+              <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 ml-1">4.8 (12K reviews)</span>
+            </div>
           </div>
         </div>
       </section>
 
+      {/* FEATURE HIGHLIGHTS BAR — overlaps the hero's bottom edge */}
+      <div id="highlights" className="max-w-6xl mx-auto px-6 -mt-14 relative z-10 scroll-mt-24">
+        <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-3xl shadow-xl p-4 sm:p-6 grid grid-cols-2 lg:grid-cols-4 gap-4">
+          {[
+            { icon: Luggage, color: "text-purple-500 bg-purple-50 dark:bg-purple-500/10", title: "AI Trip Planner", desc: "Get a personalized itinerary in seconds", action: () => setAiPlannerOpen(true) },
+            { icon: Wallet, color: "text-emerald-500 bg-emerald-50 dark:bg-emerald-500/10", title: "Smart Budgeting", desc: "Plan your trip within your budget", action: () => setItineraryDrawerOpen(true) },
+            { icon: MapPin, color: "text-orange-500 bg-orange-50 dark:bg-orange-500/10", title: "Local Insights", desc: "Discover hidden gems & local favorites", action: () => document.getElementById("explore")?.scrollIntoView({ behavior: "smooth" }) },
+            { icon: CloudSun, color: "text-sky-500 bg-sky-50 dark:bg-sky-500/10", title: "Real-time Updates", desc: "Live weather, alerts & travel updates", action: () => setIsMapOpen(true) },
+          ].map(({ icon: Icon, color, title, desc, action }) => (
+            <button
+              key={title}
+              onClick={action}
+              className="group flex items-start gap-3 p-2 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors text-left"
+            >
+              <span className={`p-2.5 rounded-xl shrink-0 ${color}`}>
+                <Icon className="h-5 w-5" />
+              </span>
+              <span className="flex-1 min-w-0">
+                <span className="flex items-center justify-between gap-1">
+                  <span className="font-bold text-sm text-slate-900 dark:text-white">{title}</span>
+                  <ArrowRight className="h-3.5 w-3.5 text-slate-300 dark:text-slate-600 group-hover:text-sky-500 group-hover:translate-x-0.5 transition-all shrink-0" />
+                </span>
+                <span className="block text-xs text-slate-500 dark:text-slate-400 mt-0.5">{desc}</span>
+              </span>
+            </button>
+          ))}
+        </div>
+      </div>
+
       {/* MAIN CONTAINER */}
-      <main className="max-w-6xl mx-auto px-6 pb-24 space-y-16">
+      <main className="max-w-6xl mx-auto px-6 pt-16 pb-24 space-y-16">
 
         {/* FILTER BAR */}
-        <section id="explore" className="space-y-8">
+        <section id="explore" className="space-y-8 scroll-mt-24">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white">Explore by Scope</h2>
+              <span className="block w-10 h-1 rounded-full bg-emerald-400 mt-1.5" />
+            </div>
+            <button
+              onClick={() => {
+                setScope("All");
+                setActiveCategory("All");
+                setSelectedRegion("All");
+                setSelectedContinent("All");
+                setShowOnlyFavorites(false);
+              }}
+              className="flex items-center gap-1 text-sm font-bold text-sky-600 dark:text-sky-400 hover:gap-1.5 transition-all"
+            >
+              View All <ArrowRight className="h-4 w-4" />
+            </button>
+          </div>
+
           <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm space-y-6">
             
             {/* Scope Row */}
@@ -461,6 +641,47 @@ export default function App() {
               />
             ))}
           </div>
+        </section>
+
+        {/* AI TRAVEL COMPANION PROMO BANNER */}
+        <section id="deals" className="scroll-mt-24">
+          <div className="bg-gradient-to-r from-emerald-50 to-sky-50 dark:from-emerald-500/10 dark:to-sky-500/10 border border-emerald-100 dark:border-emerald-500/20 rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row items-center gap-6">
+            <div className="text-5xl sm:text-6xl shrink-0" aria-hidden="true">🧳</div>
+            <div className="flex-1 text-center sm:text-left">
+              <h3 className="text-lg sm:text-xl font-extrabold text-slate-900 dark:text-white flex items-center justify-center sm:justify-start gap-2">
+                Your AI Travel Companion <Sparkles className="h-5 w-5 text-emerald-500" />
+              </h3>
+              <p className="text-sm text-slate-600 dark:text-slate-300 mt-1">
+                Get personalized recommendations, day plans, budget estimates and more — all in one place!
+              </p>
+            </div>
+            <button
+              onClick={() => setAiPlannerOpen(true)}
+              className="shrink-0 px-6 py-3 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-bold text-sm flex items-center gap-2 shadow-lg shadow-emerald-500/25 hover:scale-105 transition-transform"
+            >
+              Chat with AI Companion <ArrowRight className="h-4 w-4" />
+            </button>
+          </div>
+        </section>
+
+        {/* TRUST BADGES */}
+        <section className="grid grid-cols-2 lg:grid-cols-4 gap-6 pt-2 border-t border-slate-200 dark:border-slate-800">
+          {[
+            { icon: ShieldCheck, color: "text-emerald-600 bg-emerald-50 dark:bg-emerald-500/10", title: "Best Price Guarantee", desc: "Find the best deals for your trip" },
+            { icon: Lock, color: "text-rose-500 bg-rose-50 dark:bg-rose-500/10", title: "Secure Booking", desc: "Book with confidence and peace of mind" },
+            { icon: Headphones, color: "text-sky-500 bg-sky-50 dark:bg-sky-500/10", title: "24/7 Support", desc: "We're here for you anytime, anywhere" },
+            { icon: IndianRupee, color: "text-amber-500 bg-amber-50 dark:bg-amber-500/10", title: "No Hidden Fees", desc: "Transparent pricing you can trust" },
+          ].map(({ icon: Icon, color, title, desc }) => (
+            <div key={title} className="flex items-start gap-3 pt-4">
+              <span className={`p-2.5 rounded-xl shrink-0 ${color}`}>
+                <Icon className="h-5 w-5" />
+              </span>
+              <div>
+                <p className="font-bold text-sm text-slate-900 dark:text-white">{title}</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{desc}</p>
+              </div>
+            </div>
+          ))}
         </section>
 
       </main>

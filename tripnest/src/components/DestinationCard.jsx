@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Heart, Plus, Thermometer, MapPin, Eye, ChevronLeft, ChevronRight } from "lucide-react";
+import { Heart, Plus, Thermometer, MapPin, FileText, ChevronLeft, ChevronRight, Columns2 } from "lucide-react";
+import { categoryBadgeColor } from "../utils/categoryColors";
 
 export default function DestinationCard({
   dest,
@@ -60,7 +61,7 @@ export default function DestinationCard({
 
         {/* Top Badges */}
         <div className="absolute top-4 left-4 right-4 flex items-center justify-between z-10">
-          <span className="px-3 py-1 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md rounded-full text-[11px] font-bold text-slate-800 dark:text-slate-100 shadow-sm">
+          <span className={`px-3 py-1 ${categoryBadgeColor(dest.category)} backdrop-blur-md rounded-full text-[11px] font-bold text-white shadow-sm`}>
             {dest.category}
           </span>
 
@@ -124,16 +125,17 @@ export default function DestinationCard({
         {/* Footer Actions */}
         <div className="pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between gap-2">
           
-          {/* Compare Checkbox */}
-          <label className="flex items-center gap-2 text-[11px] font-bold text-slate-500 hover:text-slate-900 dark:hover:text-slate-200 cursor-pointer select-none">
-            <input
-              type="checkbox"
-              checked={isCompared}
-              onChange={() => onToggleCompare(dest.id)}
-              className="rounded border-slate-300 text-sky-500 focus:ring-sky-400 h-3.5 w-3.5"
-            />
+          {/* Compare Toggle */}
+          <button
+            onClick={() => onToggleCompare(dest.id)}
+            aria-pressed={isCompared}
+            className={`flex items-center gap-1.5 text-[11px] font-bold transition-colors ${
+              isCompared ? "text-sky-500" : "text-slate-500 hover:text-slate-900 dark:hover:text-slate-200"
+            }`}
+          >
+            <Columns2 className="h-3.5 w-3.5" />
             Compare
-          </label>
+          </button>
 
           <div className="flex items-center gap-2">
             {/* View Details Button */}
@@ -141,14 +143,14 @@ export default function DestinationCard({
               onClick={() => onOpenDetails(dest)}
               className="px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-bold transition-colors flex items-center gap-1"
             >
-              <Eye className="h-3.5 w-3.5" />
+              <FileText className="h-3.5 w-3.5" />
               Details
             </button>
 
             {/* Add to Itinerary Button */}
             <button
               onClick={() => onAddToItinerary(dest)}
-              className="px-3.5 py-1.5 rounded-xl bg-sky-500 hover:bg-sky-600 text-white text-xs font-bold transition-colors flex items-center gap-1 shadow-sm"
+              className="px-3.5 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold transition-colors flex items-center gap-1 shadow-sm"
             >
               <Plus className="h-3.5 w-3.5" />
               Add
