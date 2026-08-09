@@ -8,4 +8,11 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
+  server: {
+    proxy: {
+      // Forwards to the local AI server (see /server) so the browser never
+      // needs to know its real address, and no CORS config is required.
+      "/api": "http://localhost:3001",
+    },
+  },
 })

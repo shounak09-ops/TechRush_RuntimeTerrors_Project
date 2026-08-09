@@ -388,7 +388,7 @@ function buildDayWiseItinerary(dest, formData) {
   return itinerary;
 }
 
-function buildActivities(dest) {
+export function buildActivities(dest) {
   const cat = normalizedCategory(dest);
   const pool = ACTIVITY_POOL[cat] || ACTIVITY_POOL.Heritage;
   return pool.map((name, idx) => ({
@@ -398,7 +398,7 @@ function buildActivities(dest) {
   }));
 }
 
-function buildBudgetBreakdown(dest, formData) {
+export function buildBudgetBreakdown(dest, formData) {
   const { budget, days } = formData;
   const tier = BUDGET_TIERS.includes(budget) ? budget : budgetTierOf(dest);
   const rate = DAILY_RATE[tier];
@@ -418,7 +418,7 @@ function buildBudgetBreakdown(dest, formData) {
   return { tier, breakdown, total };
 }
 
-function buildPackingChecklist(dest, formData) {
+export function buildPackingChecklist(dest, formData) {
   const { weatherPreference, mood, companions } = formData;
   const destinationItems = (dest.recommendedPacking || []).map((label, idx) => ({
     id: `dest_${idx}`,
@@ -450,7 +450,7 @@ function buildPackingChecklist(dest, formData) {
   return [...STANDARD_ESSENTIALS.map((i) => ({ ...i })), ...destinationItems, ...generatedItems];
 }
 
-function buildLocalFoods(dest) {
+export function buildLocalFoods(dest) {
   return FOOD_BY_COUNTRY[dest.country] || GENERIC_FOODS;
 }
 
@@ -471,7 +471,7 @@ function buildTravelTips(dest, formData) {
   return tips;
 }
 
-function buildCrowdIndicator(dest) {
+export function buildCrowdIndicator(dest) {
   const hash = hashString(dest.id + dest.bestTime);
   const levels = ["Low", "Moderate", "High"];
   const level = levels[hash % 3];

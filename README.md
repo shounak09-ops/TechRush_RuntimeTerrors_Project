@@ -90,11 +90,20 @@ npm run dev
 4. Build for production
 bash
 npm run build
-🧩 Environment Variables (Optional)
-If you integrate real AI APIs later, create a .env file:
+🤖 AI Trip Planner backend
+The AI Trip Companion is backed by a real LLM call, not a mock. It lives in a small separate
+server (kept out of the frontend so the API key is never exposed in the browser bundle):
 
 bash
-VITE_AI_API_KEY=your_api_key_here
+cd server
+npm install
+cp .env.example .env   # then fill in GEMINI_API_KEY (get a free one at https://aistudio.google.com/apikey)
+npm run dev
+
+Run this alongside `npm run dev` in `tripnest/` — Vite proxies `/api/*` requests to it
+(see `tripnest/vite.config.js`). If the server isn't running, `generateTrip()` in
+`src/services/aiService.js` automatically falls back to the local mock generator, so the
+app still works without it.
 
 
 🧪 Future Enhancements
