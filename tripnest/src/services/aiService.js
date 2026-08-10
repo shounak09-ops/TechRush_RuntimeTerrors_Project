@@ -3,21 +3,25 @@
 // ----------------------------------------------------------------------------
 // Single integration seam between the UI and "AI trip generation".
 //
-// `generateTrip()` now calls a real LLM through the local backend in
-// /server (see server/index.js) — it never talks to the model directly,
-// since the API key has to stay server-side. The backend picks a
-// destination id from the real dataset and writes a personalized
-// itinerary/explanation; budget math, packing lists, food, and crowd info
-// stay deterministic (reused from mockTripGenerator.js) so numbers shown
-// elsewhere in the app stay consistent and correct.
+// `generateTrip()` calls a real LLM through the local backend in /server
+// (see server/index.js) — it never talks to the model directly, since the
+// API key has to stay server-side. The backend picks a destination id from
+// the real dataset and writes a personalized itinerary/explanation; budget
+// math, packing lists, food, and crowd info stay deterministic (reused from
+// mockTripGenerator.js) so numbers shown elsewhere in the app stay
+// consistent and correct.
 //
-// If the backend is unreachable or errors out, this falls back to the local
-// mock generator so the app still works offline / during a demo.
+// If the backend is unreachable, misconfigured, or the model call itself
+// fails, generateTrip THROWS — it no longer falls back to the mock
+// generator. A silent fallback made it impossible to tell, from the UI,
+// whether the LLM was actually running (see AITripPlanner.jsx, which
+// catches this and shows the error to the user). generateTripForDestination
+// (manual destination pick, no AI matching decision involved) still uses
+// the local generator directly — that path was never AI-backed.
 // ============================================================================
 
 import { DESTINATIONS } from "../data/destinations";
 import {
-  generateMockTrip,
   generateTripForDestination,
   buildBudgetBreakdown,
   buildPackingChecklist,
@@ -92,8 +96,9 @@ export async function generateTrip(formData) {
     days: Math.min(30, Math.max(1, Number(formData.days) || 5)),
   };
 
+  let response;
   try {
-    const response = await fetch("/api/generate-trip", {
+    response = await fetch("/api/generate-trip", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -101,17 +106,23 @@ export async function generateTrip(formData) {
         destinations: trimDestinationsForPrompt(),
       }),
     });
-
-    if (!response.ok) throw new Error(`AI server responded ${response.status}`);
-
-    const aiPlan = await response.json();
-    return assembleTripFromAiPlan(aiPlan, safeFormData);
-  } catch (error) {
-    // Backend not running, network hiccup, or the model call itself failed.
-    // Fall back to the local mock so the app still demos/works.
-    console.warn("generateTrip: AI backend unavailable, falling back to mock generator.", error);
-    return generateMockTrip(safeFormData);
+  } catch (networkError) {
+    // fetch() itself threw — the /api/generate-trip route isn't reachable at
+    // all (backend not running, wrong URL in prod, DNS/CORS failure, etc).
+    console.error("generateTrip: could not reach the AI backend.", networkError);
+    throw new Error("Couldn't reach the AI trip service. Check that the backend is running and reachable.");
   }
+
+  if (!response.ok) {
+    // Backend responded but the request failed — most often the Gemini call
+    // itself errored server-side (bad/missing API key, invalid model id,
+    // quota). See server/index.js's console.error for the underlying cause.
+    console.error(`generateTrip: AI server responded ${response.status}`);
+    throw new Error(`AI trip generation failed (server responded ${response.status}). Check the backend logs.`);
+  }
+
+  const aiPlan = await response.json();
+  return assembleTripFromAiPlan(aiPlan, safeFormData);
 }
 
 /**

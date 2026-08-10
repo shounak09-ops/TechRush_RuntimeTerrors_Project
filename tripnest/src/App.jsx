@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import DestinationCard from "./components/DestinationCard";
 import DestinationModal from "./components/DestinationModal";
 import CompareDrawer from "./components/CompareDrawer";
 import ItineraryDrawer from "./components/ItineraryDrawer";
 import MapView from "./components/MapView";
+import AllDestinationsOverlay from "./components/AllDestinationsOverlay";
 import AITripPlanner from "./components/AITripPlanner";
 import { DESTINATIONS } from "./data/destinations";
 import { planItineraryForDestination } from "./services/aiService";
 import { 
   MapPin, Search, Moon, Sun, 
   Filter, Globe, Heart, Luggage, Loader2, Menu, X as CloseIcon,
-  Sparkles, Wallet, CloudSun, ArrowRight, Plane, Compass
+  Sparkles, Wallet, CloudSun, ArrowRight, Plane, Compass, ChevronLeft, ChevronRight
 } from "lucide-react";
 
 const TRENDING_SEARCHES = ["Bali", "Switzerland", "Paris", "Goa", "Japan"];
@@ -32,6 +33,16 @@ export default function App() {
 
   // Live Map Overlay State
   const [isMapOpen, setIsMapOpen] = useState(false);
+  const [allDestinationsOpen, setAllDestinationsOpen] = useState(false);
+
+  // Horizontal destination rail — the scrollbar is deliberately hidden for
+  // a cleaner look, so this ref backs both the arrow buttons and a wheel
+  // handler that lets a plain vertical mouse wheel scroll it sideways too
+  // (trackpad/touch swipe already works natively via overflow-x-auto).
+  const railRef = useRef(null);
+  const scrollRailBy = (amount) => {
+    railRef.current?.scrollBy({ left: amount, behavior: "smooth" });
+  };
   
   const [favorites, setFavorites] = useState(() => {
     return JSON.parse(localStorage.getItem("tripnest_favorites") || "[]");
@@ -115,6 +126,54 @@ export default function App() {
   });
 
   const comparedObjects = DESTINATIONS.filter(item => compared.includes(item.id));
+
+  // Home view shows only the trending picks until a filter is actually
+  // applied — matched the same way search already matches (name/country/
+  // region/continent), so "Switzerland" correctly picks up the Interlaken
+  // entry via its country field rather than needing an exact name match.
+  const trendingDestinations = DESTINATIONS.filter((item) =>
+    TRENDING_SEARCHES.some((term) => {
+      const t = term.toLowerCase();
+      return (
+        item.name.toLowerCase().includes(t) ||
+        item.country.toLowerCase().includes(t) ||
+        (item.region && item.region.toLowerCase().includes(t)) ||
+        (item.continent && item.continent.toLowerCase().includes(t))
+      );
+    })
+  );
+
+  const isDefaultView =
+    scope === "All" &&
+    activeCategory === "All" &&
+    selectedRegion === "All" &&
+    selectedContinent === "All" &&
+    !showOnlyFavorites &&
+    searchQuery.trim() === "";
+
+  const cardsToShow = isDefaultView ? trendingDestinations : filteredDestinations;
+  const railKey = isDefaultView
+    ? "trending"
+    : `${scope}-${activeCategory}-${selectedRegion}-${selectedContinent}-${showOnlyFavorites}-${searchQuery}`;
+
+  // Native (non-passive) wheel listener instead of React's onWheel prop —
+  // React can attach wheel handlers as passive for scroll-performance
+  // reasons, which silently ignores preventDefault() and causes the page
+  // to scroll vertically *at the same time* as the rail scrolls sideways.
+  // Re-binds whenever railKey changes, since the rail div is keyed and
+  // gets a fresh DOM node (to replay its entrance animation) on every
+  // filter change.
+  useEffect(() => {
+    const el = railRef.current;
+    if (!el) return;
+    const onWheel = (e) => {
+      if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return; // already horizontal (trackpad) — let it pass through natively
+      e.preventDefault();
+      el.scrollBy({ left: e.deltaY, behavior: "auto" });
+    };
+    el.addEventListener("wheel", onWheel, { passive: false });
+    return () => el.removeEventListener("wheel", onWheel);
+  }, [railKey]);
 
   // Applies a fully-generated trip payload (same shape produced by both the
   // AI Trip Companion and the manual "My Itinerary" generator) to the
@@ -535,7 +594,7 @@ export default function App() {
               <span className="block w-10 h-1 rounded-full bg-emerald-400 mt-1.5" />
             </div>
             <button
-              onClick={resetFilters}
+              onClick={() => setAllDestinationsOpen(true)}
               className="flex items-center gap-1 text-sm font-bold text-emerald-600 dark:text-emerald-400 hover:gap-1.5 transition-all"
             >
               View All <ArrowRight className="h-4 w-4" />
@@ -566,7 +625,7 @@ export default function App() {
                         : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
                     }`}
                   >
-                    {item === "India" ? "🇮🇳 India" : item === "International" ? "🌍 Foreign" : "🌐 All"}
+                    {item === "India" ? "🇮🇳 India" : item === "International" ? "🌍 Foreign" : "🔥 Trending"}
                   </button>
                 ))}
               </div>
@@ -638,21 +697,57 @@ export default function App() {
 
           </div>
 
-          {/* Cards Grid — or an empty state when the current filters match nothing */}
-          {filteredDestinations.length > 0 ? (
-            <div key={`${scope}-${activeCategory}-${selectedRegion}-${selectedContinent}-${showOnlyFavorites}-${searchQuery}`} className="tn-stagger-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {filteredDestinations.map((dest) => (
-                <DestinationCard
-                  key={dest.id}
-                  dest={dest}
-                  onAddToItinerary={handleAddToItinerary}
-                  isFavorite={favorites.includes(dest.id)}
-                  onToggleFavorite={handleToggleFavorite}
-                  isCompared={compared.includes(dest.id)}
-                  onToggleCompare={handleToggleCompare}
-                  onOpenDetails={(d) => setSelectedModalDest(d)}
-                />
-              ))}
+          {/* Destination rail — trending picks by default, or the live
+              filter results once any filter/search is actually applied.
+              A single horizontally-scrollable row (app-drawer style)
+              instead of a full grid, or an empty state when a filter
+              genuinely matches nothing. */}
+          {cardsToShow.length > 0 ? (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between gap-3">
+                <p className="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
+                  {isDefaultView ? "Trending Destinations" : `${cardsToShow.length} destination${cardsToShow.length === 1 ? "" : "s"} found`}
+                </p>
+                {/* Scroll arrows — the rail's scrollbar is hidden for a
+                    cleaner look, so these give mouse users (no trackpad)
+                    an obvious way to move it, alongside touch/trackpad
+                    swipe and the wheel handler on the rail itself. */}
+                <div className="hidden sm:flex items-center gap-2 shrink-0">
+                  <button
+                    onClick={() => scrollRailBy(-340)}
+                    aria-label="Scroll left"
+                    className="p-2 rounded-full border border-slate-200 dark:border-slate-700 text-slate-500 hover:text-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 dark:hover:text-white transition-colors"
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                  </button>
+                  <button
+                    onClick={() => scrollRailBy(340)}
+                    aria-label="Scroll right"
+                    className="p-2 rounded-full border border-slate-200 dark:border-slate-700 text-slate-500 hover:text-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 dark:hover:text-white transition-colors"
+                  >
+                    <ChevronRight className="h-4 w-4" />
+                  </button>
+                </div>
+              </div>
+              <div
+                ref={railRef}
+                key={railKey}
+                className="tn-scroll-x tn-stagger-grid flex gap-6 overflow-x-auto snap-x snap-mandatory pb-2 -mx-6 sm:-mx-8 px-6 sm:px-8"
+              >
+                {cardsToShow.map((dest) => (
+                  <div key={dest.id} className="snap-start shrink-0 w-[80vw] sm:w-[320px]">
+                    <DestinationCard
+                      dest={dest}
+                      onAddToItinerary={handleAddToItinerary}
+                      isFavorite={favorites.includes(dest.id)}
+                      onToggleFavorite={handleToggleFavorite}
+                      isCompared={compared.includes(dest.id)}
+                      onToggleCompare={handleToggleCompare}
+                      onOpenDetails={(d) => setSelectedModalDest(d)}
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
           ) : (
             <div className="tn-modal-in flex flex-col items-center text-center gap-4 py-20 px-6 rounded-3xl border border-dashed border-slate-200 dark:border-slate-800">
@@ -676,6 +771,19 @@ export default function App() {
         </section>
 
       </main>
+
+      {/* ALL DESTINATIONS OVERLAY — opened via "View All" */}
+      <AllDestinationsOverlay
+        open={allDestinationsOpen}
+        onClose={() => setAllDestinationsOpen(false)}
+        destinations={DESTINATIONS}
+        favorites={favorites}
+        onToggleFavorite={handleToggleFavorite}
+        compared={compared}
+        onToggleCompare={handleToggleCompare}
+        onAddToItinerary={handleAddToItinerary}
+        onOpenDetails={(d) => setSelectedModalDest(d)}
+      />
 
       {/* LIVE MAP OVERLAY */}
       <MapView

@@ -163,3 +163,14 @@
     transform: none;
   }
 }
+
+/* Horizontal destination rail — hides scrollbar chrome for a clean,
+   app-drawer-like swipeable row (still fully scrollable via touch/trackpad,
+   and via mouse-wheel since overflow-x stays scrollable). */
+.tn-scroll-x {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+.tn-scroll-x::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
