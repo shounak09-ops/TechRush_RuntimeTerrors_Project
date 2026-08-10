@@ -25,6 +25,7 @@ import { generateTrip } from "../services/aiService"
 import PackingChecklist from "./PackingCheckList"
 import DestinationCard from "./DestinationCard"
 import { CATEGORY_STYLES, TabButton, currency } from "./ItineraryDrawer"
+import useCountUp from "../utils/useCountUp"
 
 const BUDGET_OPTIONS = ["Low", "Medium", "Luxury"]
 const WEATHER_OPTIONS = ["Cold", "Pleasant", "Warm", "Tropical", "Any"]
@@ -266,10 +267,40 @@ export default function AITripPlanner({
           )}
 
           {step === "loading" && (
-            <div className="flex flex-col items-center justify-center gap-4 py-24 text-center">
-              <Loader2 className="h-10 w-10 text-emerald-500 animate-spin" />
-              <p className={`text-sm font-semibold ${bodyText}`}>{LOADING_MESSAGES[loadingMsgIndex]}</p>
-              <p className={`text-xs ${mutedText}`}>Your AI Trip Companion is working on it</p>
+            <div className="space-y-6 py-6">
+              <div className="flex flex-col items-center justify-center gap-3 text-center">
+                <Loader2 className="h-9 w-9 text-emerald-500 animate-spin" />
+                <p className={`text-sm font-semibold ${bodyText}`}>{LOADING_MESSAGES[loadingMsgIndex]}</p>
+                <p className={`text-xs ${mutedText}`}>Your AI Trip Companion is working on it</p>
+
+                {/* Progress bar tied to the rotating status messages, so the
+                    wait reads as forward motion rather than an indefinite spin. */}
+                <div className={`w-full max-w-xs h-1.5 rounded-full overflow-hidden mt-1 ${theme === "dark" ? "bg-slate-800" : "bg-slate-200"}`}>
+                  <div
+                    className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 transition-all duration-500 ease-out"
+                    style={{ width: `${((loadingMsgIndex + 1) / LOADING_MESSAGES.length) * 100}%` }}
+                  />
+                </div>
+              </div>
+
+              {/* Skeleton preview of the result view underneath, so the
+                  layout that's about to appear is already hinted at. */}
+              <div className="space-y-4 opacity-70">
+                <div className="tn-skeleton rounded-3xl aspect-[16/7] w-full" />
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  {[0, 1, 2, 3].map((i) => (
+                    <div key={i} className="p-3 rounded-2xl bg-slate-500/5 space-y-2">
+                      <div className="tn-skeleton h-2.5 w-2/3 rounded-full" />
+                      <div className="tn-skeleton h-3 w-full rounded-full" />
+                    </div>
+                  ))}
+                </div>
+                <div className="space-y-2">
+                  <div className="tn-skeleton h-3 w-full rounded-full" />
+                  <div className="tn-skeleton h-3 w-5/6 rounded-full" />
+                  <div className="tn-skeleton h-3 w-4/6 rounded-full" />
+                </div>
+              </div>
             </div>
           )}
 
@@ -310,7 +341,7 @@ export default function AITripPlanner({
             <button
               type="button"
               onClick={handleLockTrip}
-              className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-500 px-4 py-2.5 text-xs font-bold text-white shadow-md hover:from-sky-600 hover:to-indigo-600 transition-all"
+              className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-500 px-4 py-2.5 text-xs font-bold text-white shadow-md hover:from-sky-600 hover:to-indigo-600 active:scale-95 transition-all"
             >
               <Plus className="h-4 w-4" />
               Lock {tripResult.destination.name} & Build Itinerary
@@ -345,6 +376,9 @@ function ResultView({
 
   const dayData = trip.dayWiseItinerary.find((d) => d.day === selectedDay) || trip.dayWiseItinerary[0]
 
+  const animatedMatchScore = useCountUp(trip.matchScore, { duration: 800 })
+  const animatedCost = useCountUp(trip.estimatedTravelCost, { duration: 1000 })
+
   return (
     <div className="space-y-6">
       {/* Hero */}
@@ -355,7 +389,7 @@ function ResultView({
           <div className="flex items-center gap-2 mb-1.5">
             <span className="px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs font-semibold">{dest.category}</span>
             <span className="px-3 py-1 bg-emerald-500/80 backdrop-blur-md rounded-full text-xs font-bold flex items-center gap-1">
-              <TrendingUp className="h-3 w-3" /> {trip.matchScore}% match
+              <TrendingUp className="h-3 w-3" /> {animatedMatchScore}% match
             </span>
           </div>
           <h3 className="font-display text-2xl sm:text-3xl font-semibold">{dest.name}</h3>
@@ -377,7 +411,7 @@ function ResultView({
         <StatCard icon={<CloudSun className="h-4 w-4 text-amber-500" />} label="Weather" value={trip.weather.display} theme={theme} />
         <StatCard icon={<Calendar className="h-4 w-4 text-sky-500" />} label="Best Season" value={trip.bestSeason} theme={theme} />
         <StatCard icon={<Users className="h-4 w-4 text-indigo-500" />} label="Crowd Level" value={trip.crowdIndicator.level} theme={theme} />
-        <StatCard icon={<Wallet className="h-4 w-4 text-emerald-500" />} label="Est. Cost" value={currency(trip.estimatedTravelCost)} theme={theme} />
+        <StatCard icon={<Wallet className="h-4 w-4 text-emerald-500" />} label="Est. Cost" value={currency(animatedCost)} theme={theme} />
       </div>
 
       {/* Tabs */}
@@ -474,7 +508,7 @@ function ResultView({
               </span>
               <span className={`text-xs font-semibold ${mutedText}`}>Total estimated cost ({trip.budgetTier} tier)</span>
             </div>
-            <span className={`text-2xl font-extrabold ${bodyText}`}>{currency(trip.estimatedTravelCost)}</span>
+            <span className={`text-2xl font-extrabold ${bodyText}`}>{currency(animatedCost)}</span>
           </div>
         </div>
       )}

@@ -10,7 +10,8 @@ import {
   Columns2, 
   Clock, 
   IndianRupee,
-  Loader2 
+  Loader2,
+  CheckCircle2
 } from "lucide-react";
 import { categoryBadgeColor } from "../utils/categoryColors";
 
@@ -27,6 +28,12 @@ export default function DestinationCard({
 }) {
   const [activeImgIndex, setActiveImgIndex] = useState(0);
   const [imgSrc, setImgSrc] = useState("");
+
+  // Micro-interaction state: brief "pop" on the heart when favorited, and a
+  // brief "Added ✓" swap on the Add button — pure UI feedback, reset on a
+  // timer, no bearing on the actual favorite/itinerary state.
+  const [heartPop, setHeartPop] = useState(false);
+  const [justAdded, setJustAdded] = useState(false);
   
   // Weather state
   const [liveTemp, setLiveTemp] = useState(null);
@@ -98,7 +105,7 @@ export default function DestinationCard({
     : "bg-slate-700 text-white";
 
   return (
-    <div className="group relative bg-white dark:bg-slate-900 border border-slate-900/8 dark:border-white/10 rounded-2xl overflow-hidden shadow-[0_1px_3px_rgba(15,23,42,0.06),0_1px_2px_rgba(15,23,42,0.04)] hover:shadow-[0_8px_24px_rgba(15,23,42,0.10)] hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
+    <div className="group relative bg-white dark:bg-slate-900 border border-slate-900/8 dark:border-white/10 rounded-2xl overflow-hidden shadow-[0_1px_3px_rgba(15,23,42,0.06),0_1px_2px_rgba(15,23,42,0.04)] hover:shadow-[0_8px_24px_rgba(15,23,42,0.10)] hover:-translate-y-1 hover:scale-[1.012] transition-all duration-300 flex flex-col justify-between">
       
       {/* Card Header & Image Carousel */}
       <div className="relative overflow-hidden aspect-[4/3] bg-slate-950">
@@ -152,7 +159,12 @@ export default function DestinationCard({
             <button
               onClick={(e) => {
                 e.stopPropagation();
+                const goingToFavorite = !isFavorite;
                 onToggleFavorite(dest?.id);
+                if (goingToFavorite) {
+                  setHeartPop(true);
+                  setTimeout(() => setHeartPop(false), 400);
+                }
               }}
               className={`p-2 rounded-full backdrop-blur-md transition-transform active:scale-95 shadow-sm cursor-pointer ${
                 isFavorite
@@ -161,7 +173,7 @@ export default function DestinationCard({
               }`}
               aria-label="Toggle favorite"
             >
-              <Heart className={`h-4 w-4 ${isFavorite ? "fill-current text-white" : ""}`} />
+              <Heart className={`h-4 w-4 ${isFavorite ? "fill-current text-white" : ""} ${heartPop ? "tn-heart-pop" : ""}`} />
             </button>
           </div>
         </div>
@@ -240,11 +252,27 @@ export default function DestinationCard({
             </button>
 
             <button
-              onClick={() => onAddToItinerary(dest)}
-              className="px-3.5 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold transition-all active:scale-95 flex items-center gap-1 shadow-sm cursor-pointer"
+              onClick={() => {
+                onAddToItinerary(dest);
+                setJustAdded(true);
+                setTimeout(() => setJustAdded(false), 1200);
+              }}
+              disabled={justAdded}
+              className={`px-3.5 py-1.5 rounded-xl text-white text-xs font-bold transition-all active:scale-95 flex items-center gap-1 shadow-sm cursor-pointer ${
+                justAdded ? "bg-emerald-600" : "bg-emerald-500 hover:bg-emerald-600"
+              }`}
             >
-              <Plus className="h-3.5 w-3.5" />
-              Add
+              {justAdded ? (
+                <>
+                  <CheckCircle2 className="h-3.5 w-3.5 tn-check-pop" />
+                  Added
+                </>
+              ) : (
+                <>
+                  <Plus className="h-3.5 w-3.5" />
+                  Add
+                </>
+              )}
             </button>
           </div>
         </div>
