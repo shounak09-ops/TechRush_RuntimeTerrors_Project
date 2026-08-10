@@ -217,3 +217,18 @@
 .tn-scroll-x::-webkit-scrollbar {
   display: none; /* Chrome/Safari */
 }
+/* --- Continuous Marquee Animation for User Experiences --- */
+@keyframes infinite-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-infinite-scroll {
+  display: flex;
+  width: max-content;
+  animation: infinite-scroll 35s linear infinite;
+}
