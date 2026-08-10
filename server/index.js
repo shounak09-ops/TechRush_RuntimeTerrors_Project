@@ -54,7 +54,11 @@ const TRIP_PLAN_SCHEMA = {
             items: {
               type: SchemaType.OBJECT,
               properties: {
-                time: { type: SchemaType.STRING, enum: ["Morning", "Afternoon", "Evening"] },
+                time: {
+                  type: SchemaType.STRING,
+                  description:
+                    'Exact activity time range such as "09:30 AM - 12:00 PM". Never use Morning, Afternoon, Evening, Night, or Flexible.',
+                },
                 title: { type: SchemaType.STRING },
                 category: { type: SchemaType.STRING },
                 cost: {
@@ -98,13 +102,35 @@ app.post("/api/generate-trip", async (req, res) => {
 
   try {
     const prompt =
-      `A traveler wants a trip planned with these preferences: ${JSON.stringify(formData)}.\n\n` +
-      `Pick the single best-fitting destination from this list (use its exact "id") and build a ` +
-      `${formData.days || 5}-day itinerary suited to their mood, companions, and any free-text ` +
-      `preferences. All costs must be in US dollars per activity, roughly in line with a ` +
-      `${formData.budget || "Medium"} budget tier (Low: ~$5-15/activity, Medium: ~$15-30/activity, ` +
-      `Luxury: ~$30-70/activity). Available destinations:\n${JSON.stringify(destinations)}`;
+    `A traveler wants a trip planned with these preferences: ${JSON.stringify(formData)}.\n\n` +
+    `Pick the single best-fitting destination from this list (use its exact "id") and build a ` +
+    `${formData.days || 5}-day itinerary suited to their mood, companions, and any free-text ` +
+    `preferences.\n\n` +
 
+    `IMPORTANT ITINERARY RULES:\n` +
+    `- Every activity MUST have an exact start and end time.\n` +
+    `- Use 12-hour time format, such as "08:00 AM - 09:30 AM" or "02:30 PM - 05:00 PM".\n` +
+    `- NEVER use "Morning", "Afternoon", "Evening", "Night", or "Flexible".\n` +
+    `- NEVER leave the time blank.\n` +
+    `- Activities must not overlap.\n` +
+    `- Include realistic travel time between activities.\n` +
+    `- Plan approximately 3-5 meaningful activities/stops on a normal full day.\n` +
+    `- Do NOT pack every hour with activities.\n` +
+    `- Include realistic lunch, dinner, rest, and free-time periods where appropriate.\n` +
+    `- Leave reasonable travel/buffer time between different locations.\n` +
+    `- Do not create overlapping activities.\n` +
+    `- Give major attractions enough time to actually enjoy them, generally 1.5-3 hours.\n` +
+    `- Leave approximately 1-2 hours of flexible/free time on most full days.\n` +
+    `- Arrival and departure days should be lighter than normal sightseeing days.\n` +
+    `- Consider realistic opening hours and travel time between locations.\n` +
+    `- Avoid unnecessary repetition of attractions.\n` +
+    `- The day should feel enjoyable and relaxed rather than like a checklist.\n\n` +
+
+    `All costs must be in US dollars per activity, roughly in line with a ` +
+    `${formData.budget || "Medium"} budget tier (Low: ~$5-15/activity, Medium: ~$15-30/activity, ` +
+    `Luxury: ~$30-70/activity).\n\n` +
+
+    `Available destinations:\n${JSON.stringify(destinations)}`;
     const result = await model.generateContent(prompt);
     const plan = JSON.parse(result.response.text());
 

@@ -33,6 +33,27 @@ const TYPE_OPTIONS = ["Mountains", "Beaches", "Heritage", "Wildlife", "Adventure
 const MOOD_OPTIONS = ["Relaxing", "Adventurous", "Romantic", "Cultural", "Spiritual", "Party"]
 const COMPANION_OPTIONS = ["Solo", "Couple", "Family", "Friends"]
 
+// Rupee scroll bar (range slider) for the Budget section — its filled
+// range is bucketed into the same Low/Medium/Luxury tiers as the pills
+// above, so dragging the bar keeps the pill selection in sync (and vice
+// versa).
+const BUDGET_MIN = 1000
+const BUDGET_MAX = 15000
+const BUDGET_STEP = 500
+const BUDGET_RANGES = {
+  Low: { max: 5000, default: 3000 },
+  Medium: { max: 10000, default: 7500 },
+  Luxury: { max: BUDGET_MAX, default: 12500 },
+}
+
+const formatRupees = (value) => `₹${Number(value).toLocaleString("en-IN")}`
+
+function tierForBudgetAmount(amount) {
+  if (amount <= BUDGET_RANGES.Low.max) return "Low"
+  if (amount <= BUDGET_RANGES.Medium.max) return "Medium"
+  return "Luxury"
+}
+
 const LOADING_MESSAGES = [
   "Analyzing your preferences...",
   "Matching destinations that fit...",
@@ -43,6 +64,7 @@ const LOADING_MESSAGES = [
 
 const DEFAULT_FORM = {
   budget: "Medium",
+  budgetAmount: BUDGET_RANGES.Medium.default,
   days: 5,
   weatherPreference: "Any",
   destinationType: "Any",
@@ -74,6 +96,35 @@ function PillGroup({ label, options, value, onChange, theme }) {
             {opt}
           </button>
         ))}
+      </div>
+    </div>
+  )
+}
+
+// Shared range slider styling for the rupee Budget slider.
+function ScrollBarField({ min, max, step = 1, value, onChange, accent, formatValue, minLabel, maxLabel, ariaLabel, theme }) {
+  const pct = ((value - min) / (max - min)) * 100
+  return (
+    <div className="mt-3">
+      <div className="flex items-center justify-end mb-1.5">
+        <span className="text-sm font-extrabold" style={{ color: accent }}>
+          {formatValue(value)}
+        </span>
+      </div>
+      <input
+        type="range"
+        min={min}
+        max={max}
+        step={step}
+        value={value}
+        onChange={(e) => onChange(Number(e.target.value))}
+        className="tn-range w-full"
+        style={{ "--tn-range-fill": `${pct}%`, "--tn-range-color": accent }}
+        aria-label={ariaLabel}
+      />
+      <div className={`flex justify-between text-[10px] mt-1 font-medium ${theme === "dark" ? "text-slate-500" : "text-slate-400"}`}>
+        <span>{minLabel}</span>
+        <span>{maxLabel}</span>
       </div>
     </div>
   )
@@ -127,6 +178,13 @@ export default function AITripPlanner({
   if (!open) return null
 
   const updateField = (key, value) => setFormData((prev) => ({ ...prev, [key]: value }))
+
+  // Budget pill <-> rupee scroll bar sync
+  const updateBudgetTier = (tier) =>
+    setFormData((prev) => ({ ...prev, budget: tier, budgetAmount: BUDGET_RANGES[tier].default }))
+  const updateBudgetAmount = (amount) =>
+    setFormData((prev) => ({ ...prev, budgetAmount: amount, budget: tierForBudgetAmount(amount) }))
+
 
   const handleGenerate = async () => {
     setStep("loading")
@@ -204,7 +262,22 @@ export default function AITripPlanner({
                 </div>
               )}
 
-              <PillGroup label="Budget" options={BUDGET_OPTIONS} value={formData.budget} onChange={(v) => updateField("budget", v)} theme={theme} />
+              <div>
+                <PillGroup label="Budget" options={BUDGET_OPTIONS} value={formData.budget} onChange={updateBudgetTier} theme={theme} />
+                <ScrollBarField
+                  min={BUDGET_MIN}
+                  max={BUDGET_MAX}
+                  step={BUDGET_STEP}
+                  value={formData.budgetAmount}
+                  onChange={updateBudgetAmount}
+                  accent="#10b981"
+                  formatValue={(v) => `${formatRupees(v)} / person / day`}
+                  minLabel={formatRupees(BUDGET_MIN)}
+                  maxLabel={formatRupees(BUDGET_MAX)}
+                  ariaLabel="Daily budget in rupees"
+                  theme={theme}
+                />
+              </div>
 
               <div>
                 <p className={`mb-2 text-xs font-bold uppercase tracking-wider ${theme === "dark" ? "text-slate-400" : "text-slate-500"}`}>

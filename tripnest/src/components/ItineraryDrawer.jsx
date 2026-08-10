@@ -11,6 +11,7 @@ import {
   Wallet,
   FileDown,
   Compass,
+  Clock,
   Pin,
   Loader2,
   GripVertical,
@@ -523,12 +524,20 @@ export default function ItineraryDrawer({
                               {a.category}
                             </span>
                           </div>
-                          <p className={`mt-0.5 flex items-center gap-1 text-xs ${
-                            theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
-                          }`}>
-                            <MapPin className="h-3 w-3" aria-hidden="true" />
-                            <span className="truncate">{a.location}</span>
-                          </p>
+                          <div className="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
+                            <span className={`inline-flex items-center gap-1 font-semibold ${
+                              theme === 'dark' ? 'text-teal-400' : 'text-teal-600'
+                            }`}>
+                              <Clock className="h-3 w-3" aria-hidden="true" />
+                              <span>{a.time || 'Flexible timing'}</span>
+                            </span>
+                            <span className={`inline-flex min-w-0 items-center gap-1 ${
+                              theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
+                            }`}>
+                              <MapPin className="h-3 w-3 shrink-0" aria-hidden="true" />
+                              <span className="truncate">{a.location}</span>
+                            </span>
+                          </div>
                           <div className="mt-1.5 flex items-center gap-2">
                             {fixedDays.length > 1 && (
                               <select
