@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { 
   X, MapPin, Thermometer, Calendar, Heart, Plus, Sparkles, 
   CheckCircle2, Clock, Lightbulb, Package, Ticket,
-  Utensils, ChefHat, Store, ChevronDown, ChevronUp
+  Utensils, ChefHat, Store, ChevronDown, ChevronUp, Users
 } from "lucide-react";
 
 export default function DestinationModal({
@@ -113,7 +113,9 @@ export default function DestinationModal({
             </p>
 
             {/* Quick Specs Grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-4 border-t border-slate-100 dark:border-slate-800">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-4 border-t border-slate-100 dark:border-slate-800">
+              
+              {/* Temperature */}
               <div className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-2xl flex items-center gap-3">
                 <Thermometer className="h-5 w-5 text-amber-500 shrink-0" />
                 <div>
@@ -122,6 +124,38 @@ export default function DestinationModal({
                 </div>
               </div>
 
+              {/* Crowd Level */}
+              {dest.crowdLevel && (
+                <div className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-2xl flex items-center gap-3">
+                  <Users
+                    className={`h-5 w-5 shrink-0 ${
+                      dest.crowdLevel === "High"
+                        ? "text-rose-500"
+                        : dest.crowdLevel === "Moderate"
+                        ? "text-amber-500"
+                        : "text-emerald-500"
+                    }`}
+                  />
+                  <div>
+                    <p className="text-[10px] text-slate-500 uppercase font-bold">
+                      Estimated Crowd
+                    </p>
+                    <p
+                      className={`text-xs font-bold ${
+                        dest.crowdLevel === "High"
+                          ? "text-rose-600 dark:text-rose-400"
+                          : dest.crowdLevel === "Moderate"
+                          ? "text-amber-600 dark:text-amber-400"
+                          : "text-emerald-600 dark:text-emerald-400"
+                      }`}
+                    >
+                      {dest.crowdLevel}
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {/* Best Time */}
               {dest.bestTime && (
                 <div className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-2xl flex items-center gap-3">
                   <Calendar className="h-5 w-5 text-sky-500 shrink-0" />
@@ -132,8 +166,9 @@ export default function DestinationModal({
                 </div>
               )}
 
+              {/* Suggested Trip Duration */}
               {dest.suggestedDays && (
-                <div className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-2xl flex items-center gap-3 col-span-2 sm:col-span-1">
+                <div className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-2xl flex items-center gap-3">
                   <Clock className="h-5 w-5 text-indigo-500 shrink-0" />
                   <div>
                     <p className="text-[10px] text-slate-500 uppercase font-bold">Suggested Trip</p>
