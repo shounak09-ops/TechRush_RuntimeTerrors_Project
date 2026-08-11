@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useRef } from "react";
-import DestinationCard from "./components/DestinationCard";
+import React, { useState, useEffect } from "react";
+import DestinationRail from "./components/Destinationrail";
 import DestinationModal from "./components/DestinationModal";
+import BookingModal from "./components/BookingModal";
 import CompareDrawer from "./components/CompareDrawer";
 import ItineraryDrawer from "./components/ItineraryDrawer";
 import MapView from "./components/MapView";
@@ -12,7 +13,7 @@ import UserExperiences from "./components/UserExperiences";
 import { 
   MapPin, Search, Moon, Sun, 
   Filter, Globe, Heart, Luggage, Loader2, Menu, X as CloseIcon,
-  Sparkles, Wallet, CloudSun, ArrowRight, Plane, Compass, ChevronLeft, ChevronRight
+  Sparkles, Wallet, CloudSun, ArrowRight, Plane, Compass
 } from "lucide-react";
 
 const TRENDING_SEARCHES = ["Bali", "Switzerland", "Paris", "Goa", "Japan"];
@@ -32,18 +33,14 @@ export default function App() {
   // Modal & Persistence States
   const [selectedModalDest, setSelectedModalDest] = useState(null);
 
+  // Book Now flow — separate from the details modal so booking can be
+  // triggered straight from the destination modal's "Book Now" button.
+  const [bookingDest, setBookingDest] = useState(null);
+
   // Live Map Overlay State
   const [isMapOpen, setIsMapOpen] = useState(false);
   const [allDestinationsOpen, setAllDestinationsOpen] = useState(false);
 
-  // Horizontal destination rail — the scrollbar is deliberately hidden for
-  // a cleaner look, so this ref backs the arrow buttons (trackpad/touch
-  // swipe already works natively via overflow-x-auto).
-  const railRef = useRef(null);
-  const scrollRailBy = (amount) => {
-    railRef.current?.scrollBy({ left: amount, behavior: "smooth" });
-  };
-  
   const [favorites, setFavorites] = useState(() => {
     return JSON.parse(localStorage.getItem("tripnest_favorites") || "[]");
   });
@@ -153,6 +150,11 @@ export default function App() {
       );
     })
   );
+
+  // All-India and All-Foreign rows shown below Trending on the home view —
+  // same India/International split the Scope filter already uses.
+  const indianDestinations = DESTINATIONS.filter((item) => item.country === "India");
+  const foreignDestinations = DESTINATIONS.filter((item) => item.country !== "India");
 
   const isDefaultView =
     scope === "All" &&
@@ -668,58 +670,59 @@ export default function App() {
 
           </div>
 
-          {/* Destination rail — trending picks by default, or the live
-              filter results once any filter/search is actually applied.
-              A single horizontally-scrollable row (app-drawer style)
-              instead of a full grid, or an empty state when a filter
-              genuinely matches nothing. */}
-          {cardsToShow.length > 0 ? (
-            <div className="space-y-4">
-              <div className="flex items-center justify-between gap-3">
-                <p className="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
-                  {isDefaultView ? "Trending Destinations" : `${cardsToShow.length} destination${cardsToShow.length === 1 ? "" : "s"} found`}
-                </p>
-                {/* Scroll arrows — the rail's scrollbar is hidden for a
-                    cleaner look, so these give mouse users (no trackpad)
-                    an obvious way to move it, alongside touch/trackpad
-                    swipe. */}
-                <div className="hidden sm:flex items-center gap-2 shrink-0">
-                  <button
-                    onClick={() => scrollRailBy(-340)}
-                    aria-label="Scroll left"
-                    className="p-2 rounded-full border border-slate-200 dark:border-slate-700 text-slate-500 hover:text-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 dark:hover:text-white transition-colors"
-                  >
-                    <ChevronLeft className="h-4 w-4" />
-                  </button>
-                  <button
-                    onClick={() => scrollRailBy(340)}
-                    aria-label="Scroll right"
-                    className="p-2 rounded-full border border-slate-200 dark:border-slate-700 text-slate-500 hover:text-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 dark:hover:text-white transition-colors"
-                  >
-                    <ChevronRight className="h-4 w-4" />
-                  </button>
-                </div>
-              </div>
-              <div
-                ref={railRef}
-                key={railKey}
-                className="tn-scroll-x tn-stagger-grid flex gap-6 overflow-x-auto snap-x snap-mandatory pb-2 -mx-6 sm:-mx-8 px-6 sm:px-8"
-              >
-                {cardsToShow.map((dest) => (
-                  <div key={dest.id} className="snap-start shrink-0 w-[80vw] sm:w-[320px]">
-                    <DestinationCard
-                      dest={dest}
-                      onAddToItinerary={handleAddToItinerary}
-                      isFavorite={favorites.includes(dest.id)}
-                      onToggleFavorite={handleToggleFavorite}
-                      isCompared={compared.includes(dest.id)}
-                      onToggleCompare={handleToggleCompare}
-                      onOpenDetails={(d) => setSelectedModalDest(d)}
-                    />
-                  </div>
-                ))}
-              </div>
+          {/* Destination rails — on the default (unfiltered) view this is
+              three stacked rows: Trending, then All Indian, then All
+              Foreign. Once any filter/search is applied, it collapses
+              back down to a single rail of the live filter results
+              (app-drawer style), or an empty state when nothing matches. */}
+          {isDefaultView ? (
+            <div className="space-y-10">
+              <DestinationRail
+                title="Trending Destinations"
+                destinations={trendingDestinations}
+                favorites={favorites}
+                onToggleFavorite={handleToggleFavorite}
+                compared={compared}
+                onToggleCompare={handleToggleCompare}
+                onAddToItinerary={handleAddToItinerary}
+                onOpenDetails={(d) => setSelectedModalDest(d)}
+                railKey="trending"
+              />
+              <DestinationRail
+                title="All Indian Destinations"
+                destinations={indianDestinations}
+                favorites={favorites}
+                onToggleFavorite={handleToggleFavorite}
+                compared={compared}
+                onToggleCompare={handleToggleCompare}
+                onAddToItinerary={handleAddToItinerary}
+                onOpenDetails={(d) => setSelectedModalDest(d)}
+                railKey="indian"
+              />
+              <DestinationRail
+                title="All Foreign Destinations"
+                destinations={foreignDestinations}
+                favorites={favorites}
+                onToggleFavorite={handleToggleFavorite}
+                compared={compared}
+                onToggleCompare={handleToggleCompare}
+                onAddToItinerary={handleAddToItinerary}
+                onOpenDetails={(d) => setSelectedModalDest(d)}
+                railKey="foreign"
+              />
             </div>
+          ) : cardsToShow.length > 0 ? (
+            <DestinationRail
+              title={`${cardsToShow.length} destination${cardsToShow.length === 1 ? "" : "s"} found`}
+              destinations={cardsToShow}
+              favorites={favorites}
+              onToggleFavorite={handleToggleFavorite}
+              compared={compared}
+              onToggleCompare={handleToggleCompare}
+              onAddToItinerary={handleAddToItinerary}
+              onOpenDetails={(d) => setSelectedModalDest(d)}
+              railKey={railKey}
+            />
           ) : (
             <div className="tn-modal-in flex flex-col items-center text-center gap-4 py-20 px-6 rounded-3xl border border-dashed border-slate-200 dark:border-slate-800">
               <span className="tn-float p-4 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500">
@@ -793,6 +796,14 @@ export default function App() {
         dest={selectedModalDest}
         onClose={() => setSelectedModalDest(null)}
         onAddToItinerary={handleAddToItinerary}
+        onBookNow={(d) => setBookingDest(d)}
+      />
+
+      {/* BOOK NOW MODAL — frontend-only booking flow (no backend) */}
+      <BookingModal
+        dest={bookingDest}
+        open={!!bookingDest}
+        onClose={() => setBookingDest(null)}
       />
 
       {/* COMPARE DRAWER */}
