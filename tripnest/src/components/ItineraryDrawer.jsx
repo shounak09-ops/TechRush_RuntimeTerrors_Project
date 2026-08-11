@@ -20,6 +20,7 @@ import {
   Trash2,
 } from "lucide-react"
 import PackingChecklist from "./PackingCheckList"
+import ItineraryDayMap from "./ItineraryDayMap"
 
 export const CATEGORY_STYLES = {
   Sightseeing: "bg-indigo-500/15 text-indigo-600 dark:text-indigo-400",
@@ -190,7 +191,7 @@ export default function ItineraryDrawer({
 
       {/* Drawer */}
       <aside
-        className={`fixed inset-y-0 right-0 z-50 flex w-full max-w-md flex-col border-l shadow-2xl transition-transform duration-300 ease-out ${
+        className={`fixed inset-y-0 right-0 z-50 flex w-full max-w-md lg:max-w-4xl flex-col border-l shadow-2xl transition-transform duration-300 ease-out ${
           theme === 'dark'
             ? 'border-slate-800 bg-slate-900'
             : 'border-slate-200 bg-white'
@@ -277,7 +278,10 @@ export default function ItineraryDrawer({
         </div>
 
         {/* Scrollable body */}
-        <div className="tn-scroll flex-1 overflow-y-auto p-4">
+        <div className="flex flex-1 min-h-0">
+        <div className={`tn-scroll flex-1 lg:max-w-[380px] lg:shrink-0 overflow-y-auto p-4 ${
+          theme === 'dark' ? 'lg:border-r lg:border-slate-800' : 'lg:border-r lg:border-slate-200'
+        }`}>
           {loading ? (
             <div className="flex flex-col items-center justify-center gap-3 py-24 text-center">
               <Loader2 className={`h-8 w-8 animate-spin ${theme === 'dark' ? 'text-teal-400' : 'text-teal-500'}`} />
@@ -635,6 +639,22 @@ export default function ItineraryDrawer({
               theme={theme}
             />
           )}
+        </div>
+
+        {/* Map — beside the itinerary content on large screens only, showing
+            the currently selected day's activities. Not shown while loading
+            or on the packing-list tab, since there's nothing day-specific to
+            plot there. */}
+        {!loading && tab === "itinerary" && activeDestination && (
+          <div className="hidden lg:flex lg:flex-1 lg:flex-col">
+            <ItineraryDayMap
+              destination={activeDestination}
+              activities={dayActivities}
+              selectedDay={selectedDay}
+              theme={theme}
+            />
+          </div>
+        )}
         </div>
 
         {/* Footer action bar */}
