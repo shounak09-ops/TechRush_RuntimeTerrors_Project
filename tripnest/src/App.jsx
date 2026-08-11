@@ -18,6 +18,13 @@ import {
 
 const TRENDING_SEARCHES = ["Bali", "Switzerland", "Paris", "Goa", "Japan"];
 
+const HERO_IMAGES = [
+  "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=1600&q=80",
+  "https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?auto=format&fit=crop&w=1600&q=80",
+  "https://images.unsplash.com/photo-1600356033695-a003690a6351?auto=format&fit=crop&w=1600&q=80",
+  "https://images.unsplash.com/photo-1518391846015-55a9cc003b25?auto=format&fit=crop&w=1600&q=80"
+];
+
 export default function App() {
   const [theme, setTheme] = useState("light");
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
@@ -406,12 +413,16 @@ export default function App() {
 
       {/* HERO SECTION */}
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0">
-          <img
-            src="https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?auto=format&fit=crop&w=1600&q=80"
-            alt=""
-            className="w-full h-full object-cover"
-          />
+        <div className="absolute inset-0 overflow-hidden">
+          {HERO_IMAGES.map((imgSrc, index) => (
+            <img
+              key={imgSrc}
+              src={imgSrc}
+              alt=""
+              className="absolute inset-0 w-full h-full object-cover animate-bg-slide"
+              style={{ animationDelay: `${index * 6}s` }}
+            />
+          ))}
           <div className="absolute inset-0 bg-gradient-to-r from-white via-white/90 via-40% to-white/0 dark:from-slate-950 dark:via-slate-950/90 dark:via-40% dark:to-slate-950/0" />
         </div>
 
@@ -585,7 +596,7 @@ export default function App() {
                         : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
                     }`}
                   >
-                    {item === "India" ? "🇮🇳 India" : item === "International" ? "🌍 Foreign" : "🔥 Trending"}
+                    {item === "India" ? "India" : item === "International" ? "Foreign" : "Trending"}
                   </button>
                 ))}
               </div>

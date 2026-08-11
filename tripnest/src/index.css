@@ -35,6 +35,56 @@
 }
 
 /* ---------------------------------------------------------------------
+   Typewriter Animation Keyframes & Utility Class
+------------------------------------------------------------------------ */
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blink {
+  50% { border-color: transparent; }
+}
+
+.animate-typewriter {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 3px solid #10b981; /* Emerald blinking cursor */
+  animation: 
+    typing 2.5s steps(22, end) forwards,
+    blink 0.75s step-end infinite;
+}
+
+/* ---------------------------------------------------------------------
+   Dynamic Background Image Crossfade & Subtle Zoom Loop (24s Total)
+------------------------------------------------------------------------ */
+@keyframes bg-crossfade-zoom {
+  0% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  8% {
+    opacity: 1;
+  }
+  25% {
+    opacity: 1;
+  }
+  33% {
+    opacity: 0;
+    transform: scale(1.08); /* Subtle scale-up during active cycle */
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+}
+
+.animate-bg-slide {
+  animation: bg-crossfade-zoom 24s ease-in-out infinite;
+}
+
+/* ---------------------------------------------------------------------
    Shared animation toolkit — overlays, drawers, grids, and small
    interactive pops used across the app (modals, cards, nav, buttons).
    Kept centralized here so every surface animates consistently and
@@ -90,8 +140,7 @@
   }
 }
 
-/* Backdrop fade — also matches the `animate-fadeIn` / `animate-fade-in`
-   classes already referenced on a couple of overlay components. */
+/* Backdrop fade — matches `animate-fadeIn` / `animate-fade-in` overlay classes */
 .animate-fadeIn,
 .animate-fade-in,
 .tn-fade-in {
@@ -103,8 +152,7 @@
   animation: tn-scale-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-/* Right-aligned panels/drawers that aren't already handled by a
-   transform + transition on `open` state */
+/* Right-aligned panels/drawers */
 .tn-drawer-in-right {
   animation: tn-slide-in-right 0.32s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
@@ -120,9 +168,7 @@
   animation: tn-pop-in 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 
-/* Staggered entrance for card grids — no JS required. Each direct child
-   fades/rises in with an incrementally later delay, capped so long grids
-   don't keep animating forever. */
+/* Staggered entrance for card grids */
 .tn-stagger-grid > * {
   opacity: 0;
   animation: tn-fade-up 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
@@ -147,9 +193,7 @@
   animation: tn-float 3.2s ease-in-out infinite;
 }
 
-/* Favorite (heart) toggle — a quick overshoot pop so "liking" something
-   feels like a tap, not a flat state flip. Re-triggered from React by
-   toggling this class on/off (see DestinationCard.jsx). */
+/* Favorite (heart) toggle */
 @keyframes tn-heart-pop {
   0% { transform: scale(1); }
   35% { transform: scale(1.35); }
@@ -170,8 +214,7 @@
   animation: tn-check-pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 
-/* Skeleton shimmer — used while the AI trip result is loading, in place of
-   a bare spinner, so the wait feels like progress rather than a stall. */
+/* Skeleton shimmer */
 @keyframes tn-shimmer {
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
@@ -200,16 +243,18 @@
   .tn-float,
   .tn-heart-pop,
   .tn-check-pop,
-  .tn-skeleton {
+  .tn-skeleton,
+  .animate-typewriter,
+  .animate-bg-slide {
     animation: none;
     opacity: 1;
     transform: none;
+    border-right: none;
+    width: auto;
   }
 }
 
-/* Horizontal destination rail — hides scrollbar chrome for a clean,
-   app-drawer-like swipeable row (still fully scrollable via touch/trackpad,
-   and via mouse-wheel since overflow-x stays scrollable). */
+/* Horizontal destination rail */
 .tn-scroll-x {
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE/Edge */
@@ -217,6 +262,7 @@
 .tn-scroll-x::-webkit-scrollbar {
   display: none; /* Chrome/Safari */
 }
+
 /* --- Continuous Marquee Animation for User Experiences --- */
 @keyframes infinite-scroll {
   from {
@@ -233,9 +279,7 @@
   animation: infinite-scroll 35s linear infinite;
 }
 
-/* --- AI Trip Planner: budget scroll bar ---
-   A styled <input type="range"> whose filled portion is driven by the
-   --tn-range-fill (percentage) and --tn-range-color CSS vars set inline. */
+/* --- AI Trip Planner: budget scroll bar --- */
 .tn-range {
   -webkit-appearance: none;
   appearance: none;
