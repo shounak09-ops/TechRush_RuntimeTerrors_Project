@@ -44,8 +44,9 @@ export default function DestinationCard({
 
   // AI-estimated flight price — replaces the static `totalBudget` figure
   // baked into data/destinations.js with a live fare estimate from the
-  // backend (see services/aiService.js's estimateFlightPrice). Falls back
-  // to the static value if the AI call fails or hasn't resolved yet.
+  // backend (see services/aiService.js's estimateFlightPrice), fetched
+  // on-demand when the user clicks "Add" (see fetchFlightPrice below).
+  // Shows the static value until then, or if the AI call fails.
   const [aiFlightPriceUSD, setAiFlightPriceUSD] = useState(null);
   const [isLoadingFlightPrice, setIsLoadingFlightPrice] = useState(false);
   const [flightPriceFailed, setFlightPriceFailed] = useState(false);
@@ -89,18 +90,23 @@ export default function DestinationCard({
     };
   }, [dest?.lat, dest?.lon, dest?.temp, dest?.name]);
 
-  // Fetch a live AI flight price estimate for this destination so the card
-  // shows a real estimate instead of the hardcoded totalBudget value.
-  useEffect(() => {
-    if (!dest?.id) return;
+  // Live AI flight price estimate for this destination — replaces the
+  // hardcoded totalBudget value once fetched. Unlike the weather effect
+  // above, this is deliberately NOT fetched on mount/render: with a grid of
+  // many cards (e.g. the "all destinations" view), firing one AI call per
+  // visible card on first render can blow through Gemini's free-tier rate
+  // limit. Instead it's fetched lazily, on demand, the first time the user
+  // clicks "Add" on this card (see the Add button's onClick below). The
+  // in-memory cache in aiService.js still means repeat adds/views of the
+  // same destination don't re-hit the backend.
+  const fetchFlightPrice = () => {
+    if (!dest?.id || aiFlightPriceUSD || isLoadingFlightPrice) return;
 
-    let isMounted = true;
     setIsLoadingFlightPrice(true);
     setFlightPriceFailed(false);
 
     estimateFlightPrice(dest)
       .then((result) => {
-        if (!isMounted) return;
         if (result.costUSD) {
           setAiFlightPriceUSD(result.costUSD);
         } else {
@@ -109,16 +115,12 @@ export default function DestinationCard({
       })
       .catch((err) => {
         console.error(`Error fetching AI flight price for ${dest.name}:`, err);
-        if (isMounted) setFlightPriceFailed(true);
+        setFlightPriceFailed(true);
       })
       .finally(() => {
-        if (isMounted) setIsLoadingFlightPrice(false);
+        setIsLoadingFlightPrice(false);
       });
-
-    return () => {
-      isMounted = false;
-    };
-  }, [dest?.id]);
+  };
 
   // Reset image carousel index on destination change
   useEffect(() => {
@@ -266,7 +268,7 @@ export default function DestinationCard({
                 <span className="font-medium text-slate-700 dark:text-slate-300">
                   {aiFlightPriceUSD
                     ? currency(aiFlightPriceUSD)
-                    : flightPriceFailed && dest?.totalBudget
+                    : dest?.totalBudget
                     ? `₹${dest.totalBudget}`
                     : null}
                 </span>
@@ -306,6 +308,7 @@ export default function DestinationCard({
             <button
               onClick={() => {
                 onAddToItinerary(dest);
+                fetchFlightPrice();
                 setJustAdded(true);
                 setTimeout(() => setJustAdded(false), 1200);
               }}
