@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { 
   Heart, 
   Plus, 
@@ -31,6 +31,10 @@ export default function DestinationCard({
 }) {
   const [activeImgIndex, setActiveImgIndex] = useState(0);
   const [imgSrc, setImgSrc] = useState("");
+  const [isImageHovered, setIsImageHovered] = useState(false);
+  const [isSlideshowTransitioning, setIsSlideshowTransitioning] = useState(false);
+  const [slideshowResetKey, setSlideshowResetKey] = useState(0);
+  const slideshowIntervalRef = useRef(null);
 
   // Micro-interaction state: brief "pop" on the heart when favorited, and a
   // brief "Added ✓" swap on the Add button — pure UI feedback, reset on a
@@ -55,6 +59,15 @@ export default function DestinationCard({
   const gallery = dest?.images && dest.images.length > 0 
     ? dest.images 
     : [dest?.image || FALLBACK_IMAGE];
+
+  // Preload every gallery image so the crossfade never waits for a network
+  // request when the slideshow advances.
+  useEffect(() => {
+    gallery.forEach((src) => {
+      const image = new Image();
+      image.src = src;
+    });
+  }, [dest?.id, gallery]);
 
   // Fetch Live Weather when coordinates exist
   useEffect(() => {
@@ -122,26 +135,71 @@ export default function DestinationCard({
       });
   };
 
+  const clearSlideshow = () => {
+    if (slideshowIntervalRef.current) {
+      clearInterval(slideshowIntervalRef.current);
+      slideshowIntervalRef.current = null;
+    }
+  };
+
   // Reset image carousel index on destination change
   useEffect(() => {
     setActiveImgIndex(0);
   }, [dest?.id]);
+
+  // Auto-play the gallery only while the image area is hovered.
+  // Manual navigation changes slideshowResetKey, restarting the interval
+  // so the slideshow never fights with the user's click.
+  useEffect(() => {
+    clearSlideshow();
+
+    if (!isImageHovered || gallery.length <= 1) return;
+
+    slideshowIntervalRef.current = setInterval(() => {
+      setActiveImgIndex((prev) => (prev + 1) % gallery.length);
+    }, 1600);
+
+    return clearSlideshow;
+  }, [isImageHovered, gallery.length, slideshowResetKey]);
+
+  // Extra cleanup for unmount.
+  useEffect(() => {
+    return clearSlideshow;
+  }, []);
 
   const safeImgIndex = activeImgIndex < gallery.length ? activeImgIndex : 0;
   const currentImage = gallery[safeImgIndex] || FALLBACK_IMAGE;
 
   useEffect(() => {
     setImgSrc(currentImage);
+    setIsSlideshowTransitioning(false);
   }, [currentImage]);
 
   const handleNextImage = (e) => {
     e.stopPropagation();
+    clearSlideshow();
+    setIsSlideshowTransitioning(false);
     setActiveImgIndex((prev) => (prev + 1) % gallery.length);
+    setSlideshowResetKey((prev) => prev + 1);
   };
 
   const handlePrevImage = (e) => {
     e.stopPropagation();
+    clearSlideshow();
+    setIsSlideshowTransitioning(false);
     setActiveImgIndex((prev) => (prev - 1 + gallery.length) % gallery.length);
+    setSlideshowResetKey((prev) => prev + 1);
+  };
+
+  const handleImageMouseEnter = () => {
+    setIsImageHovered(true);
+  };
+
+  const handleImageMouseLeave = () => {
+    setIsImageHovered(false);
+    clearSlideshow();
+    setIsSlideshowTransitioning(false);
+    setActiveImgIndex(0);
   };
 
   const badgeClass = typeof categoryBadgeColor === "function" 
@@ -152,15 +210,62 @@ export default function DestinationCard({
     <div className="group relative bg-white dark:bg-slate-900 border border-slate-900/8 dark:border-white/10 rounded-2xl overflow-hidden shadow-[0_1px_3px_rgba(15,23,42,0.06),0_1px_2px_rgba(15,23,42,0.04)] hover:shadow-[0_8px_24px_rgba(15,23,42,0.10)] hover:-translate-y-1 hover:scale-[1.012] transition-all duration-300 flex flex-col justify-between">
       
       {/* Card Header & Image Carousel */}
-      <div className="relative overflow-hidden aspect-[4/3] bg-slate-950">
-        <img
-          src={imgSrc}
-          alt={`${dest?.name || "Destination"} - Photo ${safeImgIndex + 1}`}
-          onError={() => setImgSrc(FALLBACK_IMAGE)}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-        />
+      <div
+        className="relative overflow-hidden aspect-[4/3] bg-slate-950"
+        onMouseEnter={handleImageMouseEnter}
+        onMouseLeave={handleImageMouseLeave}
+      >
+        <div className="absolute inset-0">
+          {/* Base image */}
+          <img
+            src={imgSrc}
+            alt={`${dest?.name || "Destination"} - Photo ${safeImgIndex + 1}`}
+            onError={() => setImgSrc(FALLBACK_IMAGE)}
+            className={`absolute inset-0 w-full h-full object-cover transition-[opacity,transform,filter] duration-[1100ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
+              isImageHovered
+                ? "scale-[1.015] brightness-[1.03] saturate-[1.03]"
+                : "scale-100"
+            }`}
+          />
+
+          {/* Incoming image sits above the current image and fades in */}
+          {gallery.length > 1 && (
+            <img
+              key={safeImgIndex}
+              src={currentImage}
+              alt=""
+              aria-hidden="true"
+              className="absolute inset-0 w-full h-full object-cover animate-[tn-crossfade_1100ms_cubic-bezier(0.22,1,0.36,1)_forwards]"
+              onError={(e) => {
+                e.currentTarget.style.display = "none";
+              }}
+            />
+          )}
+        </div>
         
+        <style>{`
+          @keyframes tn-crossfade {
+            from {
+              opacity: 0;
+            }
+            to {
+              opacity: 1;
+            }
+          }
+        `}</style>
+
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
+
+        {/* Subtle slideshow highlight */}
+        <div
+          className={`absolute inset-0 pointer-events-none transition-opacity duration-[1200ms] ease-out ${
+            isImageHovered ? "opacity-100" : "opacity-0"
+          }`}
+          style={{
+            background:
+              "linear-gradient(115deg, rgba(255,255,255,0.16) 0%, rgba(255,255,255,0.05) 28%, transparent 55%)"
+          }}
+        />
 
         {/* Carousel Arrows */}
         {gallery.length > 1 && (
@@ -229,7 +334,7 @@ export default function DestinationCard({
               <span
                 key={idx}
                 className={`h-1.5 rounded-full transition-all ${
-                  idx === safeImgIndex ? "w-4 bg-emerald-400" : "w-1.5 bg-white/50"
+                  idx === safeImgIndex ? "w-5 bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.75)]" : "w-1.5 bg-white/50"
                 }`}
               />
             ))}
