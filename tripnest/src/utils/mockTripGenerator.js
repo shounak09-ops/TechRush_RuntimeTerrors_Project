@@ -398,12 +398,19 @@ export function buildActivities(dest) {
   }));
 }
 
-export function buildBudgetBreakdown(dest, formData) {
+// `travelCostOverride` lets a caller (e.g. aiService.js, after asking the
+// LLM to estimate a real current-day fare for this destination/tier) supply
+// a live number instead of the static TRAVEL_COST table below. Only a
+// finite, positive override is honored — anything else (undefined, NaN,
+// 0, a failed AI call) falls back to the static table so the app never
+// shows a broken/zero travel cost.
+export function buildBudgetBreakdown(dest, formData, travelCostOverride) {
   const { budget, days } = formData;
   const tier = BUDGET_TIERS.includes(budget) ? budget : budgetTierOf(dest);
   const rate = DAILY_RATE[tier];
   const isIndia = dest.country === "India";
-  const travelCost = (isIndia ? TRAVEL_COST.India : TRAVEL_COST.International)[tier];
+  const hasLiveFare = Number.isFinite(travelCostOverride) && travelCostOverride > 0;
+  const travelCost = hasLiveFare ? travelCostOverride : (isIndia ? TRAVEL_COST.India : TRAVEL_COST.International)[tier];
 
   const breakdown = {
     accommodation: rate.accommodation * days,

@@ -60,7 +60,14 @@ function trimDestinationsForPrompt() {
 // destination object.
 function assembleTripFromAiPlan(aiPlan, formData) {
   const dest = DESTINATIONS.find((d) => d.id === aiPlan.destinationId) || DESTINATIONS[0];
-  const { tier, breakdown, total } = buildBudgetBreakdown(dest, formData);
+
+  // aiPlan.flightEstimate.costUSD is the model's own live fare estimate for
+  // THIS destination/tier/season (see server/index.js's flightEstimate
+  // schema + prompt) — it is not looked up from the static TRAVEL_COST
+  // table. buildBudgetBreakdown only falls back to that table if the model
+  // didn't return a usable number (e.g. costUSD came back null server-side).
+  const liveFare = Number(aiPlan.flightEstimate?.costUSD);
+  const { tier, breakdown, total } = buildBudgetBreakdown(dest, formData, liveFare);
 
   return {
     formData,
@@ -73,6 +80,10 @@ function assembleTripFromAiPlan(aiPlan, formData) {
     budgetTier: tier,
     budgetBreakdown: breakdown,
     estimatedTravelCost: Math.round(total),
+    // Whether flightsOrTravel above came from a live model estimate or the
+    // static fallback table, plus the model's one-line reasoning when it did.
+    travelCostSource: Number.isFinite(liveFare) && liveFare > 0 ? "ai" : "fallback",
+    travelCostReasoning: aiPlan.flightEstimate?.reasoning || "",
     packingChecklist: buildPackingChecklist(dest, formData),
     localFoods: buildLocalFoods(dest),
     travelTips: aiPlan.travelTips && aiPlan.travelTips.length ? aiPlan.travelTips : [],

@@ -86,8 +86,34 @@ const TRIP_PLAN_SCHEMA = {
       type: SchemaType.ARRAY,
       items: { type: SchemaType.STRING },
     },
+    flightEstimate: {
+      type: SchemaType.OBJECT,
+      description:
+        "A realistic estimate of what round-trip flights/transport to this destination would actually " +
+        "cost right now — the model should reason like it just checked fares, not return a generic or " +
+        "rounded stock figure.",
+      properties: {
+        costUSD: {
+          type: SchemaType.NUMBER,
+          description:
+            "Estimated one-time round-trip travel cost in US dollars to reach this specific destination, " +
+            "for this specific traveler. Must vary realistically with: distance/region from major global " +
+            "hubs, whether the destination is domestic or international relative to a traveler assumed to " +
+            "be departing from a major hub in their home region, the destination's bestTime/season (higher " +
+            "for peak season, lower for off-peak), and the budget tier (Low = budget carrier/economy deals, " +
+            "Medium = standard economy, Luxury = premium economy or business). Do NOT reuse a round number " +
+            "or the same figure across different destinations/tiers — vary it the way real fares vary.",
+        },
+        reasoning: {
+          type: SchemaType.STRING,
+          description:
+            "One short sentence explaining the fare estimate (e.g. distance/route, season, class of travel).",
+        },
+      },
+      required: ["costUSD", "reasoning"],
+    },
   },
-  required: ["destinationId", "aiExplanation", "matchScore", "dayWiseItinerary", "travelTips"],
+  required: ["destinationId", "aiExplanation", "matchScore", "dayWiseItinerary", "travelTips", "flightEstimate"],
 };
 
 // gemini-2.5-flash is on Google AI Studio's free tier as of writing. Google
@@ -146,6 +172,17 @@ app.post("/api/generate-trip", async (req, res) => {
     `${formData.budget || "Medium"} budget tier (Low: ~$5-15/activity, Medium: ~$15-30/activity, ` +
     `Luxury: ~$30-70/activity).\n\n` +
 
+    `FLIGHT/TRAVEL COST ESTIMATE RULES:\n` +
+    `- Also return a "flightEstimate" with a realistic round-trip flight/travel cost in USD for the ` +
+    `destination you picked, as if you had just looked up current fares.\n` +
+    `- Base it on real-world factors: how far the destination is from major global travel hubs, ` +
+    `whether it's a domestic or long-haul international route, the destination's typical season/bestTime ` +
+    `(peak season = pricier fares), and the ${formData.budget || "Medium"} budget tier (Low = budget ` +
+    `airline/economy deal fares, Medium = standard economy, Luxury = premium economy/business).\n` +
+    `- This number MUST differ meaningfully between destinations and tiers — never fall back to a flat, ` +
+    `rounded, or previously-seen figure. Two different destinations at the same tier should still get ` +
+    `noticeably different fares if their distance/region differs.\n\n` +
+
     `Available destinations:\n${JSON.stringify(destinations)}`;
     const result = await model.generateContent(prompt);
     const plan = JSON.parse(result.response.text());
@@ -161,6 +198,16 @@ app.post("/api/generate-trip", async (req, res) => {
     // requires it, but structured output isn't a hard type guarantee.
     const score = Math.round(Number(plan.matchScore));
     plan.matchScore = Number.isFinite(score) ? Math.min(100, Math.max(0, score)) : 75;
+
+    // Guard against a missing/non-numeric/absurd flight estimate — the schema
+    // requires it, but structured output isn't a hard type guarantee, and a
+    // hallucinated fare could come back negative or wildly out of range.
+    const fareRaw = Number(plan.flightEstimate?.costUSD);
+    const fareValid = Number.isFinite(fareRaw) && fareRaw > 0;
+    plan.flightEstimate = {
+      costUSD: fareValid ? Math.round(Math.min(6000, Math.max(30, fareRaw))) : null,
+      reasoning: plan.flightEstimate?.reasoning || "",
+    };
 
     res.json(plan);
   } catch (err) {

@@ -569,9 +569,19 @@ function ResultView({
       {resultTab === "budget" && (
         <div className="space-y-3">
           {Object.entries(trip.budgetBreakdown).map(([key, value]) => (
-            <div key={key} className={`flex items-center justify-between p-3 rounded-xl border ${theme === "dark" ? "border-slate-800 bg-slate-800/40" : "border-slate-200 bg-white"}`}>
-              <span className={`text-xs font-semibold capitalize ${mutedText}`}>{key.replace(/([A-Z])/g, " $1")}</span>
-              <span className={`text-sm font-bold ${bodyText}`}>{currency(value)}</span>
+            <div key={key} className={`rounded-xl border p-3 ${theme === "dark" ? "border-slate-800 bg-slate-800/40" : "border-slate-200 bg-white"}`}>
+              <div className="flex items-center justify-between">
+                <span className={`text-xs font-semibold capitalize ${mutedText}`}>{key.replace(/([A-Z])/g, " $1")}</span>
+                <span className={`text-sm font-bold ${bodyText}`}>{currency(value)}</span>
+              </div>
+              {key === "flightsOrTravel" && (
+                <p className={`mt-1.5 flex items-center gap-1 text-[11px] leading-relaxed ${mutedText}`}>
+                  <Sparkles className="h-3 w-3 text-sky-500 shrink-0" />
+                  {trip.travelCostSource === "ai" && trip.travelCostReasoning
+                    ? trip.travelCostReasoning
+                    : "AI-estimated fare unavailable — showing a typical baseline fare instead."}
+                </p>
+              )}
             </div>
           ))}
           <div className="flex items-center justify-between p-4 rounded-2xl border border-teal-500/30 bg-gradient-to-r from-teal-500/10 to-indigo-500/10">
