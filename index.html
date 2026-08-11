@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TripNest - Travel Planner</title>
+    <script>
+      // Applies the saved/system theme before React mounts and paints, so
+      // there's no flash of the wrong theme on load. Mirrors the same
+      // saved-choice-first, system-fallback logic App.jsx uses at runtime.
+      (function () {
+        try {
+          var saved = localStorage.getItem("tripnest_theme");
+          var isDark =
+            saved === "dark" ||
+            (saved !== "light" &&
+              window.matchMedia &&
+              window.matchMedia("(prefers-color-scheme: dark)").matches);
+          if (isDark) document.documentElement.classList.add("dark");
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

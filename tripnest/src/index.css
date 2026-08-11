@@ -1,6 +1,15 @@
 @import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600..800&family=Inter:wght@400;500;600;700;800&display=swap");
 @import "tailwindcss";
 
+/* Tailwind v4 ignores tailwind.config.js's `darkMode: 'class'` unless the
+   config is explicitly pulled in via `@config` — without this, `dark:`
+   utility classes fall back to the `prefers-color-scheme` media query and
+   follow the OS theme instead of the app's own light/dark toggle. This line
+   is what actually makes `dark:` respond to a `.dark` class on <html>,
+   keeping every `dark:` utility class in sync with the app's theme state
+   (see App.jsx) instead of the system setting. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* Fraunces carries the "voice" of the app — place names and the two big
    marketing headlines. Everything else (UI chrome, buttons, labels) stays
    on the default sans stack so functional text reads cleanly. */

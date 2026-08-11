@@ -29,7 +29,18 @@ const HERO_IMAGES = [
 export default function App() {
   const [showIntro, setShowIntro] = useState(true);
 
-  const [theme, setTheme] = useState("light");
+  // Theme: an explicit user choice, persisted once made. Falls back to the
+  // OS preference only on a first-ever visit (no saved choice yet) — after
+  // that, the app's toggle is the single source of truth and never gets
+  // silently overridden by a later system-theme change.
+  const [theme, setTheme] = useState(() => {
+    const saved = localStorage.getItem("tripnest_theme");
+    if (saved === "light" || saved === "dark") return saved;
+    if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      return "dark";
+    }
+    return "light";
+  });
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   
@@ -91,6 +102,15 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem("tripnest_travelcost", String(travelCost));
   }, [travelCost]);
+
+  // Keep the `.dark` class on <html> — and thus every Tailwind `dark:`
+  // utility class across the app — in lockstep with the theme state, and
+  // persist the explicit choice so it survives reloads and never gets
+  // reset by a later change to the OS-level theme.
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", theme === "dark");
+    localStorage.setItem("tripnest_theme", theme);
+  }, [theme]);
 
   const toggleTheme = () => setTheme(prev => prev === "light" ? "dark" : "light");
 
