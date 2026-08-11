@@ -7,7 +7,11 @@ import MapView from "./components/MapView";
 import AllDestinationsOverlay from "./components/AllDestinationsOverlay";
 import AITripPlanner from "./components/AITripPlanner";
 import { DESTINATIONS } from "./data/destinations";
-import { planItineraryForDestination } from "./services/aiService";
+import {
+  planItineraryForDestination,
+  getTrendingDestinationIds,
+  getDailyDestinationPrices,
+} from "./services/aiService";
 import UserExperiences from "./components/UserExperiences";
 import { 
   MapPin, Search, Moon, Sun, 
@@ -37,9 +41,10 @@ export default function App() {
   const [allDestinationsOpen, setAllDestinationsOpen] = useState(false);
 
   // Horizontal destination rail — the scrollbar is deliberately hidden for
-  // a cleaner look, so this ref backs both the arrow buttons and a wheel
-  // handler that lets a plain vertical mouse wheel scroll it sideways too
-  // (trackpad/touch swipe already works natively via overflow-x-auto).
+  // a cleaner look. This ref backs the arrow buttons only; horizontal
+  // mouse-wheel scrolling is intentionally NOT wired up here — movement
+  // comes from the arrow buttons and native touch/trackpad swipe
+  // (overflow-x-auto) alone.
   const railRef = useRef(null);
   const scrollRailBy = (amount) => {
     railRef.current?.scrollBy({ left: amount, behavior: "smooth" });
@@ -70,6 +75,30 @@ export default function App() {
     return Number(localStorage.getItem("tripnest_daycount")) || 0;
   });
 
+  // Recent search terms (most-recent-last) — feeds the once-a-day LLM
+  // "Trending Destinations" pick below.
+  const [recentSearches, setRecentSearches] = useState(() => {
+    return JSON.parse(localStorage.getItem("tripnest_recent_searches") || "[]");
+  });
+
+  // LLM-picked trending destination ids, refreshed at most once every 24h
+  // (see aiService.getTrendingDestinationIds). Empty until the first fetch
+  // resolves, in which case the term-matching fallback below is used.
+  const [trendingDestinationIds, setTrendingDestinationIds] = useState([]);
+
+  // Once-a-day LLM-estimated realistic trip price per destination (USD),
+  // shown on a card until that destination has an actual itinerary built
+  // for it (see itineraryPriceOverrides + utils/priceSync.js).
+  const [aiDailyPrices, setAiDailyPrices] = useState({});
+
+  // Live itinerary totals per destination id (USD) — kept in sync with
+  // whatever "My Itinerary" is currently showing for that destination, so a
+  // destination card's price always matches the trip actually built for it
+  // instead of a stale/mismatched static number.
+  const [itineraryPriceOverrides, setItineraryPriceOverrides] = useState(() => {
+    return JSON.parse(localStorage.getItem("tripnest_price_overrides") || "{}");
+  });
+
   // Sync state to LocalStorage
   useEffect(() => {
     localStorage.setItem("tripnest_favorites", JSON.stringify(favorites));
@@ -82,6 +111,61 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem("tripnest_daycount", String(dayCount));
   }, [dayCount]);
+
+  useEffect(() => {
+    localStorage.setItem("tripnest_recent_searches", JSON.stringify(recentSearches));
+  }, [recentSearches]);
+
+  useEffect(() => {
+    localStorage.setItem("tripnest_price_overrides", JSON.stringify(itineraryPriceOverrides));
+  }, [itineraryPriceOverrides]);
+
+  // Records a completed search (typed + submitted, or a trending chip tap)
+  // so the once-a-day trending refresh has real search history to lean on.
+  const recordSearch = (term) => {
+    const clean = (term || "").trim();
+    if (!clean) return;
+    setRecentSearches((prev) => {
+      const deduped = prev.filter((t) => t.toLowerCase() !== clean.toLowerCase());
+      return [clean, ...deduped].slice(0, 20);
+    });
+  };
+
+  // Once-a-day AI refreshes — both are cached in localStorage by
+  // aiService.js, so this only actually calls the backend when that day's
+  // cache is missing/stale. On failure, quietly keep the existing
+  // term-matching trending list / static card prices instead of breaking
+  // the page.
+  useEffect(() => {
+    let cancelled = false;
+    getTrendingDestinationIds(recentSearches)
+      .then((ids) => {
+        if (!cancelled && ids.length) setTrendingDestinationIds(ids);
+      })
+      .catch((err) => {
+        console.error("Trending destinations (AI) unavailable, using fallback:", err);
+      });
+    return () => {
+      cancelled = true;
+    };
+    // Only re-check once per mount — the daily cache (not this effect) is
+    // what decides whether a real backend call happens.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    getDailyDestinationPrices()
+      .then((prices) => {
+        if (!cancelled) setAiDailyPrices(prices);
+      })
+      .catch((err) => {
+        console.error("AI destination pricing unavailable, using static prices:", err);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const toggleTheme = () => setTheme(prev => prev === "light" ? "dark" : "light");
 
@@ -129,20 +213,25 @@ export default function App() {
   const comparedObjects = DESTINATIONS.filter(item => compared.includes(item.id));
 
   // Home view shows only the trending picks until a filter is actually
-  // applied — matched the same way search already matches (name/country/
-  // region/continent), so "Switzerland" correctly picks up the Interlaken
-  // entry via its country field rather than needing an exact name match.
-  const trendingDestinations = DESTINATIONS.filter((item) =>
-    TRENDING_SEARCHES.some((term) => {
-      const t = term.toLowerCase();
-      return (
-        item.name.toLowerCase().includes(t) ||
-        item.country.toLowerCase().includes(t) ||
-        (item.region && item.region.toLowerCase().includes(t)) ||
-        (item.continent && item.continent.toLowerCase().includes(t))
+  // applied. When the once-a-day AI pick has resolved, it drives this list
+  // directly (already tailored to recent searches); until then, or if it's
+  // ever unavailable, fall back to matching the static TRENDING_SEARCHES
+  // terms the same way search already matches (name/country/region/
+  // continent), so "Switzerland" correctly picks up the Interlaken entry
+  // via its country field rather than needing an exact name match.
+  const trendingDestinations = trendingDestinationIds.length
+    ? trendingDestinationIds.map((id) => DESTINATIONS.find((d) => d.id === id)).filter(Boolean)
+    : DESTINATIONS.filter((item) =>
+        TRENDING_SEARCHES.some((term) => {
+          const t = term.toLowerCase();
+          return (
+            item.name.toLowerCase().includes(t) ||
+            item.country.toLowerCase().includes(t) ||
+            (item.region && item.region.toLowerCase().includes(t)) ||
+            (item.continent && item.continent.toLowerCase().includes(t))
+          );
+        })
       );
-    })
-  );
 
   const isDefaultView =
     scope === "All" &&
@@ -156,25 +245,6 @@ export default function App() {
   const railKey = isDefaultView
     ? "trending"
     : `${scope}-${activeCategory}-${selectedRegion}-${selectedContinent}-${showOnlyFavorites}-${searchQuery}`;
-
-  // Native (non-passive) wheel listener instead of React's onWheel prop —
-  // React can attach wheel handlers as passive for scroll-performance
-  // reasons, which silently ignores preventDefault() and causes the page
-  // to scroll vertically *at the same time* as the rail scrolls sideways.
-  // Re-binds whenever railKey changes, since the rail div is keyed and
-  // gets a fresh DOM node (to replay its entrance animation) on every
-  // filter change.
-  useEffect(() => {
-    const el = railRef.current;
-    if (!el) return;
-    const onWheel = (e) => {
-      if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return; // already horizontal (trackpad) — let it pass through natively
-      e.preventDefault();
-      el.scrollBy({ left: e.deltaY, behavior: "auto" });
-    };
-    el.addEventListener("wheel", onWheel, { passive: false });
-    return () => el.removeEventListener("wheel", onWheel);
-  }, [railKey]);
 
   // Applies a fully-generated trip payload (same shape produced by both the
   // AI Trip Companion and the manual "My Itinerary" generator) to the
@@ -315,6 +385,15 @@ export default function App() {
   };
 
   const handleResetItinerary = () => {
+    // Un-sync the destination card price for whatever trip is being cleared
+    // — it goes back to the AI-estimated/static price instead of keeping a
+    // now-abandoned itinerary total.
+    setItineraryPriceOverrides((prev) => {
+      if (!activeDestination || !(activeDestination.id in prev)) return prev;
+      const next = { ...prev };
+      delete next[activeDestination.id];
+      return next;
+    });
     setActivitiesByDay({});
     setActiveDestination(null);
     setDayCount(0);
@@ -323,6 +402,19 @@ export default function App() {
   };
 
   const totalBudget = Object.values(activitiesByDay).flat().reduce((sum, activity) => sum + (activity.cost || 0), 0);
+
+  // Keeps a destination card's price in sync with "My Itinerary" — whenever
+  // the locked destination or its running total changes (built by the AI
+  // Trip Companion, the manual "Add to itinerary" flow, or any later edit
+  // to an activity's cost), the card for that exact destination picks up
+  // the new number instead of showing a stale/mismatched static price. See
+  // utils/priceSync.js for how this overrides the AI/static price.
+  useEffect(() => {
+    if (!activeDestination || totalBudget <= 0) return;
+    setItineraryPriceOverrides((prev) =>
+      prev[activeDestination.id] === totalBudget ? prev : { ...prev, [activeDestination.id]: totalBudget }
+    );
+  }, [activeDestination, totalBudget]);
 
   return (
     <div className={`min-h-screen ${theme === 'dark' ? 'bg-slate-950 text-white' : 'bg-slate-50 text-slate-900'} transition-colors duration-300 font-sans`}>
@@ -482,6 +574,7 @@ export default function App() {
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
+                  recordSearch(searchQuery);
                   document.getElementById("explore")?.scrollIntoView({ behavior: "smooth" });
                 }}
                 className="flex items-center bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-full shadow-md p-2"
@@ -513,6 +606,7 @@ export default function App() {
                   key={term}
                   onClick={() => {
                     setSearchQuery(term);
+                    recordSearch(term);
                     document.getElementById("explore")?.scrollIntoView({ behavior: "smooth" });
                   }}
                   className="flex items-center gap-1 px-3.5 py-1.5 rounded-full bg-white/80 dark:bg-slate-900/70 backdrop-blur-sm border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:border-emerald-400 hover:text-emerald-600 transition-colors"
@@ -715,6 +809,8 @@ export default function App() {
                       isCompared={compared.includes(dest.id)}
                       onToggleCompare={handleToggleCompare}
                       onOpenDetails={(d) => setSelectedModalDest(d)}
+                      itineraryOverrides={itineraryPriceOverrides}
+                      aiPrices={aiDailyPrices}
                     />
                   </div>
                 ))}
@@ -754,6 +850,8 @@ export default function App() {
         onToggleCompare={handleToggleCompare}
         onAddToItinerary={handleAddToItinerary}
         onOpenDetails={(d) => setSelectedModalDest(d)}
+        itineraryOverrides={itineraryPriceOverrides}
+        aiPrices={aiDailyPrices}
       />
 
       {/* LIVE MAP OVERLAY */}
@@ -779,6 +877,8 @@ export default function App() {
         compared={compared}
         onToggleCompare={handleToggleCompare}
         onOpenDetails={(d) => setSelectedModalDest(d)}
+        itineraryOverrides={itineraryPriceOverrides}
+        aiPrices={aiDailyPrices}
       />
       <div className="min-h-screen bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100">
       {/* Existing Navbar, Main Content, Modals, etc. */}

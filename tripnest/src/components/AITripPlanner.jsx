@@ -142,6 +142,8 @@ export default function AITripPlanner({
   compared,
   onToggleCompare,
   onOpenDetails,
+  itineraryOverrides = {},
+  aiPrices = {},
 }) {
   const [step, setStep] = useState("form") // form | loading | result
   const [formData, setFormData] = useState(DEFAULT_FORM)
@@ -394,6 +396,8 @@ export default function AITripPlanner({
               onOpenDetails={onOpenDetails}
               onAddToItinerary={onAddToItinerary}
               onBookNow={onBookNow}
+              itineraryOverrides={itineraryOverrides}
+              aiPrices={aiPrices}
             />
           )}
         </div>
@@ -442,6 +446,8 @@ function ResultView({
   onOpenDetails,
   onAddToItinerary,
   onBookNow,
+  itineraryOverrides = {},
+  aiPrices = {},
 }) {
   const { destination: dest } = trip
   const mutedText = theme === "dark" ? "text-slate-400" : "text-slate-500"
@@ -633,6 +639,8 @@ function ResultView({
                 isCompared={compared.includes(alt.id)}
                 onToggleCompare={onToggleCompare}
                 onOpenDetails={onOpenDetails}
+                itineraryOverrides={itineraryOverrides}
+                aiPrices={aiPrices}
               />
             ))}
           </div>
