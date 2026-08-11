@@ -207,13 +207,15 @@ export default function DestinationCard({
     : "bg-slate-700 text-white";
 
   return (
-    <div className="group relative bg-white dark:bg-slate-900 border border-slate-900/8 dark:border-white/10 rounded-2xl overflow-hidden shadow-[0_1px_3px_rgba(15,23,42,0.06),0_1px_2px_rgba(15,23,42,0.04)] hover:shadow-[0_8px_24px_rgba(15,23,42,0.10)] hover:-translate-y-1 hover:scale-[1.012] transition-all duration-300 flex flex-col justify-between">
+    <div
+      className="group relative bg-white dark:bg-slate-900 border border-slate-900/8 dark:border-white/10 rounded-2xl overflow-hidden shadow-[0_1px_3px_rgba(15,23,42,0.06),0_1px_2px_rgba(15,23,42,0.04)] hover:shadow-[0_8px_24px_rgba(15,23,42,0.10)] hover:-translate-y-1 hover:scale-[1.012] transition-all duration-300 flex flex-col justify-between"
+      onMouseEnter={handleImageMouseEnter}
+      onMouseLeave={handleImageMouseLeave}
+    >
       
       {/* Card Header & Image Carousel */}
       <div
         className="relative overflow-hidden aspect-[4/3] bg-slate-950"
-        onMouseEnter={handleImageMouseEnter}
-        onMouseLeave={handleImageMouseLeave}
       >
         <div className="absolute inset-0">
           {/* Base image */}
