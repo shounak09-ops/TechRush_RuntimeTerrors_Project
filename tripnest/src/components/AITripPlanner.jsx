@@ -626,7 +626,7 @@ function ResultView({
               <DestinationCard
                 key={alt.id}
                 dest={alt}
-                onAddToItinerary={onAddToItinerary}
+                onAddToItinerary={(d) => onAddToItinerary(d, trip.formData)}
                 onBookNow={onBookNow}
                 isFavorite={favorites.includes(alt.id)}
                 onToggleFavorite={onToggleFavorite}

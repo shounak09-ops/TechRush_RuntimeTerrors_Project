@@ -37,9 +37,8 @@ export default function App() {
   const [allDestinationsOpen, setAllDestinationsOpen] = useState(false);
 
   // Horizontal destination rail — the scrollbar is deliberately hidden for
-  // a cleaner look, so this ref backs both the arrow buttons and a wheel
-  // handler that lets a plain vertical mouse wheel scroll it sideways too
-  // (trackpad/touch swipe already works natively via overflow-x-auto).
+  // a cleaner look, so this ref backs the arrow buttons (trackpad/touch
+  // swipe already works natively via overflow-x-auto).
   const railRef = useRef(null);
   const scrollRailBy = (amount) => {
     railRef.current?.scrollBy({ left: amount, behavior: "smooth" });
@@ -69,6 +68,13 @@ export default function App() {
   const [dayCount, setDayCount] = useState(() => {
     return Number(localStorage.getItem("tripnest_daycount")) || 0;
   });
+  // One-time "getting there" cost (flights/travel from India, domestic or
+  // international depending on the destination) — kept separate from the
+  // per-day activitiesByDay costs so it can be shown as its own line in the
+  // itinerary instead of being folded into a specific day.
+  const [travelCost, setTravelCost] = useState(() => {
+    return Number(localStorage.getItem("tripnest_travelcost")) || 0;
+  });
 
   // Sync state to LocalStorage
   useEffect(() => {
@@ -82,6 +88,10 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem("tripnest_daycount", String(dayCount));
   }, [dayCount]);
+
+  useEffect(() => {
+    localStorage.setItem("tripnest_travelcost", String(travelCost));
+  }, [travelCost]);
 
   const toggleTheme = () => setTheme(prev => prev === "light" ? "dark" : "light");
 
@@ -157,25 +167,6 @@ export default function App() {
     ? "trending"
     : `${scope}-${activeCategory}-${selectedRegion}-${selectedContinent}-${showOnlyFavorites}-${searchQuery}`;
 
-  // Native (non-passive) wheel listener instead of React's onWheel prop —
-  // React can attach wheel handlers as passive for scroll-performance
-  // reasons, which silently ignores preventDefault() and causes the page
-  // to scroll vertically *at the same time* as the rail scrolls sideways.
-  // Re-binds whenever railKey changes, since the rail div is keyed and
-  // gets a fresh DOM node (to replay its entrance animation) on every
-  // filter change.
-  useEffect(() => {
-    const el = railRef.current;
-    if (!el) return;
-    const onWheel = (e) => {
-      if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return; // already horizontal (trackpad) — let it pass through natively
-      e.preventDefault();
-      el.scrollBy({ left: e.deltaY, behavior: "auto" });
-    };
-    el.addEventListener("wheel", onWheel, { passive: false });
-    return () => el.removeEventListener("wheel", onWheel);
-  }, [railKey]);
-
   // Applies a fully-generated trip payload (same shape produced by both the
   // AI Trip Companion and the manual "My Itinerary" generator) to the
   // shared itinerary state, so the drawer always shows a fully locked,
@@ -196,6 +187,10 @@ export default function App() {
       }));
     });
     setActivitiesByDay(byDay);
+    // One-time getting-there cost (flights/travel from India) — kept out of
+    // the day-wise activities and tracked on its own so it shows as a
+    // distinct line in the itinerary instead of being lost or blended in.
+    setTravelCost(trip.budgetBreakdown?.flightsOrTravel || 0);
   };
 
   // Destination Lock System Handler — used when a destination is picked
@@ -203,17 +198,18 @@ export default function App() {
   // an "alternate" suggestion). Generates the same kind of day-wise plan +
   // packing checklist the AI Companion builds, just for the exact
   // destination the person chose, instead of a single placeholder entry.
-  const handleAddToItinerary = async (destination) => {
+  const handleAddToItinerary = async (destination, formData) => {
     setActiveDestination(destination);
     setItineraryDrawerOpen(true);
     setItineraryLoading(true);
     try {
-      const trip = await planItineraryForDestination(destination);
+      const trip = await planItineraryForDestination(destination, formData);
       applyGeneratedTrip(trip);
     } catch (err) {
       console.error(err);
       // Fall back to a minimal single entry so the drawer is never empty
       setDayCount(1);
+      setTravelCost(0);
       setActivitiesByDay(prev => ({
         ...prev,
         1: [{
@@ -318,11 +314,15 @@ export default function App() {
     setActivitiesByDay({});
     setActiveDestination(null);
     setDayCount(0);
+    setTravelCost(0);
     localStorage.removeItem("tripnest_activities");
     localStorage.removeItem("tripnest_daycount");
+    localStorage.removeItem("tripnest_travelcost");
   };
 
-  const totalBudget = Object.values(activitiesByDay).flat().reduce((sum, activity) => sum + (activity.cost || 0), 0);
+  // Total = day-wise activity costs + the separate one-time travel cost.
+  const activitiesCost = Object.values(activitiesByDay).flat().reduce((sum, activity) => sum + (activity.cost || 0), 0);
+  const totalBudget = activitiesCost + travelCost;
 
   return (
     <div className={`min-h-screen ${theme === 'dark' ? 'bg-slate-950 text-white' : 'bg-slate-50 text-slate-900'} transition-colors duration-300 font-sans`}>
@@ -682,7 +682,7 @@ export default function App() {
                 {/* Scroll arrows — the rail's scrollbar is hidden for a
                     cleaner look, so these give mouse users (no trackpad)
                     an obvious way to move it, alongside touch/trackpad
-                    swipe and the wheel handler on the rail itself. */}
+                    swipe. */}
                 <div className="hidden sm:flex items-center gap-2 shrink-0">
                   <button
                     onClick={() => scrollRailBy(-340)}
@@ -817,6 +817,7 @@ export default function App() {
         activeDestination={activeDestination}
         activitiesByDay={activitiesByDay}
         dayCount={dayCount}
+        travelCost={travelCost}
         totalBudget={totalBudget}
         loading={itineraryLoading}
         packingItems={[]}

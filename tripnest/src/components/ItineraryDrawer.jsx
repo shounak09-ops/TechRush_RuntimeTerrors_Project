@@ -51,6 +51,7 @@ export default function ItineraryDrawer({
   activeDestination,
   activitiesByDay,
   dayCount,
+  travelCost = 0,
   totalBudget,
   packingItems,
   onTogglePacking,
@@ -612,23 +613,46 @@ export default function ItineraryDrawer({
               </div>
 
               {/* Budget summary */}
-              <div className="flex items-center justify-between rounded-2xl border border-teal-500/30 bg-gradient-to-r from-teal-500/10 to-indigo-500/10 p-4">
-                <div className="flex items-center gap-2">
-                  <span className="grid h-9 w-9 place-items-center rounded-xl bg-teal-500/20 text-teal-600 dark:text-teal-400">
-                    <Wallet className="h-4 w-4" aria-hidden="true" />
-                  </span>
-                  <div>
-                    <p className={`text-xs ${
-                      theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
-                    }`}>Total estimated cost</p>
-                    <p className={`text-xs ${
-                      theme === 'dark' ? 'text-slate-500' : 'text-slate-400'
-                    }`}>Across all {fixedDays.length} days</p>
+              <div className="flex flex-col gap-2">
+                {travelCost > 0 && (
+                  <div className={`flex items-center justify-between rounded-xl border p-3 ${
+                    theme === 'dark' ? 'border-slate-800 bg-slate-800/40' : 'border-slate-200 bg-white'
+                  }`}>
+                    <div>
+                      <p className={`text-xs font-semibold ${
+                        theme === 'dark' ? 'text-slate-200' : 'text-slate-700'
+                      }`}>Travel cost (from India)</p>
+                      <p className={`text-[11px] ${
+                        theme === 'dark' ? 'text-slate-500' : 'text-slate-400'
+                      }`}>
+                        One-time {activeDestination?.country === "India" ? "domestic" : "international"} getting-there cost, kept separate from daily activities
+                      </p>
+                    </div>
+                    <span className={`text-sm font-bold shrink-0 ${
+                      theme === 'dark' ? 'text-slate-100' : 'text-slate-900'
+                    }`}>{currency(travelCost)}</span>
                   </div>
+                )}
+                <div className="flex items-center justify-between rounded-2xl border border-teal-500/30 bg-gradient-to-r from-teal-500/10 to-indigo-500/10 p-4">
+                  <div className="flex items-center gap-2">
+                    <span className="grid h-9 w-9 place-items-center rounded-xl bg-teal-500/20 text-teal-600 dark:text-teal-400">
+                      <Wallet className="h-4 w-4" aria-hidden="true" />
+                    </span>
+                    <div>
+                      <p className={`text-xs ${
+                        theme === 'dark' ? 'text-slate-400' : 'text-slate-500'
+                      }`}>Total estimated cost</p>
+                      <p className={`text-xs ${
+                        theme === 'dark' ? 'text-slate-500' : 'text-slate-400'
+                      }`}>
+                        {travelCost > 0 ? `Travel + activities across all ${fixedDays.length} days` : `Across all ${fixedDays.length} days`}
+                      </p>
+                    </div>
+                  </div>
+                  <span className={`text-2xl font-extrabold ${
+                    theme === 'dark' ? 'text-slate-100' : 'text-slate-900'
+                  }`}>{currency(totalBudget)}</span>
                 </div>
-                <span className={`text-2xl font-extrabold ${
-                  theme === 'dark' ? 'text-slate-100' : 'text-slate-900'
-                }`}>{currency(totalBudget)}</span>
               </div>
             </div>
           ) : (
@@ -701,6 +725,15 @@ export default function ItineraryDrawer({
               </p>
             )}
           </div>
+
+          {travelCost > 0 && (
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", background: "#f0fdfa", borderRadius: "8px", padding: "10px 14px", marginBottom: "18px" }}>
+              <p style={{ margin: 0, fontSize: "12px", color: "#0f766e", fontWeight: "bold" }}>
+                Travel cost (from India, one-time)
+              </p>
+              <p style={{ margin: 0, fontSize: "13px", fontWeight: "bold", color: "#0f172a" }}>{currency(travelCost)}</p>
+            </div>
+          )}
 
           {fixedDays.map((day) => {
             const items = activitiesByDay[day] || []
