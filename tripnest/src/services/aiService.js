@@ -20,6 +20,14 @@
 // the local generator directly — that path was never AI-backed.
 // ============================================================================
 
+// In dev, this stays "" so requests hit the relative "/api/..." path that
+// vite.config.js's server.proxy forwards to the local backend. In
+// production there is no such proxy — a static build has no server logic
+// at all — so VITE_API_BASE_URL must point at wherever the real backend
+// (see /server) is actually deployed, e.g. "https://your-backend.onrender.com".
+// Set it in a `.env.production` file or your host's environment variables.
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "";
+
 import { DESTINATIONS } from "../data/destinations";
 import {
   generateTripForDestination,
@@ -58,7 +66,7 @@ function assembleTripFromAiPlan(aiPlan, formData) {
     formData,
     destination: dest,
     aiExplanation: aiPlan.aiExplanation,
-    matchScore: 92,
+    matchScore: aiPlan.matchScore,
     dayWiseItinerary: aiPlan.dayWiseItinerary,
     attractions: dest.highlights || [],
     activities: buildActivities(dest),
@@ -98,7 +106,7 @@ export async function generateTrip(formData) {
 
   let response;
   try {
-    response = await fetch("/api/generate-trip", {
+    response = await fetch(`${API_BASE_URL}/api/generate-trip`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

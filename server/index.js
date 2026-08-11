@@ -43,6 +43,15 @@ const TRIP_PLAN_SCHEMA = {
       type: SchemaType.STRING,
       description: "1-2 sentences explaining why this destination fits what the traveler asked for.",
     },
+    matchScore: {
+      type: SchemaType.NUMBER,
+      description:
+        "An honest 0-100 score for how well this specific destination fits the traveler's stated " +
+        "preferences (mood, budget, weather, companions, and any free-text notes). This should vary " +
+        "genuinely with fit — a strong, well-aligned match can score in the 85-98 range, but a looser " +
+        "or partial fit (e.g. only some preferences matched, or this destination was the best of a weak " +
+        "field) should score meaningfully lower, such as 55-80. Do not default to a high score out of habit.",
+    },
     dayWiseItinerary: {
       type: SchemaType.ARRAY,
       items: {
@@ -78,7 +87,7 @@ const TRIP_PLAN_SCHEMA = {
       items: { type: SchemaType.STRING },
     },
   },
-  required: ["destinationId", "aiExplanation", "dayWiseItinerary", "travelTips"],
+  required: ["destinationId", "aiExplanation", "matchScore", "dayWiseItinerary", "travelTips"],
 };
 
 // gemini-2.5-flash is on Google AI Studio's free tier as of writing. Google
@@ -106,6 +115,13 @@ app.post("/api/generate-trip", async (req, res) => {
     `Pick the single best-fitting destination from this list (use its exact "id") and build a ` +
     `${formData.days || 5}-day itinerary suited to their mood, companions, and any free-text ` +
     `preferences.\n\n` +
+
+    `MATCH SCORE RULES:\n` +
+    `- Give an honest matchScore (0-100) for how well the destination you picked actually fits ` +
+    `what the traveler asked for — do not default to a high number out of habit.\n` +
+    `- Score genuinely strong, well-aligned fits in the 85-98 range.\n` +
+    `- Score partial or "best of a weak field" fits lower, such as 55-80, when only some of their ` +
+    `stated preferences (mood, budget, weather, companions, free-text notes) are actually satisfied.\n\n` +
 
     `IMPORTANT ITINERARY RULES:\n` +
     `- Every activity MUST have an exact start and end time.\n` +
@@ -140,6 +156,11 @@ app.post("/api/generate-trip", async (req, res) => {
     if (!validIds.has(plan.destinationId)) {
       plan.destinationId = destinations[0].id;
     }
+
+    // Guard against a missing/out-of-range/non-numeric score — the schema
+    // requires it, but structured output isn't a hard type guarantee.
+    const score = Math.round(Number(plan.matchScore));
+    plan.matchScore = Number.isFinite(score) ? Math.min(100, Math.max(0, score)) : 75;
 
     res.json(plan);
   } catch (err) {
