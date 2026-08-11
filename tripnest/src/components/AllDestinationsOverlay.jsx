@@ -35,7 +35,7 @@ export default function AllDestinationsOverlay({
 
   return (
     <div className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm flex items-center justify-center p-0 sm:p-6 animate-fade-in">
-      <div className="tn-modal-in relative bg-white dark:bg-slate-900 w-full h-full sm:rounded-3xl sm:max-w-6xl sm:h-[85vh] overflow-hidden shadow-2xl border border-slate-200 dark:border-slate-800 flex flex-col">
+      <div className="tn-modal-in relative bg-white dark:bg-slate-900 w-full h-full sm:rounded-none sm:max-w-6xl sm:h-[85vh] overflow-hidden shadow-2xl border border-slate-200 dark:border-slate-800 flex flex-col">
         {/* Header bar */}
         <div className="shrink-0 flex items-center gap-3 px-4 sm:px-6 py-4 border-b border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95">
           <div className="flex items-center gap-2 font-bold text-slate-900 dark:text-white shrink-0">

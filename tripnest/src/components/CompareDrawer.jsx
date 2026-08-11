@@ -16,7 +16,7 @@ export default function CompareDrawer({ comparedItems, onRemoveCompare, onClearA
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-gradient-to-r from-sky-500 to-indigo-500 rounded-xl">
+            <div className="p-2 bg-sky-500 rounded-none">
               <Sparkles className="h-5 w-5 text-white" />
             </div>
             <div>
@@ -31,7 +31,7 @@ export default function CompareDrawer({ comparedItems, onRemoveCompare, onClearA
           <div className="flex items-center gap-3">
             <button
               onClick={onClearAll}
-              className={`px-4 py-2 rounded-xl text-sm font-semibold transition-colors ${
+              className={`px-4 py-2 rounded-none text-sm font-semibold transition-colors ${
                 theme === 'dark'
                   ? 'bg-slate-800 text-slate-300 hover:bg-slate-700'
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
@@ -41,7 +41,7 @@ export default function CompareDrawer({ comparedItems, onRemoveCompare, onClearA
             </button>
             <button
               onClick={onClose}
-              className={`p-2 rounded-xl transition-colors ${
+              className={`p-2 rounded-none transition-colors ${
                 theme === 'dark'
                   ? 'bg-slate-800 text-slate-300 hover:bg-slate-700'
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
@@ -57,7 +57,7 @@ export default function CompareDrawer({ comparedItems, onRemoveCompare, onClearA
           {comparedItems.map((item) => (
             <div
               key={item.id}
-              className={`relative rounded-2xl overflow-hidden shadow-2xl flex flex-col ${
+              className={`relative rounded-none overflow-hidden shadow-2xl flex flex-col ${
                 theme === 'dark' ? 'bg-slate-800' : 'bg-white'
               }`}
             >
@@ -150,7 +150,7 @@ export default function CompareDrawer({ comparedItems, onRemoveCompare, onClearA
                 {/* Action Button */}
                 <button
                   onClick={() => handleChooseDestination(item)}
-                  className="mt-auto w-full py-3 bg-gradient-to-r from-sky-500 to-indigo-500 text-white font-bold rounded-xl hover:from-sky-600 hover:to-indigo-600 transition-all flex items-center justify-center gap-2 shadow-lg shadow-sky-500/25"
+                  className="mt-auto w-full py-3 bg-sky-500 text-white font-bold rounded-none hover:from-sky-600 hover:to-indigo-600 transition-all flex items-center justify-center gap-2 shadow-lg shadow-sky-500/25"
                 >
                   <CheckCircle2 className="h-5 w-5" />
                   Choose & Lock Itinerary

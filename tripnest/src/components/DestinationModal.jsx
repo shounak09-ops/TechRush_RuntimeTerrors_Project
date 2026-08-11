@@ -35,7 +35,7 @@ export default function DestinationModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fadeIn">
-      <div className="tn-modal-in relative w-full max-w-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
+      <div className="tn-modal-in relative w-full max-w-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-none overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
         
         {/* Close Button */}
         <button
@@ -89,7 +89,7 @@ export default function DestinationModal({
                   <button
                     key={idx}
                     onClick={() => setSelectedImage(imgUrl)}
-                    className={`relative rounded-xl overflow-hidden shrink-0 transition-all duration-200 h-16 w-24 border-2 ${
+                    className={`relative rounded-none overflow-hidden shrink-0 transition-all duration-200 h-16 w-24 border-2 ${
                       selectedImage === imgUrl
                         ? "border-sky-500 scale-105 shadow-md"
                         : "border-transparent opacity-70 hover:opacity-100"
@@ -116,7 +116,7 @@ export default function DestinationModal({
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-4 border-t border-slate-100 dark:border-slate-800">
               
               {/* Temperature */}
-              <div className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-2xl flex items-center gap-3">
+              <div className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-none flex items-center gap-3">
                 <Thermometer className="h-5 w-5 text-amber-500 shrink-0" />
                 <div>
                   <p className="text-[10px] text-slate-500 uppercase font-bold">Temperature</p>
@@ -126,7 +126,7 @@ export default function DestinationModal({
 
               {/* Crowd Level */}
               {dest.crowdLevel && (
-                <div className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-2xl flex items-center gap-3">
+                <div className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-none flex items-center gap-3">
                   <Users
                     className={`h-5 w-5 shrink-0 ${
                       dest.crowdLevel === "High"
@@ -157,7 +157,7 @@ export default function DestinationModal({
 
               {/* Best Time */}
               {dest.bestTime && (
-                <div className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-2xl flex items-center gap-3">
+                <div className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-none flex items-center gap-3">
                   <Calendar className="h-5 w-5 text-sky-500 shrink-0" />
                   <div>
                     <p className="text-[10px] text-slate-500 uppercase font-bold">Best Time</p>
@@ -168,7 +168,7 @@ export default function DestinationModal({
 
               {/* Suggested Trip Duration */}
               {dest.suggestedDays && (
-                <div className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-2xl flex items-center gap-3">
+                <div className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-none flex items-center gap-3">
                   <Clock className="h-5 w-5 text-indigo-500 shrink-0" />
                   <div>
                     <p className="text-[10px] text-slate-500 uppercase font-bold">Suggested Trip</p>
@@ -183,10 +183,10 @@ export default function DestinationModal({
               <div className="pt-4 border-t border-slate-100 dark:border-slate-800">
                 <button
                   onClick={() => setShowLocalInsights(!showLocalInsights)}
-                  className="w-full p-4 bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-amber-500/5 hover:from-amber-500/20 hover:via-orange-500/20 border border-amber-500/20 dark:border-amber-500/30 rounded-2xl flex items-center justify-between transition-all group shadow-sm"
+                  className="w-full p-4 bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-amber-500/5 hover:from-amber-500/20 hover:via-orange-500/20 border border-amber-500/20 dark:border-amber-500/30 rounded-none flex items-center justify-between transition-all group shadow-sm"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="p-2.5 bg-amber-500 text-white rounded-xl shadow-md group-hover:scale-105 transition-transform">
+                    <div className="p-2.5 bg-amber-500 text-white rounded-none shadow-md group-hover:scale-105 transition-transform">
                       <Utensils className="h-4 w-4" />
                     </div>
                     <div className="text-left">
@@ -212,7 +212,7 @@ export default function DestinationModal({
 
                 {/* Collapsible Content */}
                 {showLocalInsights && (
-                  <div className="mt-3 p-4 bg-amber-50/40 dark:bg-slate-800/40 border border-amber-200/50 dark:border-slate-800 rounded-2xl space-y-4 animate-fadeIn">
+                  <div className="mt-3 p-4 bg-amber-50/40 dark:bg-slate-800/40 border border-amber-200/50 dark:border-slate-800 rounded-none space-y-4 animate-fadeIn">
                     
                     {/* Famous Dishes */}
                     {dest.cuisine.dishes && dest.cuisine.dishes.length > 0 && (
@@ -227,7 +227,7 @@ export default function DestinationModal({
                           {dest.cuisine.dishes.map((dish, idx) => (
                             <span
                               key={idx}
-                              className="px-3 py-1 bg-amber-100/80 dark:bg-amber-950/40 border border-amber-200/80 dark:border-amber-800/40 text-amber-900 dark:text-amber-200 text-xs font-semibold rounded-xl flex items-center gap-1.5 shadow-2xs"
+                              className="px-3 py-1 bg-amber-100/80 dark:bg-amber-950/40 border border-amber-200/80 dark:border-amber-800/40 text-amber-900 dark:text-amber-200 text-xs font-semibold rounded-none flex items-center gap-1.5 shadow-2xs"
                             >
                               <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
                               {dish}
@@ -250,7 +250,7 @@ export default function DestinationModal({
                           {dest.cuisine.popularRestaurants.map((restaurant, idx) => (
                             <div
                               key={idx}
-                              className="p-2.5 bg-white dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800 rounded-xl flex items-center gap-2 text-xs font-medium text-slate-800 dark:text-slate-200"
+                              className="p-2.5 bg-white dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800 rounded-none flex items-center gap-2 text-xs font-medium text-slate-800 dark:text-slate-200"
                             >
                               <MapPin className="h-3.5 w-3.5 text-orange-500 shrink-0" />
                               <span className="truncate">{restaurant}</span>
@@ -279,7 +279,7 @@ export default function DestinationModal({
                   {dest.highlights.map((highlight, idx) => (
                     <div
                       key={idx}
-                      className="flex items-start gap-2.5 p-3 bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800 rounded-2xl"
+                      className="flex items-start gap-2.5 p-3 bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800 rounded-none"
                     >
                       <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
                       <span className="text-xs font-medium text-slate-700 dark:text-slate-200 leading-relaxed">
@@ -304,7 +304,7 @@ export default function DestinationModal({
                   {dest.recommendedPacking.map((item, idx) => (
                     <span
                       key={idx}
-                      className="px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-medium rounded-xl"
+                      className="px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-medium rounded-none"
                     >
                       {item}
                     </span>
@@ -315,7 +315,7 @@ export default function DestinationModal({
 
             {/* Insider Tip Section */}
             {dest.insiderTip && (
-              <div className="p-4 bg-amber-50 dark:bg-amber-950/30 border border-amber-200/60 dark:border-amber-800/40 rounded-2xl flex items-start gap-3">
+              <div className="p-4 bg-amber-50 dark:bg-amber-950/30 border border-amber-200/60 dark:border-amber-800/40 rounded-none flex items-start gap-3">
                 <Lightbulb className="h-5 w-5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
                 <div>
                   <h5 className="text-xs font-bold uppercase tracking-wider text-amber-800 dark:text-amber-300 mb-1">
@@ -334,7 +334,7 @@ export default function DestinationModal({
           <div className="p-4 sm:p-6 bg-slate-50 dark:bg-slate-900/50 border-t border-slate-100 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3">
             <button
               onClick={() => onToggleFavorite(dest.id)}
-              className={`px-4 py-2.5 rounded-2xl font-bold text-xs flex items-center gap-2 transition-colors ${
+              className={`px-4 py-2.5 rounded-none font-bold text-xs flex items-center gap-2 transition-colors ${
                 isFavorite
                   ? "bg-rose-500 text-white"
                   : "bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-300 dark:hover:bg-slate-700"
@@ -350,7 +350,7 @@ export default function DestinationModal({
                   onAddToItinerary(dest);
                   onClose();
                 }}
-                className="px-5 py-2.5 rounded-2xl bg-sky-500 hover:bg-sky-600 text-white font-bold text-xs flex items-center gap-2 shadow-md transition-colors"
+                className="px-5 py-2.5 rounded-none bg-sky-500 hover:bg-sky-600 text-white font-bold text-xs flex items-center gap-2 shadow-md transition-colors"
               >
                 <Plus className="h-4 w-4" />
                 Add to Itinerary
@@ -361,7 +361,7 @@ export default function DestinationModal({
                   onBookNow(dest);
                   onClose();
                 }}
-                className="px-5 py-2.5 rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs flex items-center gap-2 shadow-md transition-colors"
+                className="px-5 py-2.5 rounded-none bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs flex items-center gap-2 shadow-md transition-colors"
               >
                 <Ticket className="h-4 w-4" />
                 Book Now

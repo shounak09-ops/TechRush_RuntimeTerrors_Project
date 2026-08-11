@@ -205,7 +205,7 @@ export default function ItineraryDrawer({
         <header className={`flex items-center gap-3 border-b p-4 ${
           theme === 'dark' ? 'border-slate-800' : 'border-slate-200'
         }`}>
-          <div className="flex flex-1 items-center gap-3 rounded-xl bg-gradient-to-r from-teal-500/10 to-indigo-500/10 px-3 py-2">
+          <div className="flex flex-1 items-center gap-3 rounded-none bg-slate-100 dark:bg-slate-800 px-3 py-2">
             <span className="text-xl leading-none" aria-hidden="true">
               🎒
             </span>
@@ -222,7 +222,7 @@ export default function ItineraryDrawer({
             type="button"
             onClick={onToggleTheme}
             aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-            className={`grid h-9 w-9 place-items-center rounded-xl border transition-colors hover:bg-slate-100 ${
+            className={`grid h-9 w-9 place-items-center rounded-none border transition-colors hover:bg-slate-100 ${
               theme === 'dark'
                 ? 'border-slate-700 text-slate-300 hover:bg-slate-800'
                 : 'border-slate-200 text-slate-600'
@@ -234,7 +234,7 @@ export default function ItineraryDrawer({
             type="button"
             onClick={onClose}
             aria-label="Close itinerary panel"
-            className={`grid h-9 w-9 place-items-center rounded-xl border transition-colors hover:bg-slate-100 ${
+            className={`grid h-9 w-9 place-items-center rounded-none border transition-colors hover:bg-slate-100 ${
               theme === 'dark'
                 ? 'border-slate-700 text-slate-300 hover:bg-slate-800'
                 : 'border-slate-200 text-slate-600'
@@ -246,7 +246,7 @@ export default function ItineraryDrawer({
 
         {/* Status Badge */}
         {activeDestination && (
-          <div className={`mx-4 mt-4 flex items-center gap-2 rounded-xl bg-gradient-to-r from-sky-500/10 to-indigo-500/10 px-3 py-2 border border-sky-500/20 ${
+          <div className={`mx-4 mt-4 flex items-center gap-2 rounded-none bg-gradient-to-r from-sky-500/10 to-indigo-500/10 px-3 py-2 border border-sky-500/20 ${
             theme === 'dark' ? 'text-slate-100' : 'text-slate-900'
           }`}>
             <Pin className="h-4 w-4 text-sky-500" />
@@ -331,7 +331,7 @@ export default function ItineraryDrawer({
                           setDragOverIndex(null)
                         }}
                         aria-pressed={active}
-                        className={`relative flex min-w-[84px] snap-start flex-col items-center rounded-xl border px-3 py-2.5 transition-all ${
+                        className={`relative flex min-w-[84px] snap-start flex-col items-center rounded-none border px-3 py-2.5 transition-all ${
                           active
                             ? "border-teal-500 bg-teal-500 text-white shadow-lg shadow-teal-500/25"
                             : theme === 'dark'
@@ -369,7 +369,7 @@ export default function ItineraryDrawer({
                     onClick={onAddDay}
                     disabled={fixedDays.length >= 30}
                     aria-label="Add day"
-                    className={`flex min-w-[56px] snap-start flex-col items-center justify-center gap-1 rounded-xl border border-dashed px-3 py-2.5 transition-all disabled:opacity-40 ${
+                    className={`flex min-w-[56px] snap-start flex-col items-center justify-center gap-1 rounded-none border border-dashed px-3 py-2.5 transition-all disabled:opacity-40 ${
                       theme === 'dark'
                         ? "border-slate-700 text-slate-400 hover:border-teal-400 hover:text-teal-400"
                         : "border-slate-300 text-slate-400 hover:border-teal-400 hover:text-teal-500"
@@ -408,7 +408,7 @@ export default function ItineraryDrawer({
                 {showAddForm && (
                   <form
                     onSubmit={handleSubmitAddActivity}
-                    className={`flex flex-col gap-2 rounded-xl border p-3 ${
+                    className={`flex flex-col gap-2 rounded-none border p-3 ${
                       theme === 'dark' ? 'border-slate-700 bg-slate-800/60' : 'border-slate-200 bg-slate-50'
                     }`}
                   >
@@ -478,7 +478,7 @@ export default function ItineraryDrawer({
                   </p>
                 )}
                 {dayActivities.length === 0 ? (
-                  <div className={`flex flex-col items-center gap-3 rounded-2xl border border-dashed py-10 text-center ${
+                  <div className={`flex flex-col items-center gap-3 rounded-none border border-dashed py-10 text-center ${
                     theme === 'dark' ? 'border-slate-700' : 'border-slate-300'
                   }`}>
                     <span className={`grid h-14 w-14 place-items-center rounded-full ${
@@ -505,7 +505,7 @@ export default function ItineraryDrawer({
                         onDragOver={(e) => handleDragOver(e, index)}
                         onDrop={() => handleDrop(index)}
                         onDragEnd={handleDragEnd}
-                        className={`group flex items-start gap-2 rounded-xl border p-3 shadow-sm transition-colors cursor-grab active:cursor-grabbing ${
+                        className={`group flex items-start gap-2 rounded-none border p-3 shadow-sm transition-colors cursor-grab active:cursor-grabbing ${
                           dragOverIndex === index && dragIndex !== null && dragIndex !== index
                             ? 'border-teal-500 ring-1 ring-teal-500'
                             : theme === 'dark'
@@ -615,7 +615,7 @@ export default function ItineraryDrawer({
               {/* Budget summary */}
               <div className="flex flex-col gap-2">
                 {travelCost > 0 && (
-                  <div className={`flex items-center justify-between rounded-xl border p-3 ${
+                  <div className={`flex items-center justify-between rounded-none border p-3 ${
                     theme === 'dark' ? 'border-slate-800 bg-slate-800/40' : 'border-slate-200 bg-white'
                   }`}>
                     <div>
@@ -633,9 +633,9 @@ export default function ItineraryDrawer({
                     }`}>{currency(travelCost)}</span>
                   </div>
                 )}
-                <div className="flex items-center justify-between rounded-2xl border border-teal-500/30 bg-gradient-to-r from-teal-500/10 to-indigo-500/10 p-4">
+                <div className="flex items-center justify-between rounded-none border border-teal-500/30 bg-slate-100 dark:bg-slate-800 p-4">
                   <div className="flex items-center gap-2">
-                    <span className="grid h-9 w-9 place-items-center rounded-xl bg-teal-500/20 text-teal-600 dark:text-teal-400">
+                    <span className="grid h-9 w-9 place-items-center rounded-none bg-teal-500/20 text-teal-600 dark:text-teal-400">
                       <Wallet className="h-4 w-4" aria-hidden="true" />
                     </span>
                     <div>
@@ -689,7 +689,7 @@ export default function ItineraryDrawer({
             type="button"
             onClick={handleSavePDF}
             disabled={pdfBusy || !activeDestination}
-            className={`inline-flex items-center justify-center gap-1.5 rounded-xl border px-2 py-2.5 text-xs font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
+            className={`inline-flex items-center justify-center gap-1.5 rounded-none border px-2 py-2.5 text-xs font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
               theme === 'dark'
                 ? 'border-slate-700 text-slate-200 hover:bg-slate-800'
                 : 'border-slate-200 text-slate-700 hover:bg-slate-100'
@@ -702,7 +702,7 @@ export default function ItineraryDrawer({
             type="button"
             onClick={handleReset}
             disabled={!activeDestination}
-            className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-rose-500/30 bg-rose-500/10 px-2 py-2.5 text-xs font-semibold text-rose-600 dark:text-rose-400 transition-colors hover:bg-rose-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="inline-flex items-center justify-center gap-1.5 rounded-none border border-rose-500/30 bg-rose-500/10 px-2 py-2.5 text-xs font-semibold text-rose-600 dark:text-rose-400 transition-colors hover:bg-rose-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <RotateCcw className="h-4 w-4" aria-hidden="true" />
             Reset itinerary
@@ -777,7 +777,7 @@ export function TabButton({ active, onClick, icon, full, short, theme }) {
       type="button"
       onClick={onClick}
       aria-pressed={active}
-      className={`flex flex-1 items-center justify-center gap-1.5 rounded-xl px-3 py-2 text-sm font-semibold transition-colors ${
+      className={`flex flex-1 items-center justify-center gap-1.5 rounded-none px-3 py-2 text-sm font-semibold transition-colors ${
         active
           ? theme === 'dark'
             ? "bg-slate-100 text-slate-900"

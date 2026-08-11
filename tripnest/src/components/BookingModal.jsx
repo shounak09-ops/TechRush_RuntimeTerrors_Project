@@ -104,7 +104,7 @@ export default function BookingModal({ dest, open, onClose }) {
 
   return (
     <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fadeIn">
-      <div className="tn-modal-in relative w-full max-w-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl overflow-hidden shadow-2xl max-h-[90vh] flex flex-col">
+      <div className="tn-modal-in relative w-full max-w-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-none overflow-hidden shadow-2xl max-h-[90vh] flex flex-col">
         <button
           onClick={onClose}
           className="absolute top-4 right-4 z-20 p-2 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition-colors"
@@ -127,7 +127,7 @@ export default function BookingModal({ dest, open, onClose }) {
               </p>
             </div>
 
-            <div className="w-full mt-2 p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 text-left space-y-2">
+            <div className="w-full mt-2 p-4 rounded-none bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 text-left space-y-2">
               <div className="flex items-center justify-between text-xs">
                 <span className="text-slate-500 dark:text-slate-400">Booking reference</span>
                 <span className="font-mono font-bold text-slate-800 dark:text-slate-100">{bookingRef}</span>
@@ -154,7 +154,7 @@ export default function BookingModal({ dest, open, onClose }) {
 
             <button
               onClick={onClose}
-              className="mt-1 w-full px-5 py-2.5 rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-sm shadow-md transition-colors active:scale-95"
+              className="mt-1 w-full px-5 py-2.5 rounded-none bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-sm shadow-md transition-colors active:scale-95"
             >
               Done
             </button>
@@ -185,7 +185,7 @@ export default function BookingModal({ dest, open, onClose }) {
                   value={form.fullName}
                   onChange={updateField("fullName")}
                   placeholder="e.g. Aarav Sharma"
-                  className={`w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border text-sm outline-none text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-emerald-500 ${
+                  className={`w-full px-3.5 py-2.5 rounded-none bg-slate-50 dark:bg-slate-800/60 border text-sm outline-none text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-emerald-500 ${
                     errors.fullName ? "border-rose-400" : "border-slate-200 dark:border-slate-700"
                   }`}
                 />
@@ -202,7 +202,7 @@ export default function BookingModal({ dest, open, onClose }) {
                     value={form.email}
                     onChange={updateField("email")}
                     placeholder="you@example.com"
-                    className={`w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border text-sm outline-none text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-emerald-500 ${
+                    className={`w-full px-3.5 py-2.5 rounded-none bg-slate-50 dark:bg-slate-800/60 border text-sm outline-none text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-emerald-500 ${
                       errors.email ? "border-rose-400" : "border-slate-200 dark:border-slate-700"
                     }`}
                   />
@@ -217,7 +217,7 @@ export default function BookingModal({ dest, open, onClose }) {
                     value={form.phone}
                     onChange={updateField("phone")}
                     placeholder="98765 43210"
-                    className={`w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border text-sm outline-none text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-emerald-500 ${
+                    className={`w-full px-3.5 py-2.5 rounded-none bg-slate-50 dark:bg-slate-800/60 border text-sm outline-none text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-emerald-500 ${
                       errors.phone ? "border-rose-400" : "border-slate-200 dark:border-slate-700"
                     }`}
                   />
@@ -235,7 +235,7 @@ export default function BookingModal({ dest, open, onClose }) {
                     value={form.travelDate}
                     min={new Date().toISOString().split("T")[0]}
                     onChange={updateField("travelDate")}
-                    className={`w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border text-sm outline-none text-slate-900 dark:text-white focus:border-emerald-500 ${
+                    className={`w-full px-3.5 py-2.5 rounded-none bg-slate-50 dark:bg-slate-800/60 border text-sm outline-none text-slate-900 dark:text-white focus:border-emerald-500 ${
                       errors.travelDate ? "border-rose-400" : "border-slate-200 dark:border-slate-700"
                     }`}
                   />
@@ -251,7 +251,7 @@ export default function BookingModal({ dest, open, onClose }) {
                     max={20}
                     value={form.travelers}
                     onChange={updateField("travelers")}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-sm outline-none text-slate-900 dark:text-white focus:border-emerald-500"
+                    className="w-full px-3.5 py-2.5 rounded-none bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-sm outline-none text-slate-900 dark:text-white focus:border-emerald-500"
                   />
                 </div>
               </div>
@@ -271,7 +271,7 @@ export default function BookingModal({ dest, open, onClose }) {
               <button
                 type="submit"
                 disabled={status === "submitting"}
-                className="w-full px-5 py-3 rounded-2xl bg-emerald-500 hover:bg-emerald-600 disabled:opacity-70 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-md transition-colors active:scale-95"
+                className="w-full px-5 py-3 rounded-none bg-emerald-500 hover:bg-emerald-600 disabled:opacity-70 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-md transition-colors active:scale-95"
               >
                 {status === "submitting" ? (
                   <>

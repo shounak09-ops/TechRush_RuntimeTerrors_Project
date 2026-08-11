@@ -331,13 +331,13 @@ export default function App() {
       />
     )}
 
-    <div className={`min-h-screen ${theme === 'dark' ? 'bg-slate-950 text-white' : 'bg-slate-50 text-slate-900'} transition-colors duration-300 font-sans`}>
+    <div className={`tn-editorial min-h-screen ${theme === 'dark' ? 'bg-slate-950 text-white' : 'bg-slate-50 text-slate-900'} transition-colors duration-300 font-sans`}>
       
       {/* HEADER */}
-      <header className="sticky top-0 z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200/70 dark:border-slate-800/70">
+      <header className="sticky top-0 z-40 bg-white dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800">
         <div className="max-w-6xl mx-auto px-6 sm:px-8 py-5 flex items-center justify-between gap-4">
           <a href="#" className="flex items-center gap-2.5 shrink-0">
-            <span className="p-2.5 bg-gradient-to-tr from-emerald-500 to-emerald-400 text-white rounded-xl shadow-md">
+            <span className="p-2.5 bg-emerald-500 text-white">
               <MapPin className="h-5 w-5" />
             </span>
             <span className="text-xl sm:text-2xl font-bold tracking-tight">
@@ -396,7 +396,7 @@ export default function App() {
 
             <button
               onClick={() => setAiPlannerOpen(true)}
-              className="ml-1 flex items-center gap-2 pl-4 pr-5 py-2.5 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-semibold text-sm shadow-md shadow-emerald-500/25 hover:shadow-lg hover:shadow-emerald-500/35 hover:scale-[1.03] active:scale-95 transition-all"
+              className="ml-1 flex items-center gap-2 px-4 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold text-sm active:translate-y-px transition-colors"
             >
               <Plane className="h-4 w-4 -rotate-45" />
               <span className="hidden sm:inline">Plan with AI</span>
@@ -461,7 +461,7 @@ export default function App() {
         <div className="relative max-w-6xl mx-auto px-6 sm:px-8 pt-16 pb-24 lg:pt-24 lg:pb-32">
           <div className="max-w-xl space-y-6">
             <span
-              className="tn-animate-in inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/80 dark:bg-slate-900/70 backdrop-blur-sm text-emerald-600 dark:text-emerald-400 font-bold text-xs tracking-wider uppercase shadow-sm"
+              className="tn-animate-in inline-flex items-center gap-2 px-0 py-1 text-emerald-600 dark:text-emerald-400 font-bold text-xs tracking-[0.18em] uppercase border-b border-emerald-400/60"
               style={{ animationDelay: "0ms" }}
             >
               <Sparkles className="h-4 w-4" /> Smart Travel Planner
@@ -490,7 +490,7 @@ export default function App() {
                   e.preventDefault();
                   document.getElementById("explore")?.scrollIntoView({ behavior: "smooth" });
                 }}
-                className="flex items-center bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-full shadow-md p-2"
+                className="flex items-center bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 p-1.5"
               >
                 <Search className="h-5 w-5 text-slate-400 ml-3 shrink-0" />
                 <input
@@ -503,7 +503,7 @@ export default function App() {
                 <button
                   type="submit"
                   aria-label="Search"
-                  className="px-6 py-3 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-sm shrink-0 shadow-md shadow-emerald-500/30 hover:shadow-lg hover:shadow-emerald-500/40 transition-all flex items-center gap-2"
+                  className="px-5 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-sm shrink-0 transition-colors flex items-center gap-2"
                 >
                   <Search className="h-4 w-4" />
                   <span className="hidden sm:inline">Search</span>
@@ -521,7 +521,7 @@ export default function App() {
                     setSearchQuery(term);
                     document.getElementById("explore")?.scrollIntoView({ behavior: "smooth" });
                   }}
-                  className="flex items-center gap-1 px-3.5 py-1.5 rounded-full bg-white/80 dark:bg-slate-900/70 backdrop-blur-sm border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:border-emerald-400 hover:text-emerald-600 transition-colors"
+                  className="flex items-center gap-1 px-0 py-1 border-b border-transparent text-xs font-semibold text-slate-700 dark:text-slate-200 hover:border-emerald-400 hover:text-emerald-600 transition-colors"
                 >
                   <MapPin className="h-3 w-3 text-emerald-500" />
                   {term}
@@ -560,7 +560,7 @@ export default function App() {
 
       {/* FEATURE HIGHLIGHTS BAR */}
       <div id="highlights" className="max-w-6xl mx-auto px-6 sm:px-8 -mt-14 relative z-10 scroll-mt-24">
-        <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-xl p-6 sm:p-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="bg-white dark:bg-slate-900 border-y border-slate-200 dark:border-slate-800 p-6 sm:p-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
           {[
             { icon: Luggage, color: "text-emerald-600 bg-slate-100 dark:bg-slate-800", title: "AI Trip Planner", desc: "Get a personalized itinerary in seconds", action: () => setAiPlannerOpen(true) },
             { icon: Wallet, color: "text-emerald-600 bg-slate-100 dark:bg-slate-800", title: "Smart Budgeting", desc: "Plan your trip within your budget", action: () => setItineraryDrawerOpen(true) },
@@ -569,7 +569,7 @@ export default function App() {
             <button
               key={title}
               onClick={action}
-              className="group flex items-start gap-3 p-2 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors text-left"
+              className="group flex items-start gap-3 p-2 border-l-2 border-transparent hover:border-emerald-500 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors text-left"
             >
               <span className={`p-2.5 rounded-xl shrink-0 ${color}`}>
                 <Icon className="h-5 w-5" />
@@ -613,7 +613,7 @@ export default function App() {
                 <span>Scope</span>
               </div>
 
-              <div className="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-2xl w-full sm:w-auto">
+              <div className="flex border-b border-slate-300 dark:border-slate-700 w-full sm:w-auto">
                 {["All", "India", "International"].map((item) => (
                   <button
                     key={item}
@@ -622,10 +622,10 @@ export default function App() {
                       if (item !== "India") setSelectedRegion("All");
                       if (item !== "International") setSelectedContinent("All");
                     }}
-                    className={`flex-1 sm:flex-none px-5 py-2 rounded-xl text-xs font-bold transition-all active:scale-95 ${
+                    className={`flex-1 sm:flex-none px-5 py-2 text-xs font-bold border-b-2 transition-all active:scale-95 ${
                       scope === item
-                        ? "bg-white dark:bg-slate-900 text-emerald-500 shadow-sm"
-                        : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
+                        ? "border-emerald-500 text-emerald-500"
+                        : "border-transparent text-slate-500 hover:text-slate-900 dark:hover:text-white"
                     }`}
                   >
                     {item === "India" ? "India" : item === "International" ? "Foreign" : "Trending"}
@@ -641,10 +641,10 @@ export default function App() {
                   <button
                     key={cat}
                     onClick={() => setActiveCategory(cat)}
-                    className={`px-4 py-2 rounded-xl text-xs font-bold transition-all active:scale-95 ${
+                    className={`px-4 py-2 text-xs font-bold border-b-2 transition-all active:scale-95 ${
                       activeCategory === cat
-                        ? "bg-emerald-500 text-white shadow-md shadow-emerald-500/30"
-                        : "bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 text-slate-600 dark:text-slate-300"
+                        ? "border-emerald-500 text-emerald-600 dark:text-emerald-400"
+                        : "border-transparent text-slate-600 dark:text-slate-300"
                     }`}
                   >
                     {cat}
@@ -654,10 +654,10 @@ export default function App() {
                 {/* Favorite Quick Filter Pill */}
                 <button
                   onClick={() => setShowOnlyFavorites(!showOnlyFavorites)}
-                  className={`px-4 py-2 rounded-xl text-xs font-bold transition-all active:scale-95 flex items-center gap-1.5 ${
+                  className={`px-4 py-2 text-xs font-bold border-b-2 transition-all active:scale-95 flex items-center gap-1.5 ${
                     showOnlyFavorites
-                      ? "bg-rose-500 text-white shadow-md shadow-rose-500/30"
-                      : "bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 text-rose-500"
+                      ? "border-rose-500 text-rose-500"
+                      : "border-transparent text-rose-500"
                   }`}
                 >
                   <Heart className={`h-3.5 w-3.5 ${showOnlyFavorites ? "fill-current" : ""}`} />
@@ -718,7 +718,7 @@ export default function App() {
               railKey={railKey}
             />
           ) : (
-            <div className="tn-modal-in flex flex-col items-center text-center gap-4 py-20 px-6 rounded-3xl border border-dashed border-slate-200 dark:border-slate-800">
+            <div className="tn-modal-in flex flex-col items-center text-center gap-4 py-20 px-6 border border-dashed border-slate-200 dark:border-slate-800">
               <span className="tn-float p-4 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500">
                 <Compass className="h-7 w-7" />
               </span>
@@ -730,7 +730,7 @@ export default function App() {
               </div>
               <button
                 onClick={resetFilters}
-                className="mt-1 px-5 py-2.5 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-sm shadow-sm transition-colors active:scale-95"
+                className="mt-1 px-5 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-sm transition-colors active:scale-95"
               >
                 Clear filters
               </button>

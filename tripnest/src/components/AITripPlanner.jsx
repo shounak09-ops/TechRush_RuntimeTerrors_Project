@@ -85,7 +85,7 @@ function PillGroup({ label, options, value, onChange, theme }) {
             key={opt}
             type="button"
             onClick={() => onChange(opt)}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+            className={`px-4 py-2 rounded-none text-xs font-bold transition-all ${
               value === opt
                 ? "bg-sky-500 text-white shadow-md shadow-sky-500/30"
                 : theme === "dark"
@@ -220,10 +220,10 @@ export default function AITripPlanner({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fadeIn">
-      <div className={`tn-modal-in relative w-full max-w-4xl border rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh] ${panelClasses}`}>
+      <div className={`tn-modal-in relative w-full max-w-4xl border rounded-none overflow-hidden shadow-2xl flex flex-col max-h-[90vh] ${panelClasses}`}>
         {/* Header */}
         <div className="flex items-center gap-3 p-5 border-b border-slate-200 dark:border-slate-800 bg-gradient-to-r from-emerald-500/10 to-teal-500/10">
-          <span className="p-2.5 bg-gradient-to-tr from-emerald-500 to-teal-500 text-white rounded-xl shadow-md">
+          <span className="p-2.5 bg-gradient-to-tr from-emerald-500 to-teal-500 text-white rounded-none shadow-md">
             <Bot className="h-5 w-5" />
           </span>
           <div className="flex-1 min-w-0">
@@ -236,7 +236,7 @@ export default function AITripPlanner({
             type="button"
             onClick={onClose}
             aria-label="Close AI trip planner"
-            className={`grid h-9 w-9 place-items-center rounded-xl border transition-colors ${
+            className={`grid h-9 w-9 place-items-center rounded-none border transition-colors ${
               theme === "dark" ? "border-slate-700 text-slate-300 hover:bg-slate-800" : "border-slate-200 text-slate-600 hover:bg-slate-100"
             }`}
           >
@@ -249,7 +249,7 @@ export default function AITripPlanner({
           {step === "form" && (
             <div className="space-y-6 max-w-2xl mx-auto">
               {error && (
-                <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-600 dark:text-rose-400 text-xs font-semibold flex items-center justify-between gap-3">
+                <div className="p-3 rounded-none bg-rose-500/10 border border-rose-500/30 text-rose-600 dark:text-rose-400 text-xs font-semibold flex items-center justify-between gap-3">
                   <span>{error}</span>
                   <button
                     type="button"
@@ -287,7 +287,7 @@ export default function AITripPlanner({
                   <button
                     type="button"
                     onClick={() => updateField("days", Math.max(1, Number(formData.days) - 1))}
-                    className={`h-9 w-9 rounded-xl border font-bold transition-colors ${
+                    className={`h-9 w-9 rounded-none border font-bold transition-colors ${
                       theme === "dark" ? "border-slate-700 text-slate-200 hover:bg-slate-800" : "border-slate-200 text-slate-700 hover:bg-slate-100"
                     }`}
                   >
@@ -297,7 +297,7 @@ export default function AITripPlanner({
                   <button
                     type="button"
                     onClick={() => updateField("days", Math.min(30, Number(formData.days) + 1))}
-                    className={`h-9 w-9 rounded-xl border font-bold transition-colors ${
+                    className={`h-9 w-9 rounded-none border font-bold transition-colors ${
                       theme === "dark" ? "border-slate-700 text-slate-200 hover:bg-slate-800" : "border-slate-200 text-slate-700 hover:bg-slate-100"
                     }`}
                   >
@@ -320,7 +320,7 @@ export default function AITripPlanner({
                   onChange={(e) => updateField("preferences", e.target.value)}
                   placeholder="e.g. quiet cafes, waterfalls, nightlife, wildlife photography..."
                   rows={3}
-                  className={`w-full rounded-xl border px-3 py-2.5 text-sm outline-none transition-colors ${
+                  className={`w-full rounded-none border px-3 py-2.5 text-sm outline-none transition-colors ${
                     theme === "dark"
                       ? "bg-slate-800 border-slate-700 text-slate-100 placeholder:text-slate-500 focus:border-sky-500"
                       : "bg-slate-50 border-slate-200 text-slate-900 placeholder:text-slate-400 focus:border-sky-500"
@@ -331,7 +331,7 @@ export default function AITripPlanner({
               <button
                 type="button"
                 onClick={handleGenerate}
-                className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/25 hover:from-emerald-600 hover:to-teal-600 active:scale-[0.98] transition-all"
+                className="w-full py-3.5 rounded-none bg-emerald-500 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/25 hover:from-emerald-600 hover:to-teal-600 active:scale-[0.98] transition-all"
               >
                 <Sparkles className="h-4 w-4" />
                 Generate My Trip
@@ -350,7 +350,7 @@ export default function AITripPlanner({
                     wait reads as forward motion rather than an indefinite spin. */}
                 <div className={`w-full max-w-xs h-1.5 rounded-full overflow-hidden mt-1 ${theme === "dark" ? "bg-slate-800" : "bg-slate-200"}`}>
                   <div
-                    className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 transition-all duration-500 ease-out"
+                    className="h-full rounded-full bg-emerald-500 transition-all duration-500 ease-out"
                     style={{ width: `${((loadingMsgIndex + 1) / LOADING_MESSAGES.length) * 100}%` }}
                   />
                 </div>
@@ -359,10 +359,10 @@ export default function AITripPlanner({
               {/* Skeleton preview of the result view underneath, so the
                   layout that's about to appear is already hinted at. */}
               <div className="space-y-4 opacity-70">
-                <div className="tn-skeleton rounded-3xl aspect-[16/7] w-full" />
+                <div className="tn-skeleton rounded-none aspect-[16/7] w-full" />
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                   {[0, 1, 2, 3].map((i) => (
-                    <div key={i} className="p-3 rounded-2xl bg-slate-500/5 space-y-2">
+                    <div key={i} className="p-3 rounded-none bg-slate-500/5 space-y-2">
                       <div className="tn-skeleton h-2.5 w-2/3 rounded-full" />
                       <div className="tn-skeleton h-3 w-full rounded-full" />
                     </div>
@@ -404,7 +404,7 @@ export default function AITripPlanner({
             <button
               type="button"
               onClick={() => setStep("form")}
-              className={`inline-flex items-center gap-1.5 rounded-xl border px-3 py-2.5 text-xs font-semibold transition-colors ${
+              className={`inline-flex items-center gap-1.5 rounded-none border px-3 py-2.5 text-xs font-semibold transition-colors ${
                 theme === "dark" ? "border-slate-700 text-slate-200 hover:bg-slate-800" : "border-slate-200 text-slate-700 hover:bg-slate-100"
               }`}
             >
@@ -414,7 +414,7 @@ export default function AITripPlanner({
             <button
               type="button"
               onClick={handleLockTrip}
-              className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-500 px-4 py-2.5 text-xs font-bold text-white shadow-md hover:from-sky-600 hover:to-indigo-600 active:scale-95 transition-all"
+              className="inline-flex items-center gap-1.5 rounded-none bg-sky-500 px-4 py-2.5 text-xs font-bold text-white shadow-md hover:from-sky-600 hover:to-indigo-600 active:scale-95 transition-all"
             >
               <Plus className="h-4 w-4" />
               Lock {tripResult.destination.name} & Build Itinerary
@@ -455,7 +455,7 @@ function ResultView({
   return (
     <div className="space-y-6">
       {/* Hero */}
-      <div className="relative rounded-3xl overflow-hidden aspect-[16/7] bg-slate-950">
+      <div className="relative rounded-none overflow-hidden aspect-[16/7] bg-slate-950">
         <img src={dest.image} alt={dest.name} className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
         <div className="absolute bottom-4 left-5 right-5 text-white">
@@ -474,7 +474,7 @@ function ResultView({
       </div>
 
       {/* AI explanation */}
-      <div className="p-4 rounded-2xl bg-gradient-to-r from-sky-500/10 to-indigo-500/10 border border-sky-500/20 flex items-start gap-3">
+      <div className="p-4 rounded-none bg-gradient-to-r from-sky-500/10 to-indigo-500/10 border border-sky-500/20 flex items-start gap-3">
         <Sparkles className="h-5 w-5 text-sky-500 shrink-0 mt-0.5" />
         <p className={`text-xs leading-relaxed ${theme === "dark" ? "text-slate-200" : "text-slate-700"}`}>{trip.aiExplanation}</p>
       </div>
@@ -488,7 +488,7 @@ function ResultView({
       </div>
 
       {/* Tabs */}
-      <div className={`flex gap-1 border-b p-1 rounded-xl ${theme === "dark" ? "border-slate-800 bg-slate-800/40" : "border-slate-200 bg-slate-50"}`}>
+      <div className={`flex gap-1 border-b p-1 rounded-none ${theme === "dark" ? "border-slate-800 bg-slate-800/40" : "border-slate-200 bg-slate-50"}`}>
         <TabButton active={resultTab === "itinerary"} onClick={() => setResultTab("itinerary")} icon={<Map className="h-4 w-4" />} full="Itinerary" short="Plan" theme={theme} />
         <TabButton active={resultTab === "budget"} onClick={() => setResultTab("budget")} icon={<Wallet className="h-4 w-4" />} full="Budget" short="Budget" theme={theme} />
         <TabButton active={resultTab === "essentials"} onClick={() => setResultTab("essentials")} icon={<Luggage className="h-4 w-4" />} full="Essentials" short="Pack" theme={theme} />
@@ -504,7 +504,7 @@ function ResultView({
                 key={day}
                 type="button"
                 onClick={() => setSelectedDay(day)}
-                className={`shrink-0 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+                className={`shrink-0 px-4 py-2 rounded-none text-xs font-bold transition-all ${
                   selectedDay === day
                     ? "bg-teal-500 text-white shadow-md shadow-teal-500/25"
                     : theme === "dark"
@@ -521,7 +521,7 @@ function ResultView({
             {dayData.slots.map((slot, idx) => (
               <li
                 key={idx}
-                className={`flex items-start gap-3 rounded-xl border p-3 ${
+                className={`flex items-start gap-3 rounded-none border p-3 ${
                   theme === "dark" ? "border-slate-800 bg-slate-800/50" : "border-slate-200 bg-white"
                 }`}
               >
@@ -544,7 +544,7 @@ function ResultView({
             <h4 className={`text-xs font-bold uppercase tracking-wider mb-2 ${mutedText}`}>Top Attractions</h4>
             <div className="grid gap-2">
               {trip.attractions.map((a, idx) => (
-                <div key={idx} className={`flex items-start gap-2.5 p-2.5 rounded-xl border ${theme === "dark" ? "border-slate-800 bg-slate-800/40" : "border-slate-100 bg-slate-50"}`}>
+                <div key={idx} className={`flex items-start gap-2.5 p-2.5 rounded-none border ${theme === "dark" ? "border-slate-800 bg-slate-800/40" : "border-slate-100 bg-slate-50"}`}>
                   <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
                   <span className={`text-xs font-medium leading-relaxed ${theme === "dark" ? "text-slate-200" : "text-slate-700"}`}>{a}</span>
                 </div>
@@ -557,7 +557,7 @@ function ResultView({
             <h4 className={`text-xs font-bold uppercase tracking-wider mb-2 ${mutedText}`}>Suggested Activities</h4>
             <div className="flex flex-wrap gap-2">
               {trip.activities.map((act) => (
-                <span key={act.id} className={`px-3 py-1.5 rounded-xl text-xs font-medium ${theme === "dark" ? "bg-slate-800 text-slate-300" : "bg-slate-100 text-slate-600"}`}>
+                <span key={act.id} className={`px-3 py-1.5 rounded-none text-xs font-medium ${theme === "dark" ? "bg-slate-800 text-slate-300" : "bg-slate-100 text-slate-600"}`}>
                   {act.name}
                 </span>
               ))}
@@ -569,7 +569,7 @@ function ResultView({
       {resultTab === "budget" && (
         <div className="space-y-3">
           {Object.entries(trip.budgetBreakdown).map(([key, value]) => (
-            <div key={key} className={`rounded-xl border p-3 ${theme === "dark" ? "border-slate-800 bg-slate-800/40" : "border-slate-200 bg-white"}`}>
+            <div key={key} className={`rounded-none border p-3 ${theme === "dark" ? "border-slate-800 bg-slate-800/40" : "border-slate-200 bg-white"}`}>
               <div className="flex items-center justify-between">
                 <span className={`text-xs font-semibold capitalize ${mutedText}`}>{key.replace(/([A-Z])/g, " $1")}</span>
                 <span className={`text-sm font-bold ${bodyText}`}>{currency(value)}</span>
@@ -584,9 +584,9 @@ function ResultView({
               )}
             </div>
           ))}
-          <div className="flex items-center justify-between p-4 rounded-2xl border border-teal-500/30 bg-gradient-to-r from-teal-500/10 to-indigo-500/10">
+          <div className="flex items-center justify-between p-4 rounded-none border border-teal-500/30 bg-slate-100 dark:bg-slate-800">
             <div className="flex items-center gap-2">
-              <span className="grid h-9 w-9 place-items-center rounded-xl bg-teal-500/20 text-teal-600 dark:text-teal-400">
+              <span className="grid h-9 w-9 place-items-center rounded-none bg-teal-500/20 text-teal-600 dark:text-teal-400">
                 <Wallet className="h-4 w-4" />
               </span>
               <span className={`text-xs font-semibold ${mutedText}`}>Total estimated cost ({trip.budgetTier} tier)</span>
@@ -606,7 +606,7 @@ function ResultView({
             </h4>
             <div className="flex flex-wrap gap-2">
               {trip.localFoods.map((food, idx) => (
-                <span key={idx} className={`px-3 py-1.5 rounded-xl text-xs font-medium ${theme === "dark" ? "bg-slate-800 text-slate-300" : "bg-slate-100 text-slate-600"}`}>
+                <span key={idx} className={`px-3 py-1.5 rounded-none text-xs font-medium ${theme === "dark" ? "bg-slate-800 text-slate-300" : "bg-slate-100 text-slate-600"}`}>
                   {food}
                 </span>
               ))}
@@ -619,7 +619,7 @@ function ResultView({
             </h4>
             <div className="space-y-2">
               {trip.travelTips.map((tip, idx) => (
-                <div key={idx} className="p-3 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200/60 dark:border-amber-800/40 text-xs text-amber-900 dark:text-amber-200 leading-relaxed">
+                <div key={idx} className="p-3 rounded-none bg-amber-50 dark:bg-amber-950/30 border border-amber-200/60 dark:border-amber-800/40 text-xs text-amber-900 dark:text-amber-200 leading-relaxed">
                   {tip}
                 </div>
               ))}
@@ -654,7 +654,7 @@ function ResultView({
 
 function StatCard({ icon, label, value, theme }) {
   return (
-    <div className={`p-3 rounded-2xl flex items-center gap-2.5 ${theme === "dark" ? "bg-slate-800/50" : "bg-slate-50"}`}>
+    <div className={`p-3 rounded-none flex items-center gap-2.5 ${theme === "dark" ? "bg-slate-800/50" : "bg-slate-50"}`}>
       {icon}
       <div className="min-w-0">
         <p className="text-[10px] text-slate-500 uppercase font-bold">{label}</p>

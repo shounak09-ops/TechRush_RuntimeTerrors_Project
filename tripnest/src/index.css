@@ -350,3 +350,62 @@
 .tn-range:focus-visible {
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--tn-range-color, #10b981) 35%, transparent);
 }
+
+/* ---------------------------------------------------------------------
+   TripNest editorial design system
+   Intentional, flatter surfaces: less "component kit", more travel journal.
+------------------------------------------------------------------------ */
+.tn-editorial {
+  --tn-ink: #0f172a;
+  --tn-paper: #f8f7f2;
+  --tn-line: rgba(100, 116, 139, 0.24);
+  --tn-accent: #10b981;
+}
+
+.tn-editorial .rounded-3xl,
+.tn-editorial .rounded-2xl,
+.tn-editorial .rounded-xl,
+.tn-editorial .rounded-lg {
+  border-radius: 2px !important;
+}
+
+.tn-editorial .shadow-xl,
+.tn-editorial .shadow-2xl {
+  box-shadow: 0 18px 50px rgba(15, 23, 42, 0.12) !important;
+}
+
+.tn-editorial .shadow-lg,
+.tn-editorial .shadow-md,
+.tn-editorial .shadow-sm {
+  box-shadow: none !important;
+}
+
+.tn-editorial .backdrop-blur-sm,
+.tn-editorial .backdrop-blur-md {
+  backdrop-filter: none !important;
+}
+
+.tn-editorial .tn-stagger-grid > * {
+  animation-duration: 0.7s;
+}
+
+.tn-editorial button,
+.tn-editorial a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tn-editorial input,
+.tn-editorial select,
+.tn-editorial textarea {
+  border-radius: 2px !important;
+}
+
+.tn-editorial ::selection {
+  background: rgba(16, 185, 129, 0.22);
+}
+
+@media (min-width: 1024px) {
+  .tn-editorial main {
+    max-width: 80rem;
+  }
+}

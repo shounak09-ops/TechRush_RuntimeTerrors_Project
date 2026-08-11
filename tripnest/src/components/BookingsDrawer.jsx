@@ -32,7 +32,7 @@ export default function BookingsDrawer({ open, onClose, bookings }) {
             return (
               <div
                 key={b.code}
-                className="flex gap-4 items-center border border-slate-200 dark:border-slate-800 rounded-2xl p-4"
+                className="flex gap-4 items-center border border-slate-200 dark:border-slate-800 rounded-none p-4"
               >
                 <img src={qrUrl} alt="QR" className="rounded-lg w-16 h-16 shrink-0" />
                 <div className="flex-1 min-w-0">

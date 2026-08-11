@@ -24,22 +24,6 @@ export default function DestinationRail({
     railRef.current?.scrollBy({ left: amount, behavior: "smooth" });
   };
 
-  // Native (non-passive) wheel listener so a plain vertical mouse wheel
-  // scrolls this rail sideways too — same reasoning as the original
-  // App.jsx implementation. Re-binds if railKey changes (the row gets a
-  // fresh DOM node to replay its entrance animation).
-  useEffect(() => {
-    const el = railRef.current;
-    if (!el) return;
-    const onWheel = (e) => {
-      if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
-      e.preventDefault();
-      el.scrollBy({ left: e.deltaY, behavior: "auto" });
-    };
-    el.addEventListener("wheel", onWheel, { passive: false });
-    return () => el.removeEventListener("wheel", onWheel);
-  }, [railKey]);
-
   if (!destinations || destinations.length === 0) return null;
 
   return (
@@ -52,14 +36,14 @@ export default function DestinationRail({
           <button
             onClick={() => scrollRailBy(-340)}
             aria-label={`Scroll ${title} left`}
-            className="p-2 rounded-full border border-slate-200 dark:border-slate-700 text-slate-500 hover:text-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 dark:hover:text-white transition-colors"
+            className="p-2 border border-slate-300 dark:border-slate-700 text-slate-500 hover:text-slate-900 hover:border-emerald-500 dark:hover:border-emerald-400 dark:hover:text-white transition-colors"
           >
             <ChevronLeft className="h-4 w-4" />
           </button>
           <button
             onClick={() => scrollRailBy(340)}
             aria-label={`Scroll ${title} right`}
-            className="p-2 rounded-full border border-slate-200 dark:border-slate-700 text-slate-500 hover:text-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 dark:hover:text-white transition-colors"
+            className="p-2 border border-slate-300 dark:border-slate-700 text-slate-500 hover:text-slate-900 hover:border-emerald-500 dark:hover:border-emerald-400 dark:hover:text-white transition-colors"
           >
             <ChevronRight className="h-4 w-4" />
           </button>

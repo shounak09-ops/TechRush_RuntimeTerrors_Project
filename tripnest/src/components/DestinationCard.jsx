@@ -208,14 +208,14 @@ export default function DestinationCard({
 
   return (
     <div
-      className="group relative bg-white dark:bg-slate-900 border border-slate-900/8 dark:border-white/10 rounded-2xl overflow-hidden shadow-[0_1px_3px_rgba(15,23,42,0.06),0_1px_2px_rgba(15,23,42,0.04)] hover:shadow-[0_8px_24px_rgba(15,23,42,0.10)] hover:-translate-y-1 hover:scale-[1.012] transition-all duration-300 flex flex-col justify-between"
+      className="group relative bg-white dark:bg-slate-900 border border-slate-800/20 dark:border-white/12 overflow-hidden shadow-none hover:border-emerald-400/50 hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between"
       onMouseEnter={handleImageMouseEnter}
       onMouseLeave={handleImageMouseLeave}
     >
       
       {/* Card Header & Image Carousel */}
       <div
-        className="relative overflow-hidden aspect-[4/3] bg-slate-950"
+        className="relative overflow-hidden aspect-[4/3] bg-slate-950 border-b border-white/10"
       >
         <div className="absolute inset-0">
           {/* Base image */}
@@ -274,14 +274,14 @@ export default function DestinationCard({
           <div className="absolute inset-x-2 top-1/2 -translate-y-1/2 flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity z-10">
             <button
               onClick={handlePrevImage}
-              className="p-1 rounded-full bg-white/90 hover:bg-white text-slate-700 backdrop-blur-xs transition-colors shadow-sm cursor-pointer"
+              className="p-1.5 bg-white/90 hover:bg-white text-slate-700 backdrop-blur-xs transition-colors shadow-sm cursor-pointer border border-white/70"
               aria-label="Previous photo"
             >
               <ChevronLeft className="h-4 w-4" />
             </button>
             <button
               onClick={handleNextImage}
-              className="p-1 rounded-full bg-white/90 hover:bg-white text-slate-700 backdrop-blur-xs transition-colors shadow-sm cursor-pointer"
+              className="p-1.5 bg-white/90 hover:bg-white text-slate-700 backdrop-blur-xs transition-colors shadow-sm cursor-pointer border border-white/70"
               aria-label="Next photo"
             >
               <ChevronRight className="h-4 w-4" />
@@ -291,13 +291,13 @@ export default function DestinationCard({
 
         {/* Top Badges */}
         <div className="absolute top-4 left-4 right-4 flex items-center justify-between z-10">
-          <span className={`px-3 py-1 ${badgeClass} backdrop-blur-md rounded-full text-[11px] font-bold shadow-sm`}>
+          <span className={`relative px-2.5 py-1 ${badgeClass} backdrop-blur-md text-[10px] uppercase tracking-[0.16em] font-extrabold shadow-none before:absolute before:left-0 before:bottom-0 before:h-[2px] before:w-5 before:bg-emerald-400`}>
             {dest?.category || "Travel"}
           </span>
 
           <div className="flex items-center gap-2">
             {/* Dynamic Live Weather Badge */}
-            <span className="flex items-center gap-1 px-2.5 py-1 bg-white/90 backdrop-blur-md rounded-full text-[11px] font-semibold text-slate-800 shadow-sm min-w-[55px] justify-center">
+            <span className="flex items-center gap-1 px-2.5 py-1 bg-white/90 backdrop-blur-md text-[11px] font-semibold text-slate-800 shadow-sm min-w-[55px] justify-center border border-white/60">
               <Thermometer className="h-3 w-3 text-amber-500 shrink-0" />
               {isLoadingWeather ? (
                 <Loader2 className="h-3 w-3 animate-spin text-slate-500" />
@@ -317,7 +317,7 @@ export default function DestinationCard({
                   setTimeout(() => setHeartPop(false), 400);
                 }
               }}
-              className={`p-2 rounded-full backdrop-blur-md transition-transform active:scale-95 shadow-sm cursor-pointer ${
+              className={`p-2 backdrop-blur-md transition-transform active:scale-95 shadow-sm cursor-pointer border border-white/60 ${
                 isFavorite
                   ? "bg-rose-500 text-white"
                   : "bg-white/90 text-slate-700 hover:bg-white"
@@ -359,7 +359,7 @@ export default function DestinationCard({
       </div>
 
       {/* Card Body */}
-      <div className="p-6 space-y-4 flex-1 flex flex-col justify-between">
+      <div className="p-6 space-y-4 flex-1 flex flex-col justify-between bg-white dark:bg-slate-900">
         <p className="text-sm text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">
           {dest?.description}
         </p>
@@ -395,7 +395,7 @@ export default function DestinationCard({
           <button
             onClick={() => onToggleCompare(dest?.id)}
             aria-pressed={isCompared}
-            className={`flex items-center gap-1.5 text-[11px] font-bold transition-all active:scale-95 cursor-pointer ${
+            className={`flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wide transition-all active:scale-95 cursor-pointer ${
               isCompared ? "text-emerald-500" : "text-slate-500 hover:text-slate-900 dark:hover:text-slate-200"
             }`}
           >
@@ -406,7 +406,7 @@ export default function DestinationCard({
           <div className="flex items-center gap-2">
             <button
               onClick={() => onOpenDetails(dest)}
-              className="px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-bold transition-all active:scale-95 flex items-center gap-1 cursor-pointer"
+              className="px-3 py-1.5 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-bold transition-all active:scale-95 flex items-center gap-1 cursor-pointer"
             >
               <FileText className="h-3.5 w-3.5" />
               Details
@@ -420,7 +420,7 @@ export default function DestinationCard({
                 setTimeout(() => setJustAdded(false), 1200);
               }}
               disabled={justAdded}
-              className={`px-3.5 py-1.5 rounded-xl text-white text-xs font-bold transition-all active:scale-95 flex items-center gap-1 shadow-sm cursor-pointer ${
+              className={`px-3.5 py-1.5 text-white text-xs font-bold transition-all active:scale-95 flex items-center gap-1 shadow-sm cursor-pointer ${
                 justAdded ? "bg-emerald-600" : "bg-emerald-500 hover:bg-emerald-600"
               }`}
             >

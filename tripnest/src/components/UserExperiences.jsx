@@ -85,7 +85,7 @@ export default function UserExperiences() {
           {infiniteExperiences.map((item, idx) => (
             <div
               key={`${item.id}-${idx}`}
-              className="w-[280px] sm:w-[320px] shrink-0 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between"
+              className="w-[280px] sm:w-[320px] shrink-0 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-none p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between"
             >
               <div>
                 {/* Header: User Info & Location */}
