@@ -216,6 +216,90 @@ app.post("/api/generate-trip", async (req, res) => {
   }
 });
 
+// ----------------------------------------------------------------------------
+// /api/flight-estimate
+// ----------------------------------------------------------------------------
+// Lightweight sibling of /api/generate-trip: no matching decision, no
+// itinerary, just a live round-trip flight/travel fare estimate for ONE
+// destination the caller already picked (used by DestinationCard so the
+// browse-grid/rail cards show an AI-estimated price instead of a hardcoded
+// static figure). Kept as its own route/schema rather than reusing the full
+// TRIP_PLAN_SCHEMA so these calls stay cheap and fast.
+// ----------------------------------------------------------------------------
+const FLIGHT_ESTIMATE_SCHEMA = {
+  type: SchemaType.OBJECT,
+  properties: {
+    costUSD: {
+      type: SchemaType.NUMBER,
+      description:
+        "Estimated one-time round-trip travel cost in US dollars to reach this specific destination, " +
+        "as if fares were just checked. Must vary realistically with: distance/region from major global " +
+        "hubs, whether the destination is domestic or international relative to a traveler departing from " +
+        "a major hub in their home region, the destination's bestTime/season (higher for peak season, " +
+        "lower for off-peak), and the given budget tier (Low = budget carrier/economy deals, Medium = " +
+        "standard economy, Luxury = premium economy or business). Do NOT reuse a round number or a figure " +
+        "you'd reuse across different destinations/tiers — vary it the way real fares vary.",
+    },
+    reasoning: {
+      type: SchemaType.STRING,
+      description: "One short sentence explaining the fare estimate (e.g. distance/route, season, class of travel).",
+    },
+  },
+  required: ["costUSD", "reasoning"],
+};
+
+const flightEstimateModel = genAI.getGenerativeModel({
+  model: "gemini-3.5-flash",
+  generationConfig: {
+    responseMimeType: "application/json",
+    responseSchema: FLIGHT_ESTIMATE_SCHEMA,
+  },
+});
+
+app.post("/api/flight-estimate", async (req, res) => {
+  const { destination, budget } = req.body || {};
+
+  if (!destination || !destination.name) {
+    return res.status(400).json({ error: "a destination object with at least a name is required" });
+  }
+
+  const tier = ["Low", "Medium", "Luxury"].includes(budget) ? budget : "Medium";
+
+  try {
+    const prompt =
+      `Estimate a realistic current round-trip flight/travel fare in US dollars for a trip to ` +
+      `${destination.name}${destination.country ? `, ${destination.country}` : ""}.\n\n` +
+      `Destination details: ${JSON.stringify({
+        country: destination.country,
+        region: destination.region,
+        continent: destination.continent,
+        category: destination.category,
+        bestTime: destination.bestTime,
+      })}.\n\n` +
+      `Assume the traveler departs from a major hub in their home region and is booking a ${tier} ` +
+      `budget tier (Low = budget carrier/economy deals, Medium = standard economy, Luxury = premium ` +
+      `economy/business).\n\n` +
+      `Base the number on real-world factors: distance/region from major global travel hubs, whether the ` +
+      `route is domestic or long-haul international, and the destination's typical season/bestTime (peak ` +
+      `season = pricier fares). This number MUST differ meaningfully between destinations and tiers — never ` +
+      `fall back to a flat, rounded, or previously-seen figure.`;
+
+    const result = await flightEstimateModel.generateContent(prompt);
+    const plan = JSON.parse(result.response.text());
+
+    const fareRaw = Number(plan.costUSD);
+    const fareValid = Number.isFinite(fareRaw) && fareRaw > 0;
+
+    res.json({
+      costUSD: fareValid ? Math.round(Math.min(6000, Math.max(30, fareRaw))) : null,
+      reasoning: plan.reasoning || "",
+    });
+  } catch (err) {
+    console.error("flight-estimate failed:", err);
+    res.status(500).json({ error: "AI flight estimate failed" });
+  }
+});
+
 app.get("/api/health", (_req, res) => res.json({ ok: true }));
 
 const PORT = process.env.PORT || 3001;

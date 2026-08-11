@@ -144,6 +144,73 @@ export async function generateTrip(formData) {
   return assembleTripFromAiPlan(aiPlan, safeFormData);
 }
 
+// In-memory cache so the same destination/tier pair (e.g. shown in both the
+// homepage rail and the "all destinations" overlay in the same session)
+// only triggers one live AI call, not one per card instance.
+const flightEstimateCache = new Map();
+
+/**
+ * estimateFlightPrice
+ * Lightweight sibling of generateTrip for DestinationCard: given a single
+ * destination the traveler is just browsing (not one the AI matched), asks
+ * the backend for a live AI round-trip fare estimate so the card can show
+ * that instead of the static `totalBudget` figure baked into
+ * data/destinations.js. Throws on failure — callers decide how to fall back
+ * (DestinationCard falls back to the destination's static totalBudget).
+ *
+ * @param {object} destination - a destination object from `data/destinations.js`
+ * @param {string} [budget] - "Low" | "Medium" | "Luxury" (defaults to "Medium")
+ * @returns {Promise<{costUSD: number|null, reasoning: string}>}
+ */
+export async function estimateFlightPrice(destination, budget = "Medium") {
+  const cacheKey = `${destination?.id}:${budget}`;
+  if (flightEstimateCache.has(cacheKey)) {
+    return flightEstimateCache.get(cacheKey);
+  }
+
+  let response;
+  try {
+    response = await fetch(`${API_BASE_URL}/api/flight-estimate`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        destination: {
+          id: destination?.id,
+          name: destination?.name,
+          country: destination?.country,
+          region: destination?.region,
+          continent: destination?.continent,
+          category: destination?.category,
+          bestTime: destination?.bestTime,
+        },
+        budget,
+      }),
+    });
+  } catch (networkError) {
+    console.error("estimateFlightPrice: could not reach the AI backend.", networkError);
+    throw new Error("Couldn't reach the AI flight price service.");
+  }
+
+  if (!response.ok) {
+    console.error(`estimateFlightPrice: AI server responded ${response.status}`);
+    throw new Error(`AI flight estimate failed (server responded ${response.status}).`);
+  }
+
+  const data = await response.json();
+  const result = {
+    costUSD: Number.isFinite(Number(data.costUSD)) ? Number(data.costUSD) : null,
+    reasoning: data.reasoning || "",
+  };
+
+  // Only cache real, usable results — a null/failed estimate shouldn't get
+  // stuck for the rest of the session.
+  if (result.costUSD) {
+    flightEstimateCache.set(cacheKey, result);
+  }
+
+  return result;
+}
+
 /**
  * planItineraryForDestination
  * Same integration seam as `generateTrip`, but for a destination the

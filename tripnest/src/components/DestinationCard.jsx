@@ -15,6 +15,8 @@ import {
   CheckCircle2
 } from "lucide-react";
 import { categoryBadgeColor } from "../utils/categoryColors";
+import { currency } from "./ItineraryDrawer";
+import { estimateFlightPrice } from "../services/aiService";
 
 const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=800&q=80";
 
@@ -39,6 +41,14 @@ export default function DestinationCard({
   // Weather state
   const [liveTemp, setLiveTemp] = useState(null);
   const [isLoadingWeather, setIsLoadingWeather] = useState(false);
+
+  // AI-estimated flight price — replaces the static `totalBudget` figure
+  // baked into data/destinations.js with a live fare estimate from the
+  // backend (see services/aiService.js's estimateFlightPrice). Falls back
+  // to the static value if the AI call fails or hasn't resolved yet.
+  const [aiFlightPriceUSD, setAiFlightPriceUSD] = useState(null);
+  const [isLoadingFlightPrice, setIsLoadingFlightPrice] = useState(false);
+  const [flightPriceFailed, setFlightPriceFailed] = useState(false);
 
   // Safely fallback to single image or default placeholder
   const gallery = dest?.images && dest.images.length > 0 
@@ -78,6 +88,37 @@ export default function DestinationCard({
       isMounted = false;
     };
   }, [dest?.lat, dest?.lon, dest?.temp, dest?.name]);
+
+  // Fetch a live AI flight price estimate for this destination so the card
+  // shows a real estimate instead of the hardcoded totalBudget value.
+  useEffect(() => {
+    if (!dest?.id) return;
+
+    let isMounted = true;
+    setIsLoadingFlightPrice(true);
+    setFlightPriceFailed(false);
+
+    estimateFlightPrice(dest)
+      .then((result) => {
+        if (!isMounted) return;
+        if (result.costUSD) {
+          setAiFlightPriceUSD(result.costUSD);
+        } else {
+          setFlightPriceFailed(true);
+        }
+      })
+      .catch((err) => {
+        console.error(`Error fetching AI flight price for ${dest.name}:`, err);
+        if (isMounted) setFlightPriceFailed(true);
+      })
+      .finally(() => {
+        if (isMounted) setIsLoadingFlightPrice(false);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [dest?.id]);
 
   // Reset image carousel index on destination change
   useEffect(() => {
@@ -216,10 +257,20 @@ export default function DestinationCard({
 
         {/* Budget & Duration — plain metadata, no box-in-box container */}
         <div className="flex items-center gap-4 text-sm text-slate-500 dark:text-slate-400">
-          {dest?.totalBudget && (
+          {(aiFlightPriceUSD || isLoadingFlightPrice || dest?.totalBudget) && (
             <div className="flex items-center gap-1">
               <IndianRupee className="h-3.5 w-3.5 text-emerald-500" />
-              <span className="font-medium text-slate-700 dark:text-slate-300">₹{dest.totalBudget}</span>
+              {isLoadingFlightPrice ? (
+                <Loader2 className="h-3.5 w-3.5 animate-spin text-slate-400" />
+              ) : (
+                <span className="font-medium text-slate-700 dark:text-slate-300">
+                  {aiFlightPriceUSD
+                    ? currency(aiFlightPriceUSD)
+                    : flightPriceFailed && dest?.totalBudget
+                    ? `₹${dest.totalBudget}`
+                    : null}
+                </span>
+              )}
             </div>
           )}
           {dest?.suggestedDays && (
