@@ -10,6 +10,7 @@ import AITripPlanner from "./components/AITripPlanner";
 import { DESTINATIONS } from "./data/destinations";
 import { planItineraryForDestination } from "./services/aiService";
 import UserExperiences from "./components/UserExperiences";
+import Intro from "./components/Intro";
 import { 
   MapPin, Search, Moon, Sun, 
   Filter, Globe, Heart, Luggage, Loader2, Menu, X as CloseIcon,
@@ -26,8 +27,11 @@ const HERO_IMAGES = [
 ];
 
 export default function App() {
+  const [showIntro, setShowIntro] = useState(true);
+
   const [theme, setTheme] = useState("light");
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+
   
   // Filter States
   const [scope, setScope] = useState("All"); 
@@ -298,7 +302,15 @@ export default function App() {
   const activitiesCost = Object.values(activitiesByDay).flat().reduce((sum, activity) => sum + (activity.cost || 0), 0);
   const totalBudget = activitiesCost + travelCost;
 
-  return (
+  
+    return (
+  <>
+    {showIntro && (
+      <Intro
+        onComplete={() => setShowIntro(false)}
+      />
+    )}
+
     <div className={`min-h-screen ${theme === 'dark' ? 'bg-slate-950 text-white' : 'bg-slate-50 text-slate-900'} transition-colors duration-300 font-sans`}>
       
       {/* HEADER */}
@@ -802,6 +814,7 @@ export default function App() {
         onResetItinerary={handleResetItinerary}
       />
 
-    </div>
+        </div>
+  </>
   );
 }
