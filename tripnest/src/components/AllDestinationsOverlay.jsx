@@ -17,8 +17,6 @@ export default function AllDestinationsOverlay({
   onToggleCompare,
   onAddToItinerary,
   onOpenDetails,
-  itineraryOverrides = {},
-  aiPrices = {},
 }) {
   const [query, setQuery] = useState("");
 
@@ -86,8 +84,6 @@ export default function AllDestinationsOverlay({
                     onClose();
                     onOpenDetails(d);
                   }}
-                  itineraryOverrides={itineraryOverrides}
-                  aiPrices={aiPrices}
                 />
               ))}
             </div>

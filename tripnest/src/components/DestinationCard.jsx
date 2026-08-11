@@ -11,12 +11,10 @@ import {
   Columns2, 
   Clock, 
   IndianRupee,
-  DollarSign,
   Loader2,
   CheckCircle2
 } from "lucide-react";
 import { categoryBadgeColor } from "../utils/categoryColors";
-import { getDisplayPrice } from "../utils/priceSync";
 
 const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=800&q=80";
 
@@ -27,13 +25,7 @@ export default function DestinationCard({
   onToggleFavorite,
   isCompared,
   onToggleCompare,
-  onOpenDetails,
-  // dest id -> live itinerary total (USD) once a trip's been built for it,
-  // and dest id -> once-a-day AI-estimated total (INR) otherwise. See
-  // utils/priceSync.js for the priority order — both default to {} so this
-  // card still works fine wherever a caller hasn't wired them up yet.
-  itineraryOverrides = {},
-  aiPrices = {}
+  onOpenDetails
 }) {
   const [activeImgIndex, setActiveImgIndex] = useState(0);
   const [imgSrc, setImgSrc] = useState("");
@@ -108,8 +100,6 @@ export default function DestinationCard({
     e.stopPropagation();
     setActiveImgIndex((prev) => (prev - 1 + gallery.length) % gallery.length);
   };
-
-  const priceInfo = getDisplayPrice(dest, { itineraryOverrides, aiPrices });
 
   const badgeClass = typeof categoryBadgeColor === "function" 
     ? categoryBadgeColor(dest?.category) 
@@ -226,27 +216,10 @@ export default function DestinationCard({
 
         {/* Budget & Duration — plain metadata, no box-in-box container */}
         <div className="flex items-center gap-4 text-sm text-slate-500 dark:text-slate-400">
-          {priceInfo && priceInfo.amount > 0 && (
-            <div
-              className="flex items-center gap-1"
-              title={
-                priceInfo.source === "itinerary"
-                  ? "Synced with your itinerary for this trip"
-                  : priceInfo.source === "ai"
-                  ? "AI-estimated today"
-                  : undefined
-              }
-            >
-              {priceInfo.currency === "USD" ? (
-                <DollarSign className="h-3.5 w-3.5 text-emerald-500" />
-              ) : (
-                <IndianRupee className="h-3.5 w-3.5 text-emerald-500" />
-              )}
-              <span className="font-medium text-slate-700 dark:text-slate-300">
-                {priceInfo.currency === "USD"
-                  ? `$${priceInfo.amount.toLocaleString("en-US")}`
-                  : `₹${priceInfo.amount.toLocaleString("en-IN")}`}
-              </span>
+          {dest?.totalBudget && (
+            <div className="flex items-center gap-1">
+              <IndianRupee className="h-3.5 w-3.5 text-emerald-500" />
+              <span className="font-medium text-slate-700 dark:text-slate-300">₹{dest.totalBudget}</span>
             </div>
           )}
           {dest?.suggestedDays && (
