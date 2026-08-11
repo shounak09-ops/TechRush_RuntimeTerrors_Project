@@ -32,9 +32,6 @@ export default function App() {
 
   // Modal & Persistence States
   const [selectedModalDest, setSelectedModalDest] = useState(null);
-
-  // Book Now flow — separate from the details modal so booking can be
-  // triggered straight from the destination modal's "Book Now" button.
   const [bookingDest, setBookingDest] = useState(null);
 
   // Live Map Overlay State
@@ -50,7 +47,7 @@ export default function App() {
   // Active Destination State (Destination Lock System)
   const [activeDestination, setActiveDestination] = useState(null);
 
-  // Itinerary Drawer State ("My Itinerary" — separate from the AI Companion)
+  // Itinerary Drawer State
   const [itineraryDrawerOpen, setItineraryDrawerOpen] = useState(false);
   const [itineraryLoading, setItineraryLoading] = useState(false);
 
@@ -60,15 +57,9 @@ export default function App() {
   const [activitiesByDay, setActivitiesByDay] = useState(() => {
     return JSON.parse(localStorage.getItem("tripnest_activities") || "{}");
   });
-  // Number of days in the active itinerary — separate from a destination's
-  // suggestedDays so the traveler can add/remove days freely.
   const [dayCount, setDayCount] = useState(() => {
     return Number(localStorage.getItem("tripnest_daycount")) || 0;
   });
-  // One-time "getting there" cost (flights/travel from India, domestic or
-  // international depending on the destination) — kept separate from the
-  // per-day activitiesByDay costs so it can be shown as its own line in the
-  // itinerary instead of being folded into a specific day.
   const [travelCost, setTravelCost] = useState(() => {
     return Number(localStorage.getItem("tripnest_travelcost")) || 0;
   });
@@ -135,10 +126,6 @@ export default function App() {
 
   const comparedObjects = DESTINATIONS.filter(item => compared.includes(item.id));
 
-  // Home view shows only the trending picks until a filter is actually
-  // applied — matched the same way search already matches (name/country/
-  // region/continent), so "Switzerland" correctly picks up the Interlaken
-  // entry via its country field rather than needing an exact name match.
   const trendingDestinations = DESTINATIONS.filter((item) =>
     TRENDING_SEARCHES.some((term) => {
       const t = term.toLowerCase();
@@ -151,8 +138,6 @@ export default function App() {
     })
   );
 
-  // All-India and All-Foreign rows shown below Trending on the home view —
-  // same India/International split the Scope filter already uses.
   const indianDestinations = DESTINATIONS.filter((item) => item.country === "India");
   const foreignDestinations = DESTINATIONS.filter((item) => item.country !== "India");
 
@@ -169,10 +154,6 @@ export default function App() {
     ? "trending"
     : `${scope}-${activeCategory}-${selectedRegion}-${selectedContinent}-${showOnlyFavorites}-${searchQuery}`;
 
-  // Applies a fully-generated trip payload (same shape produced by both the
-  // AI Trip Companion and the manual "My Itinerary" generator) to the
-  // shared itinerary state, so the drawer always shows a fully locked,
-  // day-by-day plan no matter which flow produced it.
   const applyGeneratedTrip = (trip) => {
     setActiveDestination(trip.destination);
     setDayCount(trip.dayWiseItinerary.length || trip.destination.suggestedDays || 1);
@@ -189,17 +170,9 @@ export default function App() {
       }));
     });
     setActivitiesByDay(byDay);
-    // One-time getting-there cost (flights/travel from India) — kept out of
-    // the day-wise activities and tracked on its own so it shows as a
-    // distinct line in the itinerary instead of being lost or blended in.
     setTravelCost(trip.budgetBreakdown?.flightsOrTravel || 0);
   };
 
-  // Destination Lock System Handler — used when a destination is picked
-  // manually (destination cards, the compare drawer, the detail modal, or
-  // an "alternate" suggestion). Generates the same kind of day-wise plan +
-  // packing checklist the AI Companion builds, just for the exact
-  // destination the person chose, instead of a single placeholder entry.
   const handleAddToItinerary = async (destination, formData) => {
     setActiveDestination(destination);
     setItineraryDrawerOpen(true);
@@ -209,7 +182,6 @@ export default function App() {
       applyGeneratedTrip(trip);
     } catch (err) {
       console.error(err);
-      // Fall back to a minimal single entry so the drawer is never empty
       setDayCount(1);
       setTravelCost(0);
       setActivitiesByDay(prev => ({
@@ -228,16 +200,11 @@ export default function App() {
     }
   };
 
-  // Called when a trip is locked from inside the AI Trip Companion. The
-  // Companion already generated the full trip (respecting the traveler's
-  // chosen days/budget/mood), so it's applied directly instead of being
-  // regenerated with defaults.
   const handleLockTrip = (trip) => {
     applyGeneratedTrip(trip);
     setItineraryDrawerOpen(true);
   };
 
-  // Compare Drawer Handler
   const handleChooseDestination = (destination) => {
     handleAddToItinerary(destination);
     setIsCompareOpen(false);
@@ -248,7 +215,6 @@ export default function App() {
       const isAdding = !prev.includes(id);
       const newCompared = isAdding ? [...prev, id] : prev.filter(compId => compId !== id);
       
-      // Open compare drawer when items are added
       if (isAdding) {
         setIsCompareOpen(true);
       }
@@ -270,8 +236,8 @@ export default function App() {
     setActivitiesByDay(prev => {
       const next = {};
       Object.keys(prev).map(Number).sort((a, b) => a - b).forEach((d) => {
-        if (d === day) return; // drop this day
-        next[d > day ? d - 1 : d] = prev[d]; // shift later days down by one
+        if (d === day) return;
+        next[d > day ? d - 1 : d] = prev[d];
       });
       return next;
     });
@@ -322,14 +288,13 @@ export default function App() {
     localStorage.removeItem("tripnest_travelcost");
   };
 
-  // Total = day-wise activity costs + the separate one-time travel cost.
   const activitiesCost = Object.values(activitiesByDay).flat().reduce((sum, activity) => sum + (activity.cost || 0), 0);
   const totalBudget = activitiesCost + travelCost;
 
   return (
     <div className={`min-h-screen ${theme === 'dark' ? 'bg-slate-950 text-white' : 'bg-slate-50 text-slate-900'} transition-colors duration-300 font-sans`}>
       
-      {/* HEADER — logo left, quiet text links, one obvious CTA on the right */}
+      {/* HEADER */}
       <header className="sticky top-0 z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200/70 dark:border-slate-800/70">
         <div className="max-w-6xl mx-auto px-6 sm:px-8 py-5 flex items-center justify-between gap-4">
           <a href="#" className="flex items-center gap-2.5 shrink-0">
@@ -341,13 +306,13 @@ export default function App() {
             </span>
           </a>
 
-          {/* Key links — plain text, underline-on-hover, never boxed like buttons */}
+          {/* Navigation Links */}
           <nav className="hidden md:flex items-center gap-9 font-semibold text-sm text-slate-600 dark:text-slate-300">
             <a href="#explore" className="group relative py-1">
               Destinations
               <span className="absolute inset-x-0 -bottom-0.5 h-0.5 bg-emerald-500 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300" />
             </a>
-            <a href="#highlights" className="group relative py-1">
+            <a href="#experiences" className="group relative py-1">
               Experiences
               <span className="absolute inset-x-0 -bottom-0.5 h-0.5 bg-emerald-500 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300" />
             </a>
@@ -358,7 +323,6 @@ export default function App() {
           </nav>
 
           <div className="flex items-center gap-1 shrink-0">
-            {/* Mobile nav toggle */}
             <button
               onClick={() => setMobileNavOpen((v) => !v)}
               className="md:hidden p-2 rounded-full text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
@@ -367,8 +331,6 @@ export default function App() {
               {mobileNavOpen ? <CloseIcon className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
 
-            {/* My Itinerary — quiet icon, not a competing button. A small dot
-                signals an active trip instead of a heavy pill/label. */}
             <button
               onClick={() => setItineraryDrawerOpen(true)}
               className="hidden sm:flex relative p-2.5 rounded-full text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
@@ -393,7 +355,6 @@ export default function App() {
               {theme === "dark" ? <Sun key="sun" className="h-5 w-5 tn-pop-in" /> : <Moon key="moon" className="h-5 w-5 tn-pop-in" />}
             </button>
 
-            {/* The one obvious CTA */}
             <button
               onClick={() => setAiPlannerOpen(true)}
               className="ml-1 flex items-center gap-2 pl-4 pr-5 py-2.5 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-semibold text-sm shadow-md shadow-emerald-500/25 hover:shadow-lg hover:shadow-emerald-500/35 hover:scale-[1.03] active:scale-95 transition-all"
@@ -415,7 +376,7 @@ export default function App() {
               Destinations
             </a>
             <a
-              href="#highlights"
+              href="#experiences"
               onClick={() => setMobileNavOpen(false)}
               className="px-3 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-emerald-500 transition-colors"
             >
@@ -507,7 +468,7 @@ export default function App() {
               </form>
             </div>
 
-            {/* Trending destination chips — each pinned like a spot on a map */}
+            {/* Trending destination chips */}
             <div className="tn-animate-in flex flex-wrap items-center gap-2 pt-1" style={{ animationDelay: "360ms" }}>
               <span className="text-xs font-bold text-slate-500 dark:text-slate-400">Trending Searches:</span>
               {TRENDING_SEARCHES.map((term) => (
@@ -532,9 +493,6 @@ export default function App() {
             </div>
           </div>
 
-          {/* Signature travel motif — a dotted flight route between two pins,
-              standing in for the old promo card without turning the hero
-              into another box. */}
           <div
             className="tn-animate-in hidden lg:flex flex-col items-end absolute bottom-12 right-10 pointer-events-none"
             style={{ animationDelay: "450ms" }}
@@ -557,13 +515,12 @@ export default function App() {
         </div>
       </section>
 
-      {/* FEATURE HIGHLIGHTS BAR — overlaps the hero's bottom edge */}
+      {/* FEATURE HIGHLIGHTS BAR */}
       <div id="highlights" className="max-w-6xl mx-auto px-6 sm:px-8 -mt-14 relative z-10 scroll-mt-24">
         <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-xl p-6 sm:p-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
           {[
             { icon: Luggage, color: "text-emerald-600 bg-slate-100 dark:bg-slate-800", title: "AI Trip Planner", desc: "Get a personalized itinerary in seconds", action: () => setAiPlannerOpen(true) },
             { icon: Wallet, color: "text-emerald-600 bg-slate-100 dark:bg-slate-800", title: "Smart Budgeting", desc: "Plan your trip within your budget", action: () => setItineraryDrawerOpen(true) },
-           
             { icon: CloudSun, color: "text-emerald-600 bg-slate-100 dark:bg-slate-800", title: "Real-time Updates", desc: "Live weather, alerts & travel updates", action: () => setIsMapOpen(true) },
           ].map(({ icon: Icon, color, title, desc, action }) => (
             <button
@@ -664,17 +621,11 @@ export default function App() {
                   Favorites ({favorites.length})
                 </button>
               </div>
-
-              
             </div>
 
           </div>
 
-          {/* Destination rails — on the default (unfiltered) view this is
-              three stacked rows: Trending, then All Indian, then All
-              Foreign. Once any filter/search is applied, it collapses
-              back down to a single rail of the live filter results
-              (app-drawer style), or an empty state when nothing matches. */}
+          {/* Destination rails */}
           {isDefaultView ? (
             <div className="space-y-10">
               <DestinationRail
@@ -746,7 +697,12 @@ export default function App() {
 
       </main>
 
-      {/* ALL DESTINATIONS OVERLAY — opened via "View All" */}
+      {/* USER EXPERIENCES SECTION */}
+      <section id="experiences" className="scroll-mt-24 min-h-screen bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100">
+        <UserExperiences />
+      </section>
+
+      {/* ALL DESTINATIONS OVERLAY */}
       <AllDestinationsOverlay
         open={allDestinationsOpen}
         onClose={() => setAllDestinationsOpen(false)}
@@ -783,14 +739,7 @@ export default function App() {
         onToggleCompare={handleToggleCompare}
         onOpenDetails={(d) => setSelectedModalDest(d)}
       />
-      <div className="min-h-screen bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100">
-      {/* Existing Navbar, Main Content, Modals, etc. */}
-      
-      {/* 2. Add the User Experiences Section here */}
-      <UserExperiences />
 
-      {/* Existing Footer (if any) */}
-    </div>
       {/* DETAIL MODAL */}
       <DestinationModal
         dest={selectedModalDest}
@@ -799,7 +748,7 @@ export default function App() {
         onBookNow={(d) => setBookingDest(d)}
       />
 
-      {/* BOOK NOW MODAL — frontend-only booking flow (no backend) */}
+      {/* BOOK NOW MODAL */}
       <BookingModal
         dest={bookingDest}
         open={!!bookingDest}
@@ -818,8 +767,7 @@ export default function App() {
         />
       )}
 
-      {/* ITINERARY DRAWER — "My Itinerary": itinerary tab + packing checklist,
-          shared by both the manual selection flow and the AI Companion lock */}
+      {/* ITINERARY DRAWER */}
       <ItineraryDrawer
         open={itineraryDrawerOpen}
         onClose={() => setItineraryDrawerOpen(false)}
