@@ -355,17 +355,7 @@ export default function DestinationModal({
                 <Plus className="h-4 w-4" />
                 Add to Itinerary
               </button>
-
-              <button
-                onClick={() => {
-                  onBookNow(dest);
-                  onClose();
-                }}
-                className="px-5 py-2.5 rounded-none bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs flex items-center gap-2 shadow-md transition-colors"
-              >
-                <Ticket className="h-4 w-4" />
-                Book Now
-              </button>
+              
             </div>
           </div>
 
