@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600..800&family=Inter:wght@400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Source+Sans+3:wght@400;500;600;700;800&display=swap");
 @import "tailwindcss";
 
 /* Tailwind v4 ignores tailwind.config.js's `darkMode: 'class'` unless the
@@ -10,12 +10,12 @@
    (see App.jsx) instead of the system setting. */
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* Fraunces carries the "voice" of the app — place names and the two big
-   marketing headlines. Everything else (UI chrome, buttons, labels) stays
-   on the default sans stack so functional text reads cleanly. */
+/* Playfair Display carries the "voice" of the app — place names and the
+   two big marketing headlines. Source Sans 3 handles everything else (UI
+   chrome, buttons, labels) so functional text reads cleanly. */
 @theme {
-  --font-display: "Fraunces", ui-serif, Georgia, serif;
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Playfair Display", ui-serif, Georgia, serif;
+  --font-sans: "Source Sans 3", ui-sans-serif, system-ui, sans-serif;
 }
 
 /* ---------------------------------------------------------------------
