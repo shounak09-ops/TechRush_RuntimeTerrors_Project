@@ -23,7 +23,12 @@ import { GoogleGenerativeAI, SchemaType } from "@google/generative-ai";
 import "dotenv/config";
 
 const app = express();
-app.use(cors());
+
+// 1. CORS middleware MUST be before routes
+app.use(cors({
+    origin: 'https://tripnest-rtt5.vercel.app' // Make sure there is no trailing slash
+}));
+
 app.use(express.json());
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
@@ -184,6 +189,7 @@ app.post("/api/generate-trip", async (req, res) => {
     `noticeably different fares if their distance/region differs.\n\n` +
 
     `Available destinations:\n${JSON.stringify(destinations)}`;
+    
     const result = await model.generateContent(prompt);
     const plan = JSON.parse(result.response.text());
 
@@ -302,5 +308,13 @@ app.post("/api/flight-estimate", async (req, res) => {
 
 app.get("/api/health", (_req, res) => res.json({ ok: true }));
 
-const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => console.log(`TripNest AI server listening on :${PORT}`));
+// Only run the server locally. Vercel will handle the routing in production.
+if (process.env.NODE_ENV !== 'production') {
+    const PORT = process.env.PORT || 3001;
+    app.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
+    });
+}
+
+// Export the app for Vercel using ES Modules
+export default app;
