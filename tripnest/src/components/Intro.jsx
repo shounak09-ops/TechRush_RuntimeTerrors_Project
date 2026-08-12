@@ -51,11 +51,11 @@ const Intro = ({ onComplete }) => {
       <div className="route-dot origin"></div>
       <div className="route-dot dest"></div>
 
-      {/* PLANE */}
+      {/* PLANE (Flipped to point forward along the trajectory) */}
       <div className="plane-wrap">
         <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-          <path d="M4 34 L58 8 L38 34 L58 58 Z" fill="#ffffff" />
-          <path d="M38 34 L18 40 L4 34 Z" fill="#10b981" />
+          <path d="M60 34 L6 8 L26 34 L6 58 Z" fill="#ffffff" />
+          <path d="M26 34 L46 40 L60 34 Z" fill="#10b981" />
         </svg>
       </div>
 
