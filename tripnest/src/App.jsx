@@ -333,11 +333,14 @@ export default function App() {
 
     <div className={`tn-editorial min-h-screen ${theme === 'dark' ? 'bg-slate-950 text-white' : 'bg-slate-50 text-slate-900'} transition-colors duration-300 font-sans`}>
       
-      {/* HEADER */}
-      <header className="sticky top-0 z-40 bg-slate-50 dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800">
-        <div className="max-w-6xl mx-auto px-6 sm:px-8 py-5 flex items-center justify-between gap-4">
-          <a href="#" className="flex items-center gap-2.5 shrink-0">
-            <span className="p-2.5 bg-emerald-500 text-white">
+      {/* HEADER — styled as a boarding-pass stub: it sits one shade off the
+          page background and its bottom edge is punched with a row of
+          page-colored notches (.tn-ticket-edge), so the whole app reads as
+          "you're holding a ticket" from the very first pixel. */}
+      <header className="tn-ticket-edge sticky top-0 z-40 bg-slate-100 dark:bg-slate-900">
+        <div className="max-w-6xl mx-auto px-6 sm:px-8 py-4 flex items-center justify-between gap-4">
+          <a href="#" className="group flex items-center gap-2.5 shrink-0">
+            <span className="p-2.5 bg-emerald-500 text-white transition-transform duration-300 group-hover:-rotate-6">
               <MapPin className="h-5 w-5" />
             </span>
             <span className="text-xl sm:text-2xl font-bold tracking-tight">
@@ -345,60 +348,77 @@ export default function App() {
             </span>
           </a>
 
-          {/* Navigation Links */}
-          <nav className="hidden md:flex items-center gap-9 font-semibold text-sm text-slate-600 dark:text-slate-300">
-            <a href="#explore" className="group relative py-1">
-              Destinations
-              <span className="absolute inset-x-0 -bottom-0.5 h-0.5 bg-emerald-500 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300" />
-            </a>
-            <a href="#experiences" className="group relative py-1">
-              Experiences
-              <span className="absolute inset-x-0 -bottom-0.5 h-0.5 bg-emerald-500 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300" />
-            </a>
-            <button onClick={() => setIsMapOpen(true)} className="group relative py-1">
-              Live Map
-              <span className="absolute inset-x-0 -bottom-0.5 h-0.5 bg-emerald-500 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300" />
-            </button>
-          </nav>
+          {/* Perforation stub + nav tabs, grouped so justify-between still
+              only sees three top-level items (logo / tabs / actions). */}
+          <div className="hidden md:flex items-center gap-6 flex-1 min-w-0 px-2">
+            <div className="h-8 w-px shrink-0 border-l border-dashed border-slate-400/60 dark:border-slate-600/60" />
+            <nav className="flex items-center gap-1 font-semibold text-sm text-slate-600 dark:text-slate-300">
+              <a
+                href="#explore"
+                className="flex items-center gap-1.5 px-4 py-2 rounded-full transition-colors hover:bg-emerald-500/10 hover:text-emerald-600 dark:hover:text-emerald-400"
+              >
+                <Compass className="h-4 w-4" />
+                Destinations
+              </a>
+              <a
+                href="#experiences"
+                className="flex items-center gap-1.5 px-4 py-2 rounded-full transition-colors hover:bg-emerald-500/10 hover:text-emerald-600 dark:hover:text-emerald-400"
+              >
+                <Sparkles className="h-4 w-4" />
+                Experiences
+              </a>
+              <button
+                onClick={() => setIsMapOpen(true)}
+                className="flex items-center gap-1.5 px-4 py-2 rounded-full transition-colors hover:bg-emerald-500/10 hover:text-emerald-600 dark:hover:text-emerald-400"
+              >
+                <Globe className="h-4 w-4" />
+                Live Map
+              </button>
+            </nav>
+          </div>
 
-          <div className="flex items-center gap-1 shrink-0">
+          <div className="flex items-center gap-2 shrink-0">
             <button
               onClick={() => setMobileNavOpen((v) => !v)}
-              className="md:hidden p-2 rounded-full text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              className="md:hidden p-2 rounded-full text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors"
               aria-label="Toggle navigation menu"
             >
               {mobileNavOpen ? <CloseIcon className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
 
-            <button
-              onClick={() => setItineraryDrawerOpen(true)}
-              className="hidden sm:flex relative p-2.5 rounded-full text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-              aria-label="My itinerary"
-              title="My Itinerary"
-            >
-              {itineraryLoading ? (
-                <Loader2 className="h-5 w-5 animate-spin" />
-              ) : (
-                <Luggage className="h-5 w-5" />
-              )}
-              {activeDestination && (
-                <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-slate-900" />
-              )}
-            </button>
+            {/* Utility dock — itinerary + theme grouped inside one pill so
+                they read as a set of "traveler tools" rather than loose icons. */}
+            <div className="hidden sm:flex items-center gap-0.5 rounded-full border border-slate-300/70 dark:border-slate-700/70 p-1">
+              <button
+                onClick={() => setItineraryDrawerOpen(true)}
+                className="relative p-2 rounded-full text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors"
+                aria-label="My itinerary"
+                title="My Itinerary"
+              >
+                {itineraryLoading ? (
+                  <Loader2 className="h-5 w-5 animate-spin" />
+                ) : (
+                  <Luggage className="h-5 w-5" />
+                )}
+                {activeDestination && (
+                  <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-emerald-500 ring-2 ring-slate-100 dark:ring-slate-900" />
+                )}
+              </button>
 
-            <button
-              onClick={toggleTheme}
-              className="p-2.5 rounded-full text-slate-600 dark:text-amber-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors active:scale-90"
-              aria-label="Toggle theme"
-            >
-              {theme === "dark" ? <Sun key="sun" className="h-5 w-5 tn-pop-in" /> : <Moon key="moon" className="h-5 w-5 tn-pop-in" />}
-            </button>
+              <button
+                onClick={toggleTheme}
+                className="p-2 rounded-full text-slate-600 dark:text-amber-400 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors active:scale-90"
+                aria-label="Toggle theme"
+              >
+                {theme === "dark" ? <Sun key="sun" className="h-5 w-5 tn-pop-in" /> : <Moon key="moon" className="h-5 w-5 tn-pop-in" />}
+              </button>
+            </div>
 
             <button
               onClick={() => setAiPlannerOpen(true)}
-              className="ml-1 flex items-center gap-2 px-4 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold text-sm active:translate-y-px transition-colors"
+              className="tn-shine group relative flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-semibold text-sm active:translate-y-px transition-colors"
             >
-              <Plane className="h-4 w-4 -rotate-45" />
+              <Plane className="h-4 w-4 -rotate-45 transition-transform duration-300 group-hover:translate-x-1" />
               <span className="hidden sm:inline">Plan with AI</span>
             </button>
           </div>
@@ -406,36 +426,36 @@ export default function App() {
 
         {/* Mobile nav panel */}
         {mobileNavOpen && (
-          <nav className="tn-nav-in md:hidden border-t border-slate-200/70 dark:border-slate-800/70 bg-slate-50 dark:bg-slate-900 px-4 py-3 flex flex-col gap-1 font-semibold text-sm text-slate-600 dark:text-slate-300">
+          <nav className="tn-nav-in md:hidden border-t border-dashed border-slate-400/60 dark:border-slate-600/60 bg-slate-100 dark:bg-slate-900 px-4 py-3 flex flex-col gap-1 font-semibold text-sm text-slate-600 dark:text-slate-300">
             <a
               href="#explore"
               onClick={() => setMobileNavOpen(false)}
-              className="px-3 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-emerald-500 transition-colors"
+              className="flex items-center gap-2 px-3 py-2.5 rounded-xl hover:bg-slate-200 dark:hover:bg-slate-800 hover:text-emerald-500 transition-colors"
             >
-              Destinations
+              <Compass className="h-4 w-4" /> Destinations
             </a>
             <a
               href="#experiences"
               onClick={() => setMobileNavOpen(false)}
-              className="px-3 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-emerald-500 transition-colors"
+              className="flex items-center gap-2 px-3 py-2.5 rounded-xl hover:bg-slate-200 dark:hover:bg-slate-800 hover:text-emerald-500 transition-colors"
             >
-              Experiences
+              <Sparkles className="h-4 w-4" /> Experiences
             </a>
             <button
               onClick={() => {
                 setIsMapOpen(true);
                 setMobileNavOpen(false);
               }}
-              className="text-left px-3 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-emerald-500 transition-colors"
+              className="text-left flex items-center gap-2 px-3 py-2.5 rounded-xl hover:bg-slate-200 dark:hover:bg-slate-800 hover:text-emerald-500 transition-colors"
             >
-              Live Map
+              <Globe className="h-4 w-4" /> Live Map
             </button>
             <button
               onClick={() => {
                 setItineraryDrawerOpen(true);
                 setMobileNavOpen(false);
               }}
-              className="text-left px-3 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-emerald-500 transition-colors flex items-center gap-2"
+              className="text-left px-3 py-2.5 rounded-xl hover:bg-slate-200 dark:hover:bg-slate-800 hover:text-emerald-500 transition-colors flex items-center gap-2"
             >
               <Luggage className="h-4 w-4" /> My Itinerary
             </button>
@@ -558,34 +578,44 @@ export default function App() {
         </div>
       </section>
 
-      {/* FEATURE HIGHLIGHTS BAR */}
-      <div id="highlights" className="max-w-6xl mx-auto px-6 sm:px-8 -mt-14 relative z-10 scroll-mt-24">
-        <div className="bg-white dark:bg-slate-900 border-y border-slate-200 dark:border-slate-800 p-6 sm:p-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {[
-            { icon: Luggage, color: "text-emerald-600 bg-slate-100 dark:bg-slate-800", title: "AI Trip Planner", desc: "Get a personalized itinerary in seconds", action: () => setAiPlannerOpen(true) },
-            { icon: Wallet, color: "text-emerald-600 bg-slate-100 dark:bg-slate-800", title: "Smart Budgeting", desc: "Plan your trip within your budget", action: () => setItineraryDrawerOpen(true) },
-            { icon: CloudSun, color: "text-emerald-600 bg-slate-100 dark:bg-slate-800", title: "Real-time Updates", desc: "Live weather, alerts & travel updates", action: () => setIsMapOpen(true) },
-          ].map(({ icon: Icon, color, title, desc, action }) => (
-            <button
-              key={title}
-              onClick={action}
-              className="group flex items-start gap-3 p-2 border-l-2 border-transparent hover:border-emerald-500 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors text-left"
-            >
-              <span className={`p-2.5 rounded-xl shrink-0 ${color}`}>
-                <Icon className="h-5 w-5" />
-              </span>
-              <span className="flex-1 min-w-0">
-                <span className="flex items-center justify-between gap-1">
-                  <span className="font-bold text-sm text-slate-900 dark:text-white">{title}</span>
-                  <ArrowRight className="h-3.5 w-3.5 text-slate-300 dark:text-slate-600 group-hover:text-emerald-500 group-hover:translate-x-0.5 transition-all shrink-0" />
-                </span>
-                <span className="block text-xs text-slate-500 dark:text-slate-400 mt-0.5">{desc}</span>
-              </span>
-            </button>
-          ))}
-        </div>
-      </div>
-
+     {/* FEATURE HIGHLIGHTS BAR */}
+<div id="highlights" className="max-w-3xl mx-auto px-4 sm:px-6 -mt-10 relative z-10 scroll-mt-24">
+  <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-200/80 dark:border-slate-800 p-2 sm:p-3 grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
+    {[
+      { 
+        icon: Luggage, 
+        color: "text-emerald-600 bg-emerald-50 dark:bg-emerald-950/50 dark:text-emerald-400", 
+        title: "AI Trip Planner", 
+        desc: "Get a personalized itinerary in seconds", 
+        action: () => setAiPlannerOpen(true) 
+      },
+      { 
+        icon: CloudSun, 
+        color: "text-amber-600 bg-amber-50 dark:bg-amber-950/50 dark:text-amber-400", 
+        title: "Real-time Updates", 
+        desc: "Live weather, alerts & travel updates", 
+        action: () => setIsMapOpen(true) 
+      },
+    ].map(({ icon: Icon, color, title, desc, action }) => (
+      <button
+        key={title}
+        onClick={action}
+        className="group flex items-center gap-3.5 p-3.5 sm:p-4 rounded-xl border border-slate-100 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-800/40 hover:bg-slate-100/80 dark:hover:bg-slate-800 hover:border-slate-200 dark:hover:border-slate-700 transition-all duration-200 text-left w-full"
+      >
+        <span className={`p-3 rounded-xl shrink-0 transition-transform group-hover:scale-105 ${color}`}>
+          <Icon className="h-5 w-5 sm:h-6 sm:w-6" />
+        </span>
+        <span className="flex-1 min-w-0">
+          <span className="flex items-center justify-between gap-2">
+            <span className="font-semibold text-sm sm:text-base text-slate-900 dark:text-white truncate">{title}</span>
+            <ArrowRight className="h-4 w-4 text-slate-400 dark:text-slate-500 group-hover:text-emerald-500 group-hover:translate-x-1 transition-all shrink-0" />
+          </span>
+          <span className="block text-xs text-slate-500 dark:text-slate-400 mt-0.5">{desc}</span>
+        </span>
+      </button>
+    ))}
+  </div>
+</div>
       {/* MAIN CONTAINER */}
       <main className="max-w-6xl mx-auto px-6 sm:px-8 pt-16 pb-24 space-y-16">
 

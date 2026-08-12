@@ -1,22 +1,43 @@
-/* Leaflet marker — sky-500 to match the site's brand accent */
+/* Color Palette System */
+:root {
+  --color-terracotta: #c85a3c;
+  --color-terracotta-hover: #b24a26;
+  --color-terracotta-light: #fdf4f0;
+  --color-terracotta-border: #fbe8e0;
+  --color-terracotta-shadow: rgba(200, 90, 60, 0.3);
+  
+  --color-ink: #1c1917;
+  --color-ink-muted: #78716c;
+  --color-ink-light: #a8a29e;
+  
+  --color-sand: #faf7f2;
+  --color-sand-muted: #f3eee5;
+  --color-sand-hover: #ebe5da;
+  --color-sand-border: #e7e0d6;
+  --color-sand-shadow: rgba(28, 25, 23, 0.12);
+}
+
+/* Leaflet marker — Terracotta pin */
 .dest-marker {
-  background: #0ea5e9;
+  background: var(--color-terracotta);
   width: 16px;
   height: 16px;
   border-radius: 50% 50% 50% 0;
   transform: rotate(-45deg);
   border: 2px solid #fff;
-  box-shadow: 0 2px 8px rgba(14, 165, 233, 0.45);
+  box-shadow: 0 2px 8px var(--color-terracotta-shadow);
 }
 
-/* Popup styling — rounded-2xl card, matching DestinationCard's visual language */
+/* Popup styling — Sand card visual language */
 .leaflet-popup-content-wrapper {
   border-radius: 20px;
-  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.18);
+  box-shadow: 0 12px 32px var(--color-sand-shadow);
   padding: 2px;
+  background: #fff;
 }
 .leaflet-popup-tip {
-  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.1);
+  box-shadow: 0 4px 10px rgba(28, 25, 23, 0.08);
+  background: #fff;
 }
 .popup-card {
   text-align: center;
@@ -33,13 +54,13 @@
 .popup-card h3 {
   font-size: 15px;
   font-weight: 800;
-  color: #0f172a;
+  color: var(--color-ink);
   margin-bottom: 4px;
   letter-spacing: -0.01em;
 }
 .popup-card p {
   font-size: 12px;
-  color: #64748b;
+  color: var(--color-ink-muted);
   margin-bottom: 10px;
   line-height: 1.4;
 }
@@ -49,8 +70,8 @@
   gap: 4px;
   font-size: 12px;
   font-weight: 700;
-  color: #0f172a;
-  background: #f1f5f9;
+  color: var(--color-ink);
+  background: var(--color-sand-muted);
   border-radius: 999px;
   padding: 5px 12px;
   margin: 0 0 10px;
@@ -61,11 +82,11 @@
 }
 .popup-weather-loading,
 .popup-weather-error {
-  color: #94a3b8;
+  color: var(--color-ink-light);
   font-weight: 600;
 }
 .popup-card button {
-  background: linear-gradient(to right, #0ea5e9, #10b981);
+  background: linear-gradient(135deg, #d96b43, var(--color-terracotta));
   color: #fff;
   border: none;
   padding: 8px 14px;
@@ -76,19 +97,19 @@
   width: 100%;
   margin-top: 6px;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
-  box-shadow: 0 4px 10px rgba(14, 165, 233, 0.25);
+  box-shadow: 0 4px 10px var(--color-terracotta-shadow);
 }
 .popup-card button:hover {
   transform: scale(1.03);
-  box-shadow: 0 6px 14px rgba(14, 165, 233, 0.35);
+  box-shadow: 0 6px 14px rgba(200, 90, 60, 0.4);
 }
 .popup-card button.secondary {
-  background: #f1f5f9;
-  color: #0f172a;
+  background: var(--color-sand-muted);
+  color: var(--color-ink);
   box-shadow: none;
 }
 .popup-card button.secondary:hover {
-  background: #e2e8f0;
+  background: var(--color-sand-hover);
   transform: scale(1.03);
   box-shadow: none;
 }
@@ -98,7 +119,7 @@
   transform: none;
 }
 
-/* Top control panel — pill container matching the site's search bar / header chips */
+/* Top control panel — Sand pill container */
 .tn-map-controls {
   position: absolute;
   top: 66px;
@@ -106,9 +127,9 @@
   transform: translateX(-50%);
   z-index: 1000;
   background: #fff;
-  border: 1px solid #f1f5f9;
+  border: 1px solid var(--color-sand-border);
   border-radius: 999px;
-  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.12);
+  box-shadow: 0 4px 16px var(--color-sand-shadow);
   padding: 6px 8px 6px 16px;
   display: flex;
   gap: 8px;
@@ -124,13 +145,13 @@
   border-radius: 999px;
   border: none;
   cursor: pointer;
-  background: #f0f9ff;
-  color: #0369a1;
+  background: var(--color-terracotta-light);
+  color: var(--color-terracotta);
   white-space: nowrap;
   transition: background 0.15s ease, transform 0.15s ease;
 }
 .tn-locate-btn:hover {
-  background: #e0f2fe;
+  background: var(--color-terracotta-border);
   transform: scale(1.03);
 }
 
@@ -144,11 +165,11 @@
   outline: none;
   width: 190px;
   background: transparent;
-  color: #0f172a;
+  color: var(--color-ink);
   font-family: inherit;
 }
 .tn-search-input::placeholder {
-  color: #94a3b8;
+  color: var(--color-ink-light);
 }
 .tn-search-results {
   position: absolute;
@@ -157,12 +178,13 @@
   width: 230px;
   background: #fff;
   border-radius: 16px;
-  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.16);
+  box-shadow: 0 12px 28px var(--color-sand-shadow);
   max-height: 220px;
   overflow-y: auto;
   display: none;
   z-index: 1001;
   padding: 6px;
+  border: 1px solid var(--color-sand-border);
 }
 .tn-search-results div {
   padding: 9px 12px;
@@ -171,20 +193,20 @@
   cursor: pointer;
   text-align: left;
   border-radius: 12px;
-  color: #1e293b;
+  color: var(--color-ink);
 }
 .tn-search-results div:hover {
-  background: #f0f9ff;
-  color: #0369a1;
+  background: var(--color-terracotta-light);
+  color: var(--color-terracotta);
 }
 .tn-search-results .no-match {
-  color: #94a3b8;
+  color: var(--color-ink-light);
   font-weight: 500;
   cursor: default;
 }
 .tn-search-results .no-match:hover {
   background: transparent;
-  color: #94a3b8;
+  color: var(--color-ink-light);
 }
 
 .tn-clear-route-btn {
@@ -194,19 +216,19 @@
   right: 12px;
   z-index: 1000;
   background: #fff;
-  border: 1px solid #f1f5f9;
+  border: 1px solid var(--color-sand-border);
   border-radius: 999px;
   padding: 8px 16px;
   font-size: 13px;
   font-weight: 700;
-  color: #334155;
+  color: var(--color-ink);
   cursor: pointer;
-  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.12);
+  box-shadow: 0 4px 16px var(--color-sand-shadow);
   transition: background 0.15s ease, transform 0.15s ease;
   font-family: inherit;
 }
 .tn-clear-route-btn:hover {
-  background: #f8fafc;
+  background: var(--color-sand);
   transform: scale(1.03);
 }
 
@@ -216,13 +238,13 @@
   top: 114px;
   right: 12px;
   z-index: 1000;
-  background: linear-gradient(to right, #0ea5e9, #10b981);
+  background: linear-gradient(135deg, var(--color-terracotta), var(--color-terracotta-hover));
   color: #fff;
   border-radius: 18px;
   padding: 10px 16px;
   font-size: 13px;
   font-weight: 700;
-  box-shadow: 0 8px 20px rgba(14, 165, 233, 0.3);
+  box-shadow: 0 8px 20px var(--color-terracotta-shadow);
   text-align: right;
   font-family: inherit;
 }

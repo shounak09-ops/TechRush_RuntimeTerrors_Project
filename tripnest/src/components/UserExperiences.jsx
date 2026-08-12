@@ -32,7 +32,7 @@ export default function UserExperiences() {
       name: "Emily Watson",
       location: "Paris",
       avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=150&q=80",
-      rating: 5,
+      rating: 4,
       review: "The seasonal 'Best Time to Visit' tips were spot on. Paris was absolute magic thanks to this guide."
     },
     {
@@ -53,10 +53,10 @@ export default function UserExperiences() {
     },
     {
       id: 7,
-      name: "David Miller",
+      name: "David Smith",
       location: "Rome",
       avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80",
-      rating: 5,
+      rating: 4,
       review: "Booked in two clicks and used the favorite list to organize our daily walks around Rome. Highly recommended!"
     }
   ];

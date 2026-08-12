@@ -270,7 +270,7 @@ export default function AITripPlanner({
                   step={BUDGET_STEP}
                   value={formData.budgetAmount}
                   onChange={updateBudgetAmount}
-                  accent="#10b981"
+                  accent="#cf6a3e"
                   formatValue={(v) => `${formatRupees(v)} / person / day`}
                   minLabel={formatRupees(BUDGET_MIN)}
                   maxLabel={formatRupees(BUDGET_MAX)}

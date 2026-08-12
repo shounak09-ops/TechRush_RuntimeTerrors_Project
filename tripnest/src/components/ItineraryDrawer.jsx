@@ -709,29 +709,28 @@ export default function ItineraryDrawer({
           </button>
         </footer>
       </aside>
-
-      {/* Offscreen printable template — rendered every time so it stays in
+{/* Offscreen printable template — rendered every time so it stays in
           sync, captured by html2pdf only when "Save as PDF" is clicked */}
       <div style={{ position: "fixed", top: 0, left: "-9999px", width: "700px" }} aria-hidden="true">
-        <div ref={printableRef} style={{ fontFamily: "Helvetica, Arial, sans-serif", background: "#ffffff", color: "#1e293b", padding: "36px" }}>
-          <div style={{ borderBottom: "3px solid #0f766e", paddingBottom: "16px", marginBottom: "20px" }}>
-            <p style={{ margin: 0, fontSize: "11px", letterSpacing: "2px", color: "#0f766e", fontWeight: "bold" }}>TRIPNEST ITINERARY</p>
-            <h1 style={{ margin: "4px 0 0", fontSize: "26px", color: "#0f172a" }}>
+        <div ref={printableRef} style={{ fontFamily: "Helvetica, Arial, sans-serif", background: "#ffffff", color: "#1c1917", padding: "36px" }}>
+          <div style={{ borderBottom: "3px solid #c85a3c", paddingBottom: "16px", marginBottom: "20px" }}>
+            <p style={{ margin: 0, fontSize: "11px", letterSpacing: "2px", color: "#c85a3c", fontWeight: "bold" }}>TRIPNEST ITINERARY</p>
+            <h1 style={{ margin: "4px 0 0", fontSize: "26px", color: "#1c1917" }}>
               {activeDestination ? `${activeDestination.name}, ${activeDestination.country}` : "Your trip"}
             </h1>
             {activeDestination && (
-              <p style={{ margin: "6px 0 0", fontSize: "13px", color: "#64748b" }}>
+              <p style={{ margin: "6px 0 0", fontSize: "13px", color: "#78716c" }}>
                 {fixedDays.length}-day plan · Total estimated cost: {currency(totalBudget)}
               </p>
             )}
           </div>
 
           {travelCost > 0 && (
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", background: "#f0fdfa", borderRadius: "8px", padding: "10px 14px", marginBottom: "18px" }}>
-              <p style={{ margin: 0, fontSize: "12px", color: "#0f766e", fontWeight: "bold" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", background: "#fdf4f0", borderRadius: "8px", padding: "10px 14px", marginBottom: "18px", border: "1px solid #fbe8e0" }}>
+              <p style={{ margin: 0, fontSize: "12px", color: "#c85a3c", fontWeight: "bold" }}>
                 Travel cost (from India, one-time)
               </p>
-              <p style={{ margin: 0, fontSize: "13px", fontWeight: "bold", color: "#0f172a" }}>{currency(travelCost)}</p>
+              <p style={{ margin: 0, fontSize: "13px", fontWeight: "bold", color: "#1c1917" }}>{currency(travelCost)}</p>
             </div>
           )}
 
@@ -740,20 +739,20 @@ export default function ItineraryDrawer({
             const dayTotal = items.reduce((sum, a) => sum + (a.cost || 0), 0)
             return (
               <div key={day} style={{ marginBottom: "22px", breakInside: "avoid" }}>
-                <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", background: "#ecfdf5", borderRadius: "8px", padding: "8px 14px", marginBottom: "8px" }}>
-                  <h2 style={{ margin: 0, fontSize: "15px", color: "#065f46" }}>Day {day}</h2>
-                  <span style={{ fontSize: "12px", fontWeight: "bold", color: "#0f766e" }}>{currency(dayTotal)}</span>
+                <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", background: "#f3eee5", borderRadius: "8px", padding: "8px 14px", marginBottom: "8px" }}>
+                  <h2 style={{ margin: 0, fontSize: "15px", color: "#1c1917" }}>Day {day}</h2>
+                  <span style={{ fontSize: "12px", fontWeight: "bold", color: "#c85a3c" }}>{currency(dayTotal)}</span>
                 </div>
                 {items.length === 0 ? (
-                  <p style={{ fontSize: "12px", color: "#94a3b8", padding: "0 14px" }}>No activities planned for this day.</p>
+                  <p style={{ fontSize: "12px", color: "#a8a29e", padding: "0 14px" }}>No activities planned for this day.</p>
                 ) : (
                   items.map((a, idx) => (
-                    <div key={a.id} style={{ display: "flex", justifyContent: "space-between", gap: "12px", padding: "8px 14px", borderBottom: idx === items.length - 1 ? "none" : "1px solid #e2e8f0" }}>
+                    <div key={a.id} style={{ display: "flex", justifyContent: "space-between", gap: "12px", padding: "8px 14px", borderBottom: idx === items.length - 1 ? "none" : "1px solid #e7e0d6" }}>
                       <div style={{ minWidth: 0 }}>
-                        <p style={{ margin: 0, fontSize: "13px", fontWeight: "bold", color: "#0f172a" }}>{a.title} <span style={{ fontWeight: "normal", color: "#0f766e", fontSize: "10px" }}>· {a.category}</span></p>
-                        <p style={{ margin: "2px 0 0", fontSize: "11px", color: "#64748b" }}>{a.location}</p>
+                        <p style={{ margin: 0, fontSize: "13px", fontWeight: "bold", color: "#1c1917" }}>{a.title} <span style={{ fontWeight: "normal", color: "#c85a3c", fontSize: "10px" }}>· {a.category}</span></p>
+                        <p style={{ margin: "2px 0 0", fontSize: "11px", color: "#78716c" }}>{a.location}</p>
                       </div>
-                      <p style={{ margin: 0, fontSize: "13px", fontWeight: "bold", color: "#0f172a", whiteSpace: "nowrap" }}>{currency(a.cost)}</p>
+                      <p style={{ margin: 0, fontSize: "13px", fontWeight: "bold", color: "#1c1917", whiteSpace: "nowrap" }}>{currency(a.cost)}</p>
                     </div>
                   ))
                 )}
@@ -761,9 +760,9 @@ export default function ItineraryDrawer({
             )
           })}
 
-          <div style={{ marginTop: "24px", borderTop: "2px solid #0f766e", paddingTop: "12px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <p style={{ margin: 0, fontSize: "12px", color: "#64748b" }}>Generated with TripNest — plans subject to change</p>
-            <p style={{ margin: 0, fontSize: "16px", fontWeight: "bold", color: "#0f172a" }}>Total: {currency(totalBudget)}</p>
+          <div style={{ marginTop: "24px", borderTop: "2px solid #c85a3c", paddingTop: "12px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <p style={{ margin: 0, fontSize: "12px", color: "#78716c" }}>Generated with TripNest — plans subject to change</p>
+            <p style={{ margin: 0, fontSize: "16px", fontWeight: "bold", color: "#1c1917" }}>Total: {currency(totalBudget)}</p>
           </div>
         </div>
       </div>

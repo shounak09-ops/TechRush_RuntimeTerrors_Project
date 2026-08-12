@@ -391,6 +391,60 @@
 }
 
 /* ---------------------------------------------------------------------
+   Header "boarding pass" perforation
+   The header sits one shade off the page background (slate-100/900 vs the
+   page's slate-50/950). This punches a row of page-colored notches along
+   its bottom edge with a single pseudo-element, so the header reads as a
+   ticket stub torn along a perforated line — no extra DOM required.
+------------------------------------------------------------------------ */
+.tn-ticket-edge {
+  position: relative;
+}
+.tn-ticket-edge::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -7px;
+  height: 14px;
+  background-image: radial-gradient(circle at 7px 7px, transparent 6.5px, #faf7f1 7px);
+  background-size: 20px 14px;
+  background-position: 10px 0;
+  background-repeat: repeat-x;
+  pointer-events: none;
+}
+.dark .tn-ticket-edge::after {
+  background-image: radial-gradient(circle at 7px 7px, transparent 6.5px, #121011 7px);
+}
+
+/* "Plan with AI" CTA — a light diagonal sweep on hover, like a boarding
+   pass catching the light as it's handed over. */
+.tn-shine {
+  overflow: hidden;
+}
+.tn-shine::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -60%;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.6s ease;
+  pointer-events: none;
+}
+.tn-shine:hover::before {
+  left: 130%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tn-shine::before {
+    display: none;
+  }
+}
+
+/* ---------------------------------------------------------------------
    TripNest editorial design system
    Intentional, flatter surfaces: less "component kit", more travel journal.
 ------------------------------------------------------------------------ */
