@@ -312,7 +312,7 @@ export default function ItineraryDrawer({
                 <div
                   ref={dayBarRef}
                   onWheel={handleWheel}
-                  className="tn-scroll-x flex snap-x gap-2 overflow-x-auto pb-2"
+                  className="tn-days-scroll flex snap-x gap-2 overflow-x-auto pb-2"
                 >
                   {fixedDays.map((day) => {
                     const count = (activitiesByDay[day] || []).length

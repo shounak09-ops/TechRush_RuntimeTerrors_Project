@@ -346,14 +346,14 @@ function buildDayWiseItinerary(dest, formData) {
 
     if (day === 1) {
       slots.push({
-        time: "Morning",
+        time: "10:00 AM - 12:30 PM",
         title: `Arrival in ${dest.name} & check-in`,
         category: "Transport",
         cost: Math.round(rate.localTransport * 1.5),
       });
     } else {
       slots.push({
-        time: "Morning",
+        time: "08:30 AM - 11:30 AM",
         title: highlights[(day - 1) % highlights.length],
         category: "Sightseeing",
         cost: Math.round(rate.activities * 0.8),
@@ -361,7 +361,7 @@ function buildDayWiseItinerary(dest, formData) {
     }
 
     slots.push({
-      time: "Afternoon",
+      time: "01:30 PM - 04:30 PM",
       title: pool[(day + 0) % pool.length],
       category: cat === "Beaches" || cat === "Adventure" ? "Adventure" : "Sightseeing",
       cost: Math.round(rate.activities),
@@ -369,14 +369,14 @@ function buildDayWiseItinerary(dest, formData) {
 
     if (day === days && days > 1) {
       slots.push({
-        time: "Evening",
+        time: "06:30 PM - 09:00 PM",
         title: `Farewell dinner & departure prep`,
         category: "Food",
         cost: Math.round(rate.food * 1.3),
       });
     } else {
       slots.push({
-        time: "Evening",
+        time: "07:00 PM - 09:00 PM",
         title: `Local food trail: ${(FOOD_BY_COUNTRY[dest.country] || GENERIC_FOODS)[day % (FOOD_BY_COUNTRY[dest.country] || GENERIC_FOODS).length]}`,
         category: "Food",
         cost: Math.round(rate.food),

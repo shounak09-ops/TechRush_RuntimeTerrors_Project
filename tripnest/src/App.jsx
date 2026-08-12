@@ -194,6 +194,7 @@ export default function App() {
       byDay[day] = slots.map((slot, idx) => ({
         id: `${trip.destination.id}-d${day}-${idx}`,
         title: slot.title,
+        time: slot.time,
         location: `${trip.destination.name}, ${trip.destination.country}`,
         category: slot.category,
         cost: slot.cost,
