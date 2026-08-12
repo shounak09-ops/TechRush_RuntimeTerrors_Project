@@ -336,7 +336,7 @@ export default function DestinationCard({
               <span
                 key={idx}
                 className={`h-1.5 rounded-full transition-all ${
-                  idx === safeImgIndex ? "w-5 bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.75)]" : "w-1.5 bg-white/50"
+                  idx === safeImgIndex ? "w-5 bg-emerald-400 shadow-[0_0_8px_rgba(224,138,92,0.75)]" : "w-1.5 bg-white/50"
                 }`}
               />
             ))}

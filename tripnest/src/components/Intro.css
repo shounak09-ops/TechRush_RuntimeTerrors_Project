@@ -58,7 +58,7 @@
   height: 55vw;
   left: -10%;
   top: -10%;
-  background: radial-gradient(circle, #10b981 0%, transparent 70%);
+  background: radial-gradient(circle, #cf6a3e 0%, transparent 70%);
   animation-duration: 10s;
 }
 
@@ -161,11 +161,11 @@
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, rgba(16, 185, 129, 0.25), rgba(6, 20, 40, 0.9) 60%, rgba(3, 8, 18, 0.95) 100%);
+  background: radial-gradient(circle at 35% 30%, rgba(207, 106, 62, 0.25), rgba(6, 20, 40, 0.9) 60%, rgba(3, 8, 18, 0.95) 100%);
   box-shadow:
     inset -20px -20px 60px rgba(0, 0, 0, 0.5),
-    0 0 90px rgba(16, 185, 129, 0.15);
-  border: 1px solid rgba(16, 185, 129, 0.25);
+    0 0 90px rgba(207, 106, 62, 0.15);
+  border: 1px solid rgba(207, 106, 62, 0.25);
 }
 
 .globe-grid {
@@ -245,10 +245,10 @@
 
 .route-path {
   fill: none;
-  stroke: rgba(16, 185, 129, 0.75);
+  stroke: rgba(207, 106, 62, 0.75);
   stroke-width: 0.35;
   stroke-linecap: round;
-  filter: drop-shadow(0 0 3px rgba(16, 185, 129, 0.6));
+  filter: drop-shadow(0 0 3px rgba(207, 106, 62, 0.6));
   stroke-dasharray: 1.4 1.6;
   stroke-dashoffset: 100;
   animation: routeDraw 1800ms ease-out forwards;
@@ -281,8 +281,8 @@
 .route-dot.dest {
   left: 85%;
   top: 37%;
-  background: #10b981;
-  box-shadow: 0 0 16px rgba(16, 185, 129, 0.9);
+  background: #cf6a3e;
+  box-shadow: 0 0 16px rgba(207, 106, 62, 0.9);
   animation: dotPop 400ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
   animation-delay: 2150ms;
 }
@@ -292,7 +292,7 @@
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  border: 2px solid rgba(16, 185, 129, 0.7);
+  border: 2px solid rgba(207, 106, 62, 0.7);
   animation: pingRing 1000ms ease-out infinite;
   animation-delay: 2500ms;
 }
@@ -433,8 +433,8 @@
 }
 
 .nest {
-  color: #10b981;
-  text-shadow: 0 0 25px rgba(16, 185, 129, 0.5);
+  color: #cf6a3e;
+  text-shadow: 0 0 25px rgba(207, 106, 62, 0.5);
 }
 
 .brand-divider {
@@ -513,7 +513,7 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #10b981;
+  background: #cf6a3e;
   animation: dotBounce 900ms ease-in-out infinite;
 }
 

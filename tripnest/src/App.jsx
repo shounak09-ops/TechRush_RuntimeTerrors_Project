@@ -334,7 +334,7 @@ export default function App() {
     <div className={`tn-editorial min-h-screen ${theme === 'dark' ? 'bg-slate-950 text-white' : 'bg-slate-50 text-slate-900'} transition-colors duration-300 font-sans`}>
       
       {/* HEADER */}
-      <header className="sticky top-0 z-40 bg-white dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800">
+      <header className="sticky top-0 z-40 bg-slate-50 dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800">
         <div className="max-w-6xl mx-auto px-6 sm:px-8 py-5 flex items-center justify-between gap-4">
           <a href="#" className="flex items-center gap-2.5 shrink-0">
             <span className="p-2.5 bg-emerald-500 text-white">
@@ -406,7 +406,7 @@ export default function App() {
 
         {/* Mobile nav panel */}
         {mobileNavOpen && (
-          <nav className="tn-nav-in md:hidden border-t border-slate-200/70 dark:border-slate-800/70 bg-white dark:bg-slate-900 px-4 py-3 flex flex-col gap-1 font-semibold text-sm text-slate-600 dark:text-slate-300">
+          <nav className="tn-nav-in md:hidden border-t border-slate-200/70 dark:border-slate-800/70 bg-slate-50 dark:bg-slate-900 px-4 py-3 flex flex-col gap-1 font-semibold text-sm text-slate-600 dark:text-slate-300">
             <a
               href="#explore"
               onClick={() => setMobileNavOpen(false)}
