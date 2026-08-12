@@ -20,14 +20,6 @@
 // the local generator directly — that path was never AI-backed.
 // ============================================================================
 
-// In dev, this stays "" so requests hit the relative "/api/..." path that
-// vite.config.js's server.proxy forwards to the local backend. In
-// production there is no such proxy — a static build has no server logic
-// at all — so VITE_API_BASE_URL must point at wherever the real backend
-// (see /server) is actually deployed, e.g. "https://your-backend.onrender.com".
-// Set it in a `.env.production` file or your host's environment variables.
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "";
-
 import { DESTINATIONS } from "../data/destinations";
 import {
   generateTripForDestination,
@@ -37,6 +29,19 @@ import {
   buildLocalFoods,
   buildCrowdIndicator,
 } from "../utils/mockTripGenerator";
+
+// Where the backend (/server) actually lives. Left unset, this stays a
+// relative path — which only works when the frontend and backend are
+// served from the same origin (e.g. the Vite dev proxy in vite.config.js,
+// or a same-domain reverse-proxy rewrite in production).
+//
+// For a real deployment where the backend is hosted separately (Render,
+// Railway, Fly.io, etc.), set VITE_API_URL to that backend's full URL as an
+// environment variable on your FRONTEND host (Vercel/Netlify/etc.) — e.g.
+//   VITE_API_URL=https://tripnest-backend.onrender.com
+// Vite only reads VITE_-prefixed env vars, and only at build time, so this
+// has to be set before/during `npm run build`, not edited after the fact.
+const API_BASE_URL = import.meta.env.VITE_API_URL || "";
 
 // Only the fields the model needs to choose sensibly and write real
 // itinerary content — no need to ship the whole dataset (images, lat/lon,
@@ -60,30 +65,19 @@ function trimDestinationsForPrompt() {
 // destination object.
 function assembleTripFromAiPlan(aiPlan, formData) {
   const dest = DESTINATIONS.find((d) => d.id === aiPlan.destinationId) || DESTINATIONS[0];
-
-  // aiPlan.flightEstimate.costUSD is the model's own live fare estimate for
-  // THIS destination/tier/season (see server/index.js's flightEstimate
-  // schema + prompt) — it is not looked up from the static TRAVEL_COST
-  // table. buildBudgetBreakdown only falls back to that table if the model
-  // didn't return a usable number (e.g. costUSD came back null server-side).
-  const liveFare = Number(aiPlan.flightEstimate?.costUSD);
-  const { tier, breakdown, total } = buildBudgetBreakdown(dest, formData, liveFare);
+  const { tier, breakdown, total } = buildBudgetBreakdown(dest, formData);
 
   return {
     formData,
     destination: dest,
     aiExplanation: aiPlan.aiExplanation,
-    matchScore: aiPlan.matchScore,
+    matchScore: 92,
     dayWiseItinerary: aiPlan.dayWiseItinerary,
     attractions: dest.highlights || [],
     activities: buildActivities(dest),
     budgetTier: tier,
     budgetBreakdown: breakdown,
     estimatedTravelCost: Math.round(total),
-    // Whether flightsOrTravel above came from a live model estimate or the
-    // static fallback table, plus the model's one-line reasoning when it did.
-    travelCostSource: Number.isFinite(liveFare) && liveFare > 0 ? "ai" : "fallback",
-    travelCostReasoning: aiPlan.flightEstimate?.reasoning || "",
     packingChecklist: buildPackingChecklist(dest, formData),
     localFoods: buildLocalFoods(dest),
     travelTips: aiPlan.travelTips && aiPlan.travelTips.length ? aiPlan.travelTips : [],
@@ -142,73 +136,6 @@ export async function generateTrip(formData) {
 
   const aiPlan = await response.json();
   return assembleTripFromAiPlan(aiPlan, safeFormData);
-}
-
-// In-memory cache so the same destination/tier pair (e.g. shown in both the
-// homepage rail and the "all destinations" overlay in the same session)
-// only triggers one live AI call, not one per card instance.
-const flightEstimateCache = new Map();
-
-/**
- * estimateFlightPrice
- * Lightweight sibling of generateTrip for DestinationCard: given a single
- * destination the traveler is just browsing (not one the AI matched), asks
- * the backend for a live AI round-trip fare estimate so the card can show
- * that instead of the static `totalBudget` figure baked into
- * data/destinations.js. Throws on failure — callers decide how to fall back
- * (DestinationCard falls back to the destination's static totalBudget).
- *
- * @param {object} destination - a destination object from `data/destinations.js`
- * @param {string} [budget] - "Low" | "Medium" | "Luxury" (defaults to "Medium")
- * @returns {Promise<{costUSD: number|null, reasoning: string}>}
- */
-export async function estimateFlightPrice(destination, budget = "Medium") {
-  const cacheKey = `${destination?.id}:${budget}`;
-  if (flightEstimateCache.has(cacheKey)) {
-    return flightEstimateCache.get(cacheKey);
-  }
-
-  let response;
-  try {
-    response = await fetch(`${API_BASE_URL}/api/flight-estimate`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        destination: {
-          id: destination?.id,
-          name: destination?.name,
-          country: destination?.country,
-          region: destination?.region,
-          continent: destination?.continent,
-          category: destination?.category,
-          bestTime: destination?.bestTime,
-        },
-        budget,
-      }),
-    });
-  } catch (networkError) {
-    console.error("estimateFlightPrice: could not reach the AI backend.", networkError);
-    throw new Error("Couldn't reach the AI flight price service.");
-  }
-
-  if (!response.ok) {
-    console.error(`estimateFlightPrice: AI server responded ${response.status}`);
-    throw new Error(`AI flight estimate failed (server responded ${response.status}).`);
-  }
-
-  const data = await response.json();
-  const result = {
-    costUSD: Number.isFinite(Number(data.costUSD)) ? Number(data.costUSD) : null,
-    reasoning: data.reasoning || "",
-  };
-
-  // Only cache real, usable results — a null/failed estimate shouldn't get
-  // stuck for the rest of the session.
-  if (result.costUSD) {
-    flightEstimateCache.set(cacheKey, result);
-  }
-
-  return result;
 }
 
 /**
