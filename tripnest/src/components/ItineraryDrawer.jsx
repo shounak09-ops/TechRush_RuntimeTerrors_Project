@@ -37,10 +37,28 @@ export const CATEGORY_STYLES = {
 
 const ACTIVITY_CATEGORIES = Object.keys(CATEGORY_STYLES)
 
+// Activity costs are stored internally in the same USD-based unit used
+// throughout the rest of the app (AI-generated trips, mock data, etc.), and
+// currency() converts that to rupees for display. To let users enter and
+// edit activity costs directly in rupees, these helpers convert between
+// the two so a typed-in rupee amount round-trips back to the same rupee
+// figure when displayed.
+const USD_TO_INR = 83
+
 export function currency(n) {
   const amount = Number.isFinite(Number(n)) ? Number(n) : 0
-  const inr = Math.round(amount * 83)
+  const inr = Math.round(amount * USD_TO_INR)
   return `₹${inr.toLocaleString("en-IN")}`
+}
+
+function rupeesToStoredCost(rupees) {
+  const amount = Number.isFinite(Number(rupees)) ? Number(rupees) : 0
+  return amount / USD_TO_INR
+}
+
+function storedCostToRupees(cost) {
+  const amount = Number.isFinite(Number(cost)) ? Number(cost) : 0
+  return Math.round(amount * USD_TO_INR)
 }
 
 export default function ItineraryDrawer({
@@ -96,6 +114,29 @@ export default function ItineraryDrawer({
     [dayActivities]
   )
 
+  // Total activity cost across every day — deliberately excludes
+  // travelCost (flight/getting-there cost) so the budget planner only
+  // tracks day-to-day spend, not the one-time cost of getting there.
+  const activitiesCost = useMemo(
+    () => Object.values(activitiesByDay).flat().reduce((sum, a) => sum + (a.cost || 0), 0),
+    [activitiesByDay]
+  )
+
+  // Live budget-left / over-budget indicator, recalculated whenever an
+  // activity is added, deleted, moved, or edited. Compared against the
+  // destination's planned budget (stored in rupees in
+  // data/destinations.js). Flight/travel cost is intentionally left out —
+  // see activitiesCost above — so spent is activitiesCost only, in the
+  // same USD-based units `currency()` converts from.
+  const budgetStatus = useMemo(() => {
+    if (!activeDestination?.totalBudget) return null
+    const planned = Number(String(activeDestination.totalBudget).replace(/[^0-9.]/g, ""))
+    if (!Number.isFinite(planned) || planned <= 0) return null
+    const spent = Math.round((Number(activitiesCost) || 0) * 83)
+    const diff = planned - spent
+    return { planned, spent, diff, overBudget: diff < 0 }
+  }, [activeDestination, activitiesCost])
+
   function handleWheel(e) {
     const el = dayBarRef.current
     if (!el) return
@@ -150,7 +191,7 @@ export default function ItineraryDrawer({
       title: newActivity.title.trim(),
       category: newActivity.category,
       location: newActivity.location.trim() || (activeDestination ? `${activeDestination.name}, ${activeDestination.country}` : ""),
-      cost: Number(newActivity.cost) || 0,
+      cost: rupeesToStoredCost(newActivity.cost),
     })
     setNewActivity({ title: "", category: "Sightseeing", location: "", cost: "" })
     setShowAddForm(false)
@@ -580,9 +621,9 @@ export default function ItineraryDrawer({
                               type="number"
                               min="0"
                               autoFocus
-                              defaultValue={a.cost}
+                              defaultValue={storedCostToRupees(a.cost)}
                               onBlur={(e) => {
-                                onEditActivityCost?.(selectedDay, a.id, Number(e.target.value) || 0)
+                                onEditActivityCost?.(selectedDay, a.id, rupeesToStoredCost(e.target.value))
                                 setEditingCostId(null)
                               }}
                               onKeyDown={(e) => {
@@ -653,6 +694,43 @@ export default function ItineraryDrawer({
                     theme === 'dark' ? 'text-slate-100' : 'text-slate-900'
                   }`}>{currency(totalBudget)}</span>
                 </div>
+
+                {/* Budget left / over budget — updates live as activities
+                    are added or removed from the itinerary */}
+                {budgetStatus && (
+                  <div className={`flex items-center justify-between rounded-none border p-4 ${
+                    budgetStatus.overBudget
+                      ? 'border-rose-500/40 bg-rose-500/10'
+                      : 'border-emerald-500/40 bg-emerald-500/10'
+                  }`}>
+                    <div className="flex items-center gap-2">
+                      <span className={`grid h-9 w-9 place-items-center rounded-none ${
+                        budgetStatus.overBudget
+                          ? 'bg-rose-500/20 text-rose-600 dark:text-rose-400'
+                          : 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-400'
+                      }`}>
+                        <Wallet className="h-4 w-4" aria-hidden="true" />
+                      </span>
+                      <div>
+                        <p className={`text-xs font-semibold ${
+                          budgetStatus.overBudget ? 'text-rose-600 dark:text-rose-400' : 'text-emerald-600 dark:text-emerald-400'
+                        }`}>
+                          {budgetStatus.overBudget ? "Over budget" : "Budget left"}
+                        </p>
+                        <p className={`text-[11px] ${theme === 'dark' ? 'text-slate-500' : 'text-slate-400'}`}>
+                          Planned budget: ₹{budgetStatus.planned.toLocaleString("en-IN")}
+                        </p>
+                      </div>
+                    </div>
+                    <span className={`text-lg font-extrabold shrink-0 ${
+                      budgetStatus.overBudget ? 'text-rose-600 dark:text-rose-400' : 'text-emerald-600 dark:text-emerald-400'
+                    }`}>
+                      {budgetStatus.overBudget
+                        ? `₹${Math.abs(budgetStatus.diff).toLocaleString("en-IN")} over`
+                        : `₹${budgetStatus.diff.toLocaleString("en-IN")} left`}
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
           ) : (
